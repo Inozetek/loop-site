@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Loop</title>
+  <meta name="description" content="You're invited to a plan on Loop.">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <meta property="og:title" content="You're invited on Loop">
+  <meta property="og:site_name" content="Loop">
+  <meta property="og:image" content="https://loopaiapp.com/assets/og-loop.png?v=2">
+  <!-- GitHub Pages serves this file for EVERY unknown path, so every URL is
+       absolute: a relative one would resolve under /plan/. -->
+  <link rel="icon" type="image/svg+xml" href="/assets/loop-logo.svg">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .inv-main { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px var(--gutter); }
+    .inv-card { width: 100%; max-width: 440px; background: var(--card); border: 1px solid var(--hairline); border-radius: 20px; padding: 24px; }
+    .inv-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 600; margin-bottom: 24px; }
+    .inv-host { color: var(--blue-light); font-size: 14px; font-weight: 600; margin: 0 0 8px; }
+    .inv-title { font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 12px; color: var(--text); }
+    .inv-meta { color: var(--text-2); margin: 4px 0; font-size: 16px; }
+    .inv-going { color: var(--green); margin: 12px 0 20px; font-size: 14px; font-weight: 600; }
+    .inv-field { display: block; width: 100%; box-sizing: border-box; margin: 0 0 12px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--hairline); background: var(--card-2); color: var(--text); font: inherit; font-size: 16px; }
+    .inv-row { display: flex; gap: 8px; }
+    .inv-btn { flex: 1; min-height: 44px; border-radius: 999px; border: 1px solid var(--hairline); background: var(--card-2); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+    .inv-btn.yes { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .inv-btn:disabled { opacity: 0.5; }
+    .inv-error { color: var(--amber); font-size: 14px; margin: 12px 0 0; }
+    .inv-store { display: inline-flex; margin-top: 16px; }
+  </style>
+  <script src="/plan-config.js" defer></script>
+  <script src="/plan-invite.js" defer></script>
+</head>
+<body>
+  <main class="inv-main">
+    <!-- Ordinary 404 (any path that is not /plan/...) -->
+    <section class="inv-card" id="nf">
+      <a class="inv-brand" href="/"><img src="/assets/loop-logo.svg" alt="" width="34" height="24"><span>Loop</span></a>
+      <h1 class="inv-title">Page not found</h1>
+      <p class="inv-meta"><a href="/" style="color: var(--blue-light)">Back to loopaiapp.com</a></p>
+    </section>
+
+    <!-- /plan/<token> invite -->
+    <section class="inv-card" id="inv" hidden>
+      <a class="inv-brand" href="/"><img src="/assets/loop-logo.svg" alt="" width="34" height="24"><span>Loop</span></a>
+      <p class="inv-meta" id="inv-loading">Loading invite&hellip;</p>
+      <p class="inv-error" id="inv-error" hidden></p>
+      <div id="inv-card" hidden>
+        <p class="inv-host" id="inv-host"></p>
+        <h1 class="inv-title" id="inv-title"></h1>
+        <p class="inv-meta" id="inv-venue"></p>
+        <p class="inv-meta" id="inv-address"></p>
+        <p class="inv-meta" id="inv-time"></p>
+        <p class="inv-going" id="inv-going"></p>
+
+        <form id="inv-form" autocomplete="on">
+          <input class="inv-field" id="inv-name" name="name" maxlength="60" placeholder="Your name" required>
+          <input class="inv-field" id="inv-email" name="email" type="email" maxlength="254" placeholder="Email (optional)">
+          <div class="inv-row">
+            <button class="inv-btn yes" id="inv-yes" type="submit">I&rsquo;m in</button>
+            <button class="inv-btn" id="inv-no" type="submit">Can&rsquo;t make it</button>
+          </div>
+          <p class="inv-error" id="inv-form-error" hidden></p>
+        </form>
+
+        <div id="inv-done" hidden>
+          <h2 class="inv-title" id="inv-done-title"></h2>
+          <p class="inv-meta">Get Loop to see who else is going and plan the next one together.</p>
+          <a class="pill inv-store" id="inv-store" href="https://apps.apple.com/app/loop/id6820438290">Get Loop on the App Store</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
