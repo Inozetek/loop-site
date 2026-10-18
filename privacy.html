@@ -22,7 +22,7 @@
   <main class="doc">
     <a href="index.html" class="back-link">&larr; Back home</a>
     <h1>Privacy Policy</h1>
-    <p class="meta">Last Updated: September 29, 2026 &middot; Effective Date: September 29, 2026</p>
+    <p class="meta">Last Updated: October 18, 2026 &middot; Effective Date: September 29, 2026</p>
 
     <h2>1. Introduction</h2>
     <p>Nick Casey, doing business as Loop ("we," "our," or "us") operates the Loop mobile application (the "App"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use the App.</p>
@@ -42,7 +42,7 @@
     <h3>2.2 Information collected automatically</h3>
     <ul>
       <li><strong>Location data:</strong> foreground GPS location when you grant permission, used for nearby recommendations and distance/travel-time calculations. Background location is optional and, where offered, is used only for features you explicitly enable (e.g. arrival/departure-based reminders); you can revoke it at any time in device settings.</li>
-      <li><strong>Device &amp; usage information:</strong> device type, OS version, app version, and how you interact with the App (screens viewed, recommendations accepted/declined), used for debugging and improving recommendations.</li>
+      <li><strong>Device &amp; usage information:</strong> device type, OS version, app version, and how you interact with the App (screens viewed, recommendations accepted/declined), used for debugging and improving recommendations. Product analytics are collected with PostHog.</li>
       <li><strong>Push notification tokens:</strong> an Expo push token tied to your device, used to deliver reminders and recommendation alerts you've opted into.</li>
       <li><strong>Crash and error reports:</strong> collected via Sentry to diagnose and fix bugs. These reports can include device state and a stack trace at the time of the crash.</li>
     </ul>
@@ -51,7 +51,7 @@
     <ul>
       <li><strong>Google Sign-In / Facebook Login:</strong> basic profile information (name, email, profile photo) if you choose social sign-in, via Supabase Auth.</li>
       <li><strong>Google Places API:</strong> venue names, locations, ratings, hours, and photos that power recommendations. This data originates from Google and is subject to Google's own privacy policy.</li>
-      <li><strong>Google Gemini API:</strong> when you use Ask Loop (the AI chat), your query text (and relevant context such as your stated preferences or location) is sent to Google's Gemini API to generate a response and activity descriptions.</li>
+      <li><strong>Google Gemini API:</strong> when you use Ask Loop (the AI chat), your query text (and relevant context such as your stated preferences or location) is sent to Google's Gemini API to generate a response and activity descriptions. Loop uses Gemini under Google’s API terms, which may allow Google to use submitted content to improve its products, so avoid entering sensitive personal information in Ask Loop.</li>
     </ul>
 
     <h2>3. How We Use Your Information</h2>
@@ -77,6 +77,7 @@
           <li>Google Gemini API — AI concierge responses and content generation</li>
           <li>Stripe — payment processing</li>
           <li>Sentry — crash and error reporting</li>
+          <li>PostHog — product analytics (screens viewed and feature usage, tied to your account ID)</li>
           <li>Expo — push notification delivery</li>
         </ul>
       </li>
