@@ -434,7 +434,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
     <section class="stop" id="product">
       <span class="eyebrow">The product</span>
       <h2>Plans with friends, without the group chat stall</h2>
-      <p>Loop combines your calendar, your location, your taste and the people you like spending time with, then suggests the right place or event at the right time. The north star I chose says what it's for: group plans completed each week where at least two people actually showed up.</p>
+      <p>Loop combines your calendar, your location, your taste and the people you like spending time with, then suggests the right place or event at the right time. The north star says what it's for: group plans completed each week where at least two people actually showed up.</p>
       <div class="features">
         <div class="feature"><h3>Ask Loop</h3><p>An AI concierge you can ask in plain language, like "somewhere quiet for brunch with three friends."</p></div>
         <div class="feature"><h3>For You feed</h3><p>Personalized picks, each with a "why this fits" card that explains the recommendation.</p></div>
@@ -570,7 +570,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
     <section class="stop" id="arrival">
       <span class="eyebrow">Patent pending</span>
       <h2>Not just what's good, but when you can realistically go</h2>
-      <p>For every pick, Loop works out the soonest time you could actually arrive. It combines your free time, the venue's real hours (including places open past midnight) and how long it takes to get there, and it keeps that time current as the day goes on. Early builds suggested a venue 32 miles away for 22 minutes from now. Fixing cases like that became the method I filed a provisional patent on in June 2026.</p>
+      <p>For every pick, Loop works out the soonest time you could actually arrive. It combines your free time, the venue's real hours (including places open past midnight) and how long it takes to get there, and it keeps that time current as the day goes on. Early builds suggested a venue 32 miles away for 22 minutes from now. Fixing cases like that became the basis of Loop's patent-pending method.</p>
       <div class="arrival" role="img" aria-label="Example: the soonest realistic arrival is where your free time, the venue's hours and travel time overlap">
         <svg viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg">
           <g font-family="Geist, system-ui, sans-serif" font-size="13" fill="currentColor">
@@ -597,11 +597,11 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
     <section class="stop" id="process">
       <span class="eyebrow">How it was built</span>
       <h2>One person directing a team of AI agents</h2>
-      <p>I ran Loop like a small engineering team. I was the product owner, designer, architect and final reviewer, and AI agents did most of the typing. The interesting part was building a process that kept many agents productive at once without the codebase falling apart.</p>
-      <div class="diagram" role="img" aria-label="Every change passes an independent gate before it reaches my phone">
+      <p>Loop was run like a small engineering team: one product owner, designer, architect and final reviewer, with AI agents doing most of the typing. The interesting part was building a process that kept many agents productive at once without the codebase falling apart.</p>
+      <div class="diagram" role="img" aria-label="Every change passes an independent gate before it reaches a real phone">
         <svg viewBox="0 0 760 472" xmlns="http://www.w3.org/2000/svg" font-family="Geist, system-ui, sans-serif" font-size="13">
           <defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
-          <text x="24" y="30" font-size="15" font-weight="600" fill="var(--fg)">Every change passes an independent gate before it reaches my phone</text>
+          <text x="24" y="30" font-size="15" font-weight="600" fill="var(--fg)">Every change passes an independent gate before it reaches a real phone</text>
           <g fill="none" stroke="var(--muted)" stroke-width="1.25">
             <path d="M380 112V160" marker-end="url(#arw)"/><path d="M380 112V136H140V160" marker-end="url(#arw)"/><path d="M380 112V136H620V160" marker-end="url(#arw)"/>
             <path d="M140 232V248"/><path d="M380 232V248"/><path d="M620 232V248"/>
@@ -615,11 +615,11 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
           <rect x="40" y="248" width="680" height="32" rx="8" fill="var(--tint)" stroke="var(--muted)" stroke-width="1.25"/>
           <rect x="210" y="312" width="340" height="56" rx="8" fill="var(--route)" fill-opacity="0.14" stroke="var(--route)" stroke-width="2"/>
           <g text-anchor="middle" fill="var(--fg)">
-            <text x="380" y="80" font-weight="600">Me: product owner and reviewer</text>
+            <text x="380" y="80" font-weight="600">Product owner and reviewer</text>
             <text x="140" y="184" font-weight="600">Claude Code agents</text><text x="380" y="184" font-weight="600">Codex agents</text><text x="620" y="184" font-weight="600">Database agent</text>
             <text x="380" y="268" font-size="12">Shared mailbox: handoff and checkpoint files every worktree can read</text>
             <text x="380" y="336" font-weight="600">Independent gate</text>
-            <text x="140" y="428">Main branch</text><text x="380" y="428">TestFlight build</text><text x="620" y="428">I test on my phone</text>
+            <text x="140" y="428">Main branch</text><text x="380" y="428">TestFlight build</text><text x="620" y="428">Tested on a real phone</text>
           </g>
           <g text-anchor="middle" fill="var(--muted)" font-size="11.5">
             <text x="380" y="96">specs, priorities, design calls</text>
@@ -635,8 +635,8 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
       <ul class="plain">
         <li><b>Parallel lanes.</b> Claude Code and Codex agents each worked in their own git worktree, so they never edited the same files at once.</li>
         <li><b>Independent gates.</b> No change merged on the word of the agent that wrote it. A separate agent checked it against written acceptance criteria first.</li>
-        <li><b>Living documentation.</b> Design docs, a launch tracker and a findings log told every agent what was true. My rule: every number in a doc comes with the command that reproduces it.</li>
-        <li><b>My job.</b> Priorities, product specs, design decisions, and testing every build on a real phone.</li>
+        <li><b>Living documentation.</b> Design docs, a launch tracker and a findings log told every agent what was true. The rule: every number in a doc comes with the command that reproduces it.</li>
+        <li><b>The human role.</b> Priorities, product specs, design decisions, and testing every build on a real phone.</li>
       </ul>
     </section>
 
@@ -677,7 +677,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
       <p>Loop launches in Dallas as a group planning app. Once the user base is established, it evolves into a personal AI assistant that knows the places, events and people you love, and makes sure you don't miss them.</p>
       <div class="contact">
         <h3>Want to try it or talk?</h3>
-        <p>I'm happy to send a TestFlight invite or walk through any part of Loop, including the code.</p>
+        <p>TestFlight invites and walkthroughs of how Loop was built are available on request.</p>
         <div class="mail"><code id="email">nick_casey@icloud.com</code><button type="button" id="copy">Copy email</button></div>
       </div>
     </section>
