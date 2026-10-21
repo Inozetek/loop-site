@@ -142,6 +142,25 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
   .stop::before { left: -31px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+/* Scroll motion (2026-10-21). Everything is shown as-is without JS or under
+   reduced motion: the hide/fill rules below only apply once the script adds
+   html.cs-js, and the script does not add it when motion is reduced. */
+.route::after { content: ""; position: absolute; left: 11px; top: 0; width: 2px; height: calc(var(--rp, 0) * 100%); background: var(--route); border-radius: 2px; box-shadow: 0 0 10px var(--route); pointer-events: none; }
+.stop::before { z-index: 1; transition: background 0.45s ease, box-shadow 0.45s ease; }
+.cs-js .stop.lit::before { background: var(--waypoint); box-shadow: 0 0 0 5px color-mix(in srgb, var(--waypoint) 22%, transparent); }
+.cs-js .stop > * { opacity: 0; transform: translateY(16px); transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.cs-js .stop.in > * { opacity: 1; transform: none; }
+.cs-js .stop.in > :nth-child(2) { transition-delay: 70ms; }
+.cs-js .stop.in > :nth-child(3) { transition-delay: 140ms; }
+.cs-js .stop.in > :nth-child(4) { transition-delay: 210ms; }
+.cs-js .stop.in > :nth-child(n+5) { transition-delay: 280ms; }
+.cs-js #arrival .bar { transform: scaleX(0); transform-box: fill-box; transform-origin: left center; transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+.cs-js #arrival .fade { opacity: 0; transition: opacity 0.5s ease; }
+.cs-js #arrival .arrival.go .bar { transform: none; }
+.cs-js #arrival .arrival.go .b2 { transition-delay: 0.35s; }
+.cs-js #arrival .arrival.go .b3 { transition-delay: 0.9s; }
+.cs-js #arrival .arrival.go .fade { opacity: 1; transition-delay: 1.5s; }
+@media (max-width: 640px) { .route::after { left: 6px; } }
 .phones { --ease: cubic-bezier(0.22, 1, 0.36, 1); --font: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif; }
 /* Phone art: self-framed inline SVGs. Every element's BASE style is the finished
    screen, so reduced-motion (animation: none) shows a complete, static frame. Motion
@@ -588,15 +607,15 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
             </g>
             <g stroke="var(--rule)" stroke-width="1"><line x1="150" y1="52" x2="150" y2="184"/><line x1="250" y1="52" x2="250" y2="184"/><line x1="350" y1="52" x2="350" y2="184"/><line x1="450" y1="52" x2="450" y2="184"/><line x1="550" y1="52" x2="550" y2="184"/></g>
             <text x="0" y="78" fill="var(--fg)">Your free time</text>
-            <rect x="275" y="64" width="335" height="20" rx="10" fill="var(--route)" opacity="0.25" stroke="var(--route)"/>
+            <rect class="bar b1" x="275" y="64" width="335" height="20" rx="10" fill="var(--route)" opacity="0.25" stroke="var(--route)"/>
             <text x="0" y="118" fill="var(--fg)">Venue open</text>
-            <rect x="150" y="104" width="460" height="20" rx="10" fill="var(--waypoint)" opacity="0.22" stroke="var(--waypoint)"/>
+            <rect class="bar b2" x="150" y="104" width="460" height="20" rx="10" fill="var(--waypoint)" opacity="0.22" stroke="var(--waypoint)"/>
             <text x="0" y="158" fill="var(--fg)">Travel time</text>
-            <rect x="275" y="144" width="37" height="20" rx="6" fill="var(--muted)" opacity="0.3" stroke="var(--muted)"/>
-            <text x="320" y="158" fill="var(--muted)" font-size="12">22 min drive</text>
-            <line x1="312" y1="58" x2="312" y2="190" stroke="var(--fg)" stroke-width="2" stroke-dasharray="4 4"/>
-            <circle cx="312" cy="194" r="5" fill="var(--waypoint)"/>
-            <text x="324" y="205" fill="var(--fg)" font-weight="600">Soonest realistic arrival: 6:37 PM</text>
+            <rect class="bar b3" x="275" y="144" width="37" height="20" rx="6" fill="var(--muted)" opacity="0.3" stroke="var(--muted)"/>
+            <text class="fade" x="320" y="158" fill="var(--muted)" font-size="12">22 min drive</text>
+            <line class="fade" x1="312" y1="58" x2="312" y2="190" stroke="var(--fg)" stroke-width="2" stroke-dasharray="4 4"/>
+            <circle class="fade" cx="312" cy="194" r="5" fill="var(--waypoint)"/>
+            <text class="fade" x="324" y="205" fill="var(--fg)" font-weight="600">Soonest realistic arrival: 6:37 PM</text>
           </g>
         </svg>
       </div>
@@ -672,6 +691,51 @@ document.getElementById('copy').addEventListener('click', function () {
   } catch (e) { selectIt(); done(false); }
   function selectIt() { var r = document.createRange(); r.selectNodeContents(document.getElementById('email')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
 });
+// Scroll motion: sections rise in, the route line fills and each stop lights as
+// you pass it, the numbers count up once, and the arrival bars draw in order.
+(function () {
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.documentElement.classList.add('cs-js');
+  var route = document.querySelector('.route'), stops = [].slice.call(document.querySelectorAll('.stop'));
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+  stops.forEach(function (s) { io.observe(s); });
+
+  var ticking = false;
+  function frame() {
+    ticking = false;
+    var vh = innerHeight, line = vh * 0.6, r = route.getBoundingClientRect();
+    var p = Math.max(0, Math.min(1, (line - r.top) / r.height));
+    route.style.setProperty('--rp', p.toFixed(4));
+    stops.forEach(function (s) { s.classList.toggle('lit', s.getBoundingClientRect().top + 16 < line); });
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+  if (route) { addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); frame(); }
+
+  var stats = [].slice.call(document.querySelectorAll('.stat b'));
+  var nums = stats.map(function (b) {
+    var m = /^([\d,]+)(.*)$/.exec(b.textContent);
+    return m ? { el: b, to: +m[1].replace(/,/g, ''), tail: m[2], text: b.textContent } : null;
+  }).filter(Boolean);
+  nums.forEach(function (n) { n.el.textContent = '0' + n.tail; });
+  var statsBox = document.querySelector('.stats');
+  if (statsBox) new IntersectionObserver(function (es, o) {
+    if (!es[0].isIntersecting) return;
+    o.disconnect();
+    var t0 = performance.now(), dur = 1400;
+    (function tick(t) {
+      var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      nums.forEach(function (n) { n.el.textContent = k < 1 ? Math.round(n.to * e).toLocaleString('en-US') + n.tail : n.text; });
+      if (k < 1) requestAnimationFrame(tick);
+    })(t0);
+  }, { threshold: 0.4 }).observe(statsBox);
+
+  var arrival = document.querySelector('#arrival .arrival');
+  if (arrival) new IntersectionObserver(function (es, o) {
+    if (es[0].isIntersecting) { arrival.classList.add('go'); o.disconnect(); }
+  }, { threshold: 0.5 }).observe(arrival);
+})();
 // Demo: start on its own when scrolled into view. Browsers only allow sound after the
 // visitor has interacted with the page, so try with sound first and fall back to muted
 // with a "Tap for sound" button; one tap (or any click on the page) turns sound on.

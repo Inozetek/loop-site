@@ -43,6 +43,18 @@
 
   if (reduce) { if (nav) nav.classList.add('scrolled'); return; }
 
+  /* 2b. The Today's Loop route draws itself (SMIL inside the image), which would
+         finish at page load, long before anyone scrolls to it. Hold the image
+         back and load it when the phone is on screen so the draw is seen. */
+  var route = document.querySelector('.day-anim');
+  if (route && 'IntersectionObserver' in window) {
+    var src = route.getAttribute('href');
+    route.removeAttribute('href');
+    new IntersectionObserver(function (es, o) {
+      if (es[0].isIntersecting) { route.setAttribute('href', src); o.disconnect(); }
+    }, { threshold: 0.45 }).observe(route.closest('svg') || route);
+  }
+
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
 
   /* 3. Scroll-scrubbed rise of the phones: --p goes 0 -> 1 as a stage travels
