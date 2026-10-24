@@ -423,3 +423,5 @@ html:not(.js) .nav { background: rgba(0, 0, 0, 0.72); -webkit-backdrop-filter: b
 .demo-note { color: var(--text-2); font-size: 15px; max-width: 60ch; }
 .demo-note a { color: var(--blue-light); }
 .pill-ghost { background: transparent !important; box-shadow: 0 0 0 1px rgba(255,255,255,0.35); margin-left: 10px; }
+.android-note { margin-top: 16px; font-size: 14px; color: var(--text-2); }
+.android-note a { color: var(--blue-light); }
