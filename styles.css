@@ -412,3 +412,14 @@ html:not(.js) .nav { background: rgba(0, 0, 0, 0.72); -webkit-backdrop-filter: b
   .manifesto .w { color: var(--text); }
   .scroll-cue { display: none; }
 }
+
+/* Demo: the real app */
+.demo { padding: clamp(72px, 12vh, 140px) 0 clamp(40px, 8vh, 96px); }
+.demo .wrap { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+.demo-wrap { position: relative; width: 100%; max-width: 880px; }
+.demo-video { display: block; width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--hairline); background: #090c0f; box-shadow: 0 30px 80px -30px rgba(0, 166, 217, 0.45); }
+.demo-sound { position: absolute; top: 14px; right: 14px; display: none; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(9,12,15,.78); color: var(--text); font: 600 14px/1 var(--font); cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.demo-sound.show { display: inline-flex; }
+.demo-note { color: var(--text-2); font-size: 15px; max-width: 60ch; }
+.demo-note a { color: var(--blue-light); }
+.pill-ghost { background: transparent !important; box-shadow: 0 0 0 1px rgba(255,255,255,0.35); margin-left: 10px; }

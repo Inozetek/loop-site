@@ -39,7 +39,7 @@
       <img src="assets/loop-logo.svg" alt="" width="34" height="24">
       <span>Loop</span>
     </a>
-    <a class="pill pill-sm" href="mailto:support@loopaiapp.com?subject=Notify%20me">Get notified</a>
+    <a class="pill pill-sm" href="https://testflight.apple.com/join/nhfZxpSc">Try the beta</a>
   </header>
 
   <main id="main">
@@ -53,16 +53,27 @@
       </div>
 
       <div class="hero-inner">
-        <p class="eyebrow reveal">Coming soon</p>
+        <p class="eyebrow reveal">Now in beta on iPhone</p>
         <h1 id="hero-title" class="display reveal" style="--d:1">Loop</h1>
         <p class="hero-sub reveal" style="--d:2">Your personal AI assistant that keeps you in the loop</p>
         <p class="hero-promise reveal" style="--d:3">Part concierge, part planner &mdash; it predicts the people and places you&rsquo;ll love and makes sure you never miss them.</p>
         <div class="reveal" style="--d:4">
-          <a class="pill" href="mailto:support@loopaiapp.com?subject=Notify%20me">Get notified</a>
+          <a class="pill" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
+          <a class="pill pill-ghost" href="#demo">Watch the demo</a>
         </div>
       </div>
 
       <div class="scroll-cue" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- Demo: the real app -->
+    <section class="demo" id="demo" aria-labelledby="demo-title">
+      <div class="wrap">
+        <p class="eyebrow reveal">See it work</p>
+        <h2 id="demo-title" class="headline reveal" style="--d:1">The real app, <span class="grad">today.</span></h2>
+        <div class="demo-wrap reveal" style="--d:2"><video class="demo-video" src="assets/loop-demo-v11.mp4" poster="assets/loop-demo-poster-v11.jpg" controls playsinline preload="metadata" aria-label="A 91-second tour of Loop running on a phone: asking for ideas, browsing picks, seeing why Loop picked a place, finding which friends are free, planning a stop, and the day drawn as a loop on a map."></video><button type="button" class="demo-sound" aria-label="Turn on sound">&#128264; Tap for sound</button></div>
+        <p class="demo-note reveal" style="--d:3">Screens captured from the current build. Loop is in public beta on iPhone. <a href="https://testflight.apple.com/join/nhfZxpSc">Join on TestFlight</a></p>
+      </div>
     </section>
 
     <!-- 2. It learns you -->
@@ -498,5 +509,24 @@
     <p class="copyright">&copy; 2026 Loop</p>
   </footer>
 
+<script>
+// Demo video: plays when scrolled into view (with sound if the browser allows, else muted with a "Tap for sound" button), pauses when scrolled away.
+(function () {
+  var v = document.querySelector('.demo-video'), b = document.querySelector('.demo-sound');
+  if (!v || !b || !('IntersectionObserver' in window)) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var started = false;
+  function soundOn(restart) { v.muted = false; b.classList.remove('show'); if (restart) v.currentTime = 0; v.play().catch(function () {}); }
+  function start() { started = true; v.muted = false; v.play().catch(function () { v.muted = true; b.classList.add('show'); v.play().catch(function () {}); }); }
+  b.addEventListener('click', function (e) { e.stopPropagation(); soundOn(true); });
+  v.addEventListener('volumechange', function () { if (!v.muted) b.classList.remove('show'); });
+  new IntersectionObserver(function (es) {
+    es.forEach(function (en) {
+      if (en.isIntersecting && en.intersectionRatio >= 0.5) { if (!started) start(); else if (v.paused && v.dataset.autopaused) { delete v.dataset.autopaused; v.play().catch(function () {}); } }
+      else if (!en.isIntersecting && started && !v.paused) { v.dataset.autopaused = '1'; v.pause(); }
+    });
+  }, { threshold: [0, 0.5] }).observe(v);
+})();
+</script>
 </body>
 </html>
