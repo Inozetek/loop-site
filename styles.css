@@ -422,6 +422,12 @@ html:not(.js) .nav { background: rgba(0, 0, 0, 0.72); -webkit-backdrop-filter: b
 .demo-sound.show { display: inline-flex; }
 .demo-note { color: var(--text-2); font-size: 15px; max-width: 60ch; }
 .demo-note a { color: var(--blue-light); }
-.pill-ghost { background: transparent !important; box-shadow: 0 0 0 1px rgba(255,255,255,0.35); margin-left: 10px; }
+.pill-ghost { background: transparent !important; color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,0.35); margin-left: 10px; }
 .android-note { margin-top: 16px; font-size: 14px; color: var(--text-2); }
 .android-note a { color: var(--blue-light); }
+
+/* Hero link to the vision story */
+.hero-vision { display: inline-block; margin-top: 22px; font-size: 15px; color: rgba(255,255,255,0.78); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.28); padding-bottom: 2px; transition: color .2s, border-color .2s; }
+.hero-vision:hover, .hero-vision:focus-visible { color: #fff; border-color: #09DB98; }
+.hero-vision span { display: inline-block; transition: transform .2s; }
+.hero-vision:hover span { transform: translateX(3px); }
