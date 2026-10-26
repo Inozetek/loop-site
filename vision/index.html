@@ -243,6 +243,9 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
 .scene[data-long] { height: 290svh; }
 .scene[data-xlong] { height: 460svh; }
 .js .scene.leave .device { opacity: 0; transform: translateY(-30px) scale(0.97); }
+.scene[data-car] { height: 340svh; }
+.scene[data-pull] { margin-top: -200svh; }
+.js .scene[data-pull] .stage { opacity: var(--fade, 0); }
 </style>
 
 <header class="bar wrap">
@@ -314,14 +317,14 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
       <div class="device"><div class="breathe"><div class="laptop"><div class="lid"><div class="lscr"><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Owen's in New York next week too</h3><p>You&#x27;re both free Wednesday after 6. Bramble &amp; Rye, your favorite from last time, has a table for 2 at 7:30. 8 min from both hotels.</p><div class="btns"><span class="go">Book it</span><span class="">Not this trip</span></div><div class="why">You and Owen are close friends in Loop and share your work trips, and you saved Bramble &amp; Rye in March.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Booked on OpenTable <span class="ok">✓</span></h3><p>Party of 2, Wednesday 7:30, Bramble &amp; Rye. Owen&#x27;s invited. I&#x27;ll remind you when to leave so you&#x27;re on time.</p></div></div></div></div><div class="base"></div></div></div></div>
     </div>
   </section>
-  <section class="scene" data-on="0.08" data-done="0.82" data-leave="1.05" data-long="1" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+  <section class="scene" data-on="0.05" data-done="0.62" data-car="1" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
     <div class="stage">
       <video src="media/s10.mp4?v=3" poster="media/s10.jpg?v=3" muted playsinline loop preload="metadata"></video>
       <div class="cap"><div class="who">Owen · 5:40 PM · Driving home</div><h2>Loop plans the pickup</h2><p>Jess at the studio, Leo at home, doors at 7:30. Eyes on the road, he just says &quot;Pick them up.&quot;</p></div>
       <div class="device"><div class="breathe"><div class="car"><div class="scr"><div class="map"><img src="media/nav-map.jpg" alt=""></div><div class="side"><div class="stack"><div class="mini"><img src="media/loop-logo.svg" alt="">Dinner with Marco · New York · Wed 7:30</div><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>on your route</span></div><h3>Pick up Jess and Leo?</h3><p>Leave home 6:50. Jess&#x27;s studio, then Leo&#x27;s. Adds 12 min. At the venue by 7:35.</p><div class="btns"><span class="go">Pick them up</span><span class="">Meet there</span></div><div class="why">Jess and Leo share their location with you while you have plans together.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>on your route</span></div><h3>Route set <span class="ok">✓</span></h3><p>Jess and Leo know. I&#x27;ll ping them when you&#x27;re 5 min out.</p></div></div></div></div></div></div></div></div>
     </div>
   </section>
-  <section class="scene" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+  <section class="scene" data-pull="1" data-on="0.72" data-done="0.9" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
     <div class="stage">
       <video src="media/s11.mp4" poster="media/s11.jpg" muted playsinline loop preload="metadata"></video>
       <div class="cap"><div class="who">Owen · 8:12 PM · The show</div><h2>Loop goes quiet once you&#x27;re all there</h2><p>Jess hands him the record. Leo&#x27;s beside them. The watch says one thing, then goes quiet.</p></div>
@@ -386,6 +389,7 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
         s.classList.toggle('on', p > (s.dataset.on ? +s.dataset.on : 0.16));
         s.classList.toggle('done', p > (s.dataset.done ? +s.dataset.done : 0.52));
         if (s.dataset.leave) s.classList.toggle('leave', p > +s.dataset.leave);
+        if (s.dataset.pull) { var f = Math.min(1, Math.max(0, (-r.top - vh * 0.55) / (vh * 0.3))); s.style.setProperty('--fade', f.toFixed(3)); }
       }
       wps[i].classList.toggle('lit', r.top < vh * 0.5);
       wps[i].classList.toggle('now', r.top < vh * 0.5 && r.bottom > vh * 0.5);
