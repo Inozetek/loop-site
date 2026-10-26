@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="One Friday, told by everyone it touched. A look at where Loop is heading: plans with the people and places you love, started for you.">
+<link rel="canonical" href="https://loopaiapp.com/vision/">
+<link rel="icon" type="image/svg+xml" href="/assets/loop-logo.svg?v=2">
+<link rel="icon" type="image/png" href="/assets/favicon.png?v=2">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Loop">
+<meta property="og:title" content="One Year in the Loop">
+<meta property="og:description" content="One Friday, told by everyone it touched. A look at where Loop is heading: plans with the people and places you love, started for you.">
+<meta property="og:url" content="https://loopaiapp.com/vision/">
+<meta property="og:image" content="https://loopaiapp.com/vision/og-vision.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="One Year in the Loop">
+<meta name="twitter:description" content="One Friday, told by everyone it touched. A look at where Loop is heading: plans with the people and places you love, started for you.">
+<meta name="twitter:image" content="https://loopaiapp.com/vision/og-vision.jpg">
+<title>One Year in the Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one cinematic column of pinned scenes. Each scene plays a short loop, then the device it happens on rises into the center and holds, so the Loop message can be read. A thin route line on the left fills as the day goes on, with one waypoint per person, in that person's color. Deliberately dark-only: it is a night-to-night film. */
+:root {
+  color-scheme: dark;
+  --bg: #000000;
+  --surface: #121417;
+  --fg: #F2F5F7;
+  --muted: #98A4AC;
+  --route: #2ECEFF;
+  --leaf: #09DB98;
+  --glass: rgba(14, 22, 28, 0.72);
+  --glass-edge: rgba(46, 206, 255, 0.42);
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+a { color: var(--route); }
+:focus-visible { outline: 2px solid var(--route); outline-offset: 3px; border-radius: 6px; }
+.wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* Top bar */
+.bar { position: absolute; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 30; display: flex; justify-content: space-between; align-items: center; padding-block: 18px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--fg); text-decoration: none; font: 700 18px var(--display); letter-spacing: 0.2px; }
+.brand img { width: 30px; height: auto; }
+.bar nav { display: flex; gap: 18px; font-size: 14px; }
+.bar nav a { color: var(--muted); text-decoration: none; }
+.bar nav a:hover { color: var(--fg); }
+
+/* Hero */
+.hero { min-height: 88svh; display: grid; align-content: center; gap: 22px; padding-block: 120px 60px; max-width: 900px; margin: 0 auto; }
+.eyebrow { font: 500 12px var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--leaf); }
+.hero h1 { font: 800 clamp(44px, 9vw, 104px)/0.95 var(--display); letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
+.hero h1 span { background: linear-gradient(90deg, var(--route), var(--leaf)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p { font-size: clamp(17px, 2.2vw, 21px); color: var(--muted); max-width: 34em; margin: 0; }
+.cue { font: 500 13px var(--mono); color: var(--muted); display: flex; align-items: center; gap: 10px; margin-top: 18px; }
+.cue i { width: 1px; height: 38px; background: linear-gradient(var(--route), transparent); display: block; animation: drip 2.2s var(--ease) infinite; transform-origin: top; }
+@keyframes drip { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+.note { font: 400 12px var(--mono); color: #6E7B83; }
+
+/* Route line */
+.route { position: fixed; left: max(14px, env(safe-area-inset-left, 0px)); top: 12vh; bottom: 12vh; width: 2px; z-index: 25; pointer-events: none; }
+.route::before { content: ""; position: absolute; inset: 0; border-left: 2px dotted rgba(255,255,255,0.18); }
+.route .fill { position: absolute; left: 0; top: 0; width: 2px; height: calc(var(--rp, 0) * 100%); background: linear-gradient(var(--route), var(--leaf)); background-size: 2px 76vh; border-radius: 2px; box-shadow: 0 0 10px rgba(46,206,255,0.6); }
+.route .wp { position: absolute; left: -5px; width: 12px; height: 12px; border-radius: 50%; background: #000; border: 2px solid rgba(255,255,255,0.25); transform: translateY(-50%); transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; }
+.route .wp.lit { background: var(--c); border-color: var(--c); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 25%, transparent); }
+.route .wp b { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font: 500 11px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--c); white-space: nowrap; opacity: 0; transition: opacity 0.4s ease; }
+.route .wp.now { transform: translateY(-50%) scale(1.35); }
+@media (max-width: 720px) { .route { left: 6px; } .route .wp b { display: none; } }
+
+/* Scenes */
+.scene { position: relative; height: 270svh; }
+.scene.short { height: 170svh; }
+.stage { position: sticky; top: 0; height: 100svh; overflow: hidden; display: grid; place-items: center; background: var(--bg); }
+.stage video, .stage .still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ease), filter 1.1s var(--ease), opacity 1.1s var(--ease); }
+.still { background: var(--sky); }
+.still::after { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 50% at 50% 60%, transparent, rgba(0,0,0,0.55)); }
+.stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.55), transparent 28%, transparent 70%, rgba(0,0,0,0.65)); pointer-events: none; }
+.cap { position: absolute; z-index: 5; left: max(48px, calc(env(safe-area-inset-left, 0px) + 40px)); right: max(16px, env(safe-area-inset-right, 0px)); top: calc(env(safe-area-inset-top, 0px) + 9vh); display: grid; gap: 6px; max-width: 30em; transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+.cap .time { font: 500 13px var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--c, var(--route)); }
+.cap h2 { font: 700 clamp(26px, 4.4vw, 46px)/1.05 var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; text-shadow: 0 2px 30px rgba(0,0,0,0.6); }
+.cap p { margin: 0; color: #C9D2D8; font-size: clamp(15px, 1.8vw, 18px); text-shadow: 0 1px 16px rgba(0,0,0,0.7); }
+
+.device { position: relative; z-index: 6; margin-top: 8vh; transition: transform 1s var(--ease), opacity 0.9s var(--ease); }
+.breathe { animation: breathe 5s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-6px) scale(1.012); } }
+
+/* JS-driven states. Without JS or with reduced motion, every device simply shows. */
+.js .scene .device { opacity: 0; transform: translateY(70px) scale(0.92); }
+.js .scene.on .device { opacity: 1; transform: none; }
+.js .scene.on video, .js .scene.on .still { transform: scale(1.06); filter: blur(10px) brightness(0.55); }
+.js .scene.on .cap { opacity: 0.0; transform: translateY(-12px); }
+.js .scene.short .cap { opacity: 1; transform: none; }
+
+/* Notification card, shared by every device */
+.card { background: var(--glass); backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3); border: 1px solid var(--glass-edge); border-radius: 22px; padding: 16px 16px 14px; display: grid; gap: 8px; color: var(--fg); box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 0 40px rgba(46,206,255,0.12); text-align: left; }
+.card .hd { display: flex; align-items: center; gap: 8px; font: 600 11px var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: #9FEAFF; }
+.card .hd img { width: 22px; }
+.card .hd span { margin-left: auto; color: #8E8E93; text-transform: none; letter-spacing: 0; font-weight: 500; }
+.card h3 { margin: 0; font: 700 19px/1.15 var(--body); letter-spacing: -0.01em; text-wrap: balance; }
+.card p { margin: 0; font-size: 14px; line-height: 1.4; color: #E5E5EA; }
+.card .btns { display: flex; gap: 8px; margin-top: 4px; }
+.card .btns span { flex: 1; text-align: center; border-radius: 12px; padding: 9px 6px; font: 600 13px var(--body); background: #2C2C2E; }
+.card .btns .go { background: linear-gradient(90deg, #00A6D9, #09DB98); color: #001b14; }
+.card .why { font-size: 11.5px; color: #8E8E93; }
+.card .why::before { content: "Why: "; color: #6E7B83; }
+.states { display: grid; }
+.states > * { grid-area: 1 / 1; transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.states > .s2 { opacity: 0; transform: translateY(8px) scale(0.98); }
+.js .scene.done .states > .s1 { opacity: 0; transform: translateY(-8px) scale(0.98); }
+.js .scene.done .states > .s2 { opacity: 1; transform: none; }
+html:not(.js) .states > .s2 { display: none; }
+.ok { color: var(--leaf); }
+
+/* Phone */
+.phone { width: min(300px, 74vw); aspect-ratio: 9 / 19.2; border-radius: 46px; background: #0c0c0d; padding: 11px; box-shadow: inset 0 0 0 2px #2a2a2c, 0 40px 90px rgba(0,0,0,0.6); }
+.phone .scr { position: relative; height: 100%; border-radius: 36px; overflow: hidden; background: var(--wall, radial-gradient(110% 60% at 70% 12%, #7fd6f2, #2a8fb8 40%, #0d3b52 85%)); display: grid; grid-template-rows: auto auto 1fr; justify-items: center; padding: 14px 10px; }
+.phone .isl { width: 84px; height: 24px; border-radius: 14px; background: #000; }
+.phone .clock { font: 300 64px/1 "Geist", var(--body); letter-spacing: -2px; margin-top: 30px; color: rgba(255,255,255,0.95); }
+.phone .date { font-size: 13px; color: rgba(255,255,255,0.85); align-self: start; margin-top: 4px; }
+.phone .slot { align-self: center; width: 100%; }
+.phone .card { border-radius: 20px; }
+
+/* Mirror: a frosted panel on glass */
+.mirror .card { width: min(560px, 86vw); padding: 22px 24px 18px; border-radius: 26px; background: rgba(12, 26, 34, 0.62); }
+.mirror .card h3 { font-size: clamp(20px, 3vw, 28px); }
+.mirror .card p { font-size: clamp(14px, 1.7vw, 17px); }
+
+/* Watch */
+.watch { width: min(250px, 62vw); aspect-ratio: 0.82; border-radius: 30% / 26%; padding: 10px; background: linear-gradient(135deg, #f2f3f5, #a9adb3 45%, #e6e8eb 70%, #8d9197); box-shadow: 0 40px 80px rgba(0,0,0,0.6); position: relative; }
+.watch::after { content: ""; position: absolute; right: -9px; top: 36%; width: 9px; height: 22%; border-radius: 4px; background: linear-gradient(90deg, #8b9096, #e9ebee); }
+.watch .scr { height: 100%; border-radius: 26% / 22%; background: #000; padding: 22px 18px; display: grid; align-content: start; gap: 8px; }
+.watch .hd { display: flex; align-items: center; gap: 6px; font: 600 11px var(--body); letter-spacing: 0.08em; color: #9FEAFF; }
+.watch .hd img { width: 20px; }
+.watch .big { font: 700 27px/1.05 var(--body); }
+.watch .big b { background: linear-gradient(90deg, #2ECEFF, #09DB98); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.watch p { margin: 0; font-size: 13px; color: #D1D1D6; line-height: 1.3; }
+
+/* Car display */
+.car { width: min(640px, 92vw); aspect-ratio: 16 / 7; border-radius: 22px; padding: 10px; background: #0b0b0c; box-shadow: inset 0 0 0 2px #242427, 0 40px 90px rgba(0,0,0,0.6); }
+.car .scr { position: relative; height: 100%; border-radius: 14px; overflow: hidden; background: #0d1a22; display: grid; grid-template-columns: 1.1fr 1fr; }
+.car .map { position: relative; background: radial-gradient(circle at 30% 40%, #173343, #0d1a22 70%); }
+.car .map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.car .side { padding: 14px; display: grid; align-content: center; }
+.car .card { padding: 14px; }
+@media (max-width: 560px) { .car { aspect-ratio: auto; } .car .scr { grid-template-columns: 1fr; } .car .map { height: 120px; } }
+
+/* Ending */
+.end { min-height: 100svh; display: grid; align-content: center; justify-items: start; gap: 20px; max-width: 900px; margin: 0 auto; padding-block: 120px; }
+.end h2 { font: 800 clamp(40px, 7vw, 84px)/0.98 var(--display); letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
+.end h2 span { background: linear-gradient(90deg, var(--route), var(--leaf)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.end p { color: var(--muted); max-width: 32em; margin: 0; font-size: 18px; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 20px; border-radius: 14px; background: linear-gradient(90deg, #00A6D9, #09DB98); color: #001b14; font: 600 16px var(--body); text-decoration: none; }
+.links { display: flex; flex-wrap: wrap; gap: 18px; font-size: 15px; }
+.links a { color: var(--muted); }
+footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); text-align: center; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+
+<style>
+.cap .who { display: inline-flex; align-items: center; gap: 8px; font: 500 12px var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--c); }
+.cap .who::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+.still img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.stack { display: grid; gap: 10px; }
+.mini { background: var(--glass); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 9px 12px; font-size: 12.5px; color: #D1D1D6; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.mini img { width: 16px; }
+.watch .states > * { grid-area: 1 / 1; }
+.watch .scr { overflow: hidden; padding: 38px 20px 20px; }
+.watch .big { font-size: 23px; }
+.watch .why { font-size: 11px; color: #8E8E93; }
+.watch .btn1 { margin-top: 4px; display: inline-block; padding: 6px 12px; border-radius: 12px; background: linear-gradient(90deg, #00A6D9, #09DB98); color: #001b14; font: 600 12px var(--body); justify-self: start; }
+.watch .dim { color: #6E7B83; font-size: 15px; }
+.phone .stack .card { padding: 13px 13px 11px; }
+.laptop { width: min(620px, 92vw); }
+.phone .scr { grid-template-rows: auto auto auto 1fr; }
+.phone .slot { align-self: start; margin-top: 22px; }
+.phone .card { background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.28); backdrop-filter: blur(22px) saturate(1.6); -webkit-backdrop-filter: blur(22px) saturate(1.6); box-shadow: 0 18px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.18); }
+.phone .card .hd { color: #E6FBFF; }
+.phone .card .hd span, .phone .card .why { color: rgba(255,255,255,0.7); }
+.phone .card .why::before { color: rgba(255,255,255,0.55); }
+.phone .card p { color: rgba(255,255,255,0.92); }
+.card .btns span { display: flex; align-items: center; justify-content: center; }
+.phone .card .btns span { background: rgba(255,255,255,0.18); }
+.phone .card .btns .go { background: linear-gradient(90deg, #00A6D9, #09DB98); }
+.scene[data-scrub] { height: 380svh; }
+.stage .cov { position: absolute; inset: 0; overflow: hidden; }
+.stage .cov video { position: absolute; right: auto; bottom: auto; left: 50%; top: 50%; width: max(100%, 177.78svh); height: max(100%, 56.25vw); transform: translate(-50%, -50%); object-fit: cover; }
+.stage .cov .tintv { pointer-events: none; }
+.js .scene.on .cov .tintv { opacity: 0 !important; }
+.js .scene.on .cov video { transform: translate(-50%, -50%) scale(1.06); }
+.car { width: min(760px, 94vw); aspect-ratio: 2080 / 900; }
+.car .scr { position: relative; display: block; height: 100%; }
+.car .map { position: absolute; inset: 0; }
+.car .map img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.car .side { position: absolute; right: 2%; top: 8%; bottom: 8%; width: 46%; padding: 0; }
+.car .side .card { padding: 12px; }
+.car .side .card h3 { font-size: 16px; }
+.car .side .card p { font-size: 12.5px; }
+@media (max-width: 560px) { .car { aspect-ratio: auto; height: auto; } .car .scr { display: block; height: auto; } .car .map { position: relative; height: auto; aspect-ratio: 2080 / 900; } .car .side { position: relative; width: auto; top: auto; bottom: auto; right: auto; padding: 10px; display: block; } }
+.laptop .lid { border-radius: 16px 16px 4px 4px; background: #1b1c1e; padding: 12px; box-shadow: inset 0 0 0 2px #2c2d30, 0 40px 90px rgba(0,0,0,0.6); }
+.laptop .lscr { aspect-ratio: 16 / 10; border-radius: 6px; background: #3a2f4a url(media/lisbon.jpg) center 70% / cover no-repeat; display: grid; place-items: start end; padding: 16px; }
+.laptop .lscr .states { width: min(330px, 70%); }
+.laptop .base { height: 12px; margin: 0 -4%; border-radius: 0 0 14px 14px; background: linear-gradient(#cfd2d6, #8e9297); }
+.phone .stack .card h3 { font-size: 16px; }
+.phone .stack .card p { font-size: 12.5px; }
+</style>
+
+<header class="bar wrap">
+  <a class="brand" href="/"><img src="media/loop-logo.svg" alt="">Loop</a>
+  <nav><a href="/">Home</a><a href="/case-study/">Case study</a></nav>
+</header>
+<div class="route" aria-hidden="true"><div class="fill"></div></div>
+<main>
+  <section class="hero wrap">
+    <div class="eyebrow">A vision of Loop</div>
+    <h1>One year in <span>the Loop</span></h1>
+    <p>Owen has used Loop for a year. It knows the people he keeps up with, the places he goes back to, and the music he can't stop playing. Here is one Friday, told by everyone it touched.</p>
+    <div class="cue"><i></i>Scroll to start the day</div>
+    <div class="note">Where Loop is heading.</div>
+  </section>
+  <section class="scene" data-scrub="1" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+    <div class="stage">
+      <div class="cov"><video class="clearv" src="media/s1-clear.mp4" poster="media/s1-clear.jpg" muted playsinline loop preload="auto"></video><video class="tintv" src="media/s1-tint.mp4" poster="media/s1-tint.jpg" muted playsinline loop preload="auto"></video></div>
+      <div class="cap"><div class="who">Owen · Friday · 6:45 AM</div><h2>Loop knows when your people are free</h2><p>Jess and Leo&#x27;s free evening and a show he&#x27;d never miss, lined up before he&#x27;s awake.</p></div>
+      <div class="device"><div class="breathe"><div class="phone" style="--wall: radial-gradient(120% 70% at 30% 10%, #123a4d, #0a1820 45%, #000)"><div class="scr"><div class="isl"></div><div class="clock">6:45</div><div class="date">Friday, October 23</div><div class="slot"><div class="card "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Juniper Vale added a surprise show tonight</h3><p>Announced last night. 8:15 PM, 20 min away. Leo&#x27;s already in, and Jess is free after 6. Are you in?</p><div class="btns"><span class="go">I&#x27;m in</span><span class="">Not tonight</span></div><div class="why">She announced it at 11:40 PM, Leo shares his plans with you in Loop, and you&#x27;ve played her 40 times this month.</div></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+    <div class="stage">
+      <video src="media/s3.mp4" poster="media/s3.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Owen · 7:04 AM · The mirror</div><h2>Loop brings everyone in with one tap</h2><p>The same card, now on the mirror. One tap and three people have a plan.</p></div>
+      <div class="device mirror"><div class="breathe"><div><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>7:04 AM</span></div><h3>Leo's going tonight. Are you?</h3><p>Juniper Vale&#x27;s surprise show, 8:15, 20 min away. Jess is free after 6.</p><div class="btns"><span class="go">Get 2 tickets</span><span class="">Not tonight</span></div><div class="why">You told Loop she&#x27;s a see-her-live artist.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>7:04 AM</span></div><h3>Tickets bought <span class="ok">✓</span></h3><p>They&#x27;re in your Apple Wallet. Leo knows you&#x27;re in, Jess is invited, and it&#x27;s on your calendar.</p><div class="btns"><span class="go">View plan</span></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#D9A45B" data-who="Jess" style="--c:#D9A45B">
+    <div class="stage">
+      <video src="media/s4.mp4" poster="media/s4.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Jess · 8:51 AM · Across town</div><h2>Loop gives everyone the same plan, with what each person needs</h2><p>Jess gets the night, the time, and her own leave-by, not Owen&#x27;s.</p></div>
+      <div class="device"><div class="breathe"><div class="phone" style="--wall: radial-gradient(110% 60% at 70% 12%, #ffd59a, #e0905a 40%, #5a2e3a 85%)"><div class="scr"><div class="isl"></div><div class="clock">8:51</div><div class="date">Friday, October 23</div><div class="slot"><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Owen invited you</h3><p>Juniper Vale&#x27;s surprise show, tonight 8:15. Leo&#x27;s going too. 18 min from the studio. Owen has your ticket.</p><div class="btns"><span class="go">I&#x27;m in</span><span class="">Can&#x27;t tonight</span></div><div class="why">You share your calendar with Owen in Loop, and it&#x27;s clear after 6.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>You're in <span class="ok">✓</span></h3><p>Owen and Leo know. Doors at 7:30.</p></div></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#D9A45B" data-who="Jess" style="--c:#D9A45B">
+    <div class="stage">
+      <video src="media/s5.mp4" poster="media/s5.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Jess · 9:04 AM · Coffee run</div><h2>Loop notices what&#x27;s nearby and worth it</h2><p>Two minutes off her walk, the thing Owen&#x27;s been waiting for.</p></div>
+      <div class="device"><div class="breathe"><div class="watch"><div class="scr"><div class="states"><div class="s1" style="display:grid;gap:8px;align-content:start"><div class="hd"><img src="media/loop-logo.svg" alt="">LOOP</div><div class="big">Kettle Records, 2 min ahead</div><p>Juniper Vale&#x27;s new album on vinyl, 3 copies left. It&#x27;s on Owen&#x27;s wishlist.</p><span class="btn1">Hold a copy</span><div class="why">Owen shares his wishlist with you in Loop.</div></div><div class="s2" style="display:grid;gap:8px;align-content:start"><div class="hd"><img src="media/loop-logo.svg" alt="">LOOP</div><div class="big">Held for you <span class="ok">✓</span></div><p>Pick up by 6 PM. Owen won&#x27;t see this.</p></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+    <div class="stage">
+      <video src="media/s6.mp4" poster="media/s6.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Owen · 11:47 AM · Walking to lunch</div><h2>Loop keeps everyone in the same loop, and reads ahead</h2><p>Jess and Leo said yes while he was in meetings. Next week&#x27;s New York pitch is on the calendar too.</p></div>
+      <div class="device"><div class="breathe"><div class="phone"><div class="scr"><div class="isl"></div><div class="clock">11:49</div><div class="date">Friday, October 23</div><div class="slot"><div class="stack"><div class="card "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>11:47</span></div><h3>Tonight is set</h3><p>Jess and Leo are in. Lunch with Mom at 12:00, 9 min walk. She&#x27;s already there.</p><div class="btns"><span class="go">Walk there</span></div></div><div class="card "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Before your New York pitch</h3><p>Harlow &amp; Finch, saved in Loop, has suits 30% off through Sunday. 2 min off your walk. Tailored by Saturday, before you fly.</p><div class="btns"><span class="go">Stop after lunch</span><span class="">Not today</span></div><div class="why">Your New York pitch is on your calendar.</div></div></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#D98466" data-who="Linda" style="--c:#D98466">
+    <div class="stage">
+      <video src="media/s7.mp4" poster="media/s7.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Linda · 11:58 AM · Lunch</div><h2>Loop fills the table</h2><p>Owen&#x27;s cousin Nina flies home from New York tomorrow, and everyone&#x27;s free Sunday. Loop sees the Sunday before she does.</p></div>
+      <div class="device"><div class="breathe"><div class="phone" style="--wall: radial-gradient(110% 60% at 70% 12%, #ffd0c0, #d98466 45%, #4a1e18 90%)"><div class="scr"><div class="isl"></div><div class="clock">11:58</div><div class="date">Friday, October 23</div><div class="slot"><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Everyone's free Sunday at 6</h3><p>Nina&#x27;s back from New York Saturday. Owen, Jess, Leo and Nina are all open. Dinner at yours?</p><div class="btns"><span class="go">Invite everyone</span><span class="">Not this week</span></div><div class="why">Nina shares her trips with you in Loop, and Owen, Jess and Leo share free/busy for family plans.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Invites sent <span class="ok">✓</span></h3><p>Owen, Jess, Leo and Nina have it. Owen&#x27;s 1 min away.</p></div></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#9DB36B" data-who="Nina" style="--c:#9DB36B">
+    <div class="stage">
+      <video src="media/s8.mp4" poster="media/s8.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Nina · 2:36 PM New York · Between meetings</div><h2>Loop fits the invite to your travel</h2><p>An aunt&#x27;s dinner, a Saturday flight, and the math already done.</p></div>
+      <div class="device"><div class="breathe"><div class="phone" style="--wall: radial-gradient(110% 60% at 30% 10%, #b6e3c8, #3f8a64 45%, #0e2a1d 90%)"><div class="scr"><div class="isl"></div><div class="clock">2:36</div><div class="date">Friday, October 23</div><div class="slot"><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Aunt Linda invited you</h3><p>Sunday dinner, 6 PM. You land at DFW Saturday 4:10, so you&#x27;re clear. Leo&#x27;s coming too.</p><div class="btns"><span class="go">I&#x27;m in</span><span class="">Can&#x27;t</span></div><div class="why">Your flight is on your calendar. Loop held this until your 2:30 meeting ended.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>You're in <span class="ok">✓</span></h3><p>Linda knows. It&#x27;s on your calendar for Sunday.</p></div></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#C9825A" data-who="Marco" style="--c:#C9825A">
+    <div class="stage">
+      <video src="media/s9.mp4" poster="media/s9.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Marco · 8:22 PM Lisbon · Working late at a café</div><h2>Loop makes your trips bigger than the calendar</h2><p>Two work trips land in the same city the same week. Loop sees the overlap before either of them does.</p></div>
+      <div class="device"><div class="breathe"><div class="laptop"><div class="lid"><div class="lscr"><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Owen's in New York next week too</h3><p>You&#x27;re both free Wednesday after 6. Bramble &amp; Rye, your favorite from last time, has a table for 2 at 7:30. 8 min from both hotels.</p><div class="btns"><span class="go">Book it</span><span class="">Not this trip</span></div><div class="why">You both share work trips in Loop, and you saved Bramble &amp; Rye in March.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Booked on OpenTable <span class="ok">✓</span></h3><p>Party of 2, Wednesday 7:30, Bramble &amp; Rye. Owen&#x27;s invited.</p></div></div></div></div><div class="base"></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+    <div class="stage">
+      <video src="media/s10.mp4" poster="media/s10.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Owen · 5:40 PM · Driving home</div><h2>Loop routes around your people</h2><p>Jess at the studio, Leo at home, doors at 7:30. Eyes on the road, he just says &quot;Pick them up.&quot;</p></div>
+      <div class="device"><div class="breathe"><div class="car"><div class="scr"><div class="map"><img src="media/nav-map.jpg" alt=""></div><div class="side"><div class="stack"><div class="mini"><img src="media/loop-logo.svg" alt="">Dinner with Marco · New York · Wed 7:30</div><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>on your route</span></div><h3>Pick up Jess and Leo?</h3><p>Leave home 6:50. Jess&#x27;s studio, then Leo&#x27;s. Adds 12 min. At the venue by 7:35.</p><div class="btns"><span class="go">Pick them up</span><span class="">Meet there</span></div><div class="why">Jess and Leo share their location with you while you have plans together.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>on your route</span></div><h3>Route set <span class="ok">✓</span></h3><p>Jess and Leo know you&#x27;re coming.</p></div></div></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+    <div class="stage">
+      <video src="media/s11.mp4" poster="media/s11.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Owen · 8:12 PM · The show</div><h2>Loop steps back when the moment arrives</h2><p>Jess hands him the record. Leo&#x27;s beside them. The watch says one thing, then goes quiet.</p></div>
+      <div class="device"><div class="breathe"><div class="watch"><div class="scr"><div class="states"><div class="s1" style="display:grid;gap:8px;align-content:start"><div class="hd"><img src="media/loop-logo.svg" alt="">LOOP</div><div class="big">You're all here</div><p>Juniper Vale&#x27;s on at 8:15. Loop&#x27;s quiet till the encore.</p><span class="btn1">OK</span><div class="why">You arrived together at 7:35, and your tickets scanned at the door.</div></div><div class="s2" style="display:grid;place-items:center;height:100%"><div class="dim">Quiet till the encore</div></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="scene" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+    <div class="stage">
+      <video src="media/s12.mp4" poster="media/s12.jpg" muted playsinline loop preload="metadata"></video>
+      <div class="cap"><div class="who">Owen · 10:52 PM · Leaving the show</div><h2>Loop links your circles while the night is young</h2><p>Three friends from his close friends group are out, 13 min off the way home.</p></div>
+      <div class="device"><div class="breathe"><div class="phone"><div class="scr"><div class="isl"></div><div class="clock">10:52</div><div class="date">Friday, October 23</div><div class="slot"><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>James, George and Larry are out</h3><p>They&#x27;re at The Lantern Room, 13 min off your way home. Bring Jess and Leo?</p><div class="btns"><span class="go">We&#x27;re in</span><span class="">Head home</span></div><div class="why">They shared tonight&#x27;s plan with your Close Friends group in Loop.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>On the way <span class="ok">✓</span></h3><p>Arriving 11:08. James, George and Larry know you&#x27;re coming.</p></div></div></div></div></div></div></div>
+    </div>
+  </section>
+  <section class="end wrap">
+    <div class="eyebrow">Keeping you in the Loop</div>
+    <h2>Skip the <span style="white-space:nowrap;color:inherit;background:none;-webkit-text-fill-color:currentColor">back-and-forth.</span><br><span>Let Loop kick off the plan.</span></h2>
+    <p>In one Friday, Loop kept Owen in step with Jess and Leo and got all three of them to the show. It found Jess the record, walked Owen to lunch with his mom, filled Linda's table for Sunday with Nina home, lined up a dinner in New York with Marco, and turned the ride home into a night out with James, George and Larry.</p>
+    <p>No endless group chats. No "so what works for everyone?" Just Loop keeping you in touch with the people and places you love.</p>
+    <p>Bring your friends into Loop and it brings them into your next plan.</p>
+    <a class="btn" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
+    <div class="links"><a href="/">loopaiapp.com</a><a href="/case-study/">How Loop was built</a></div>
+  </section>
+</main>
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  var route = document.querySelector('.route'), fill = route.querySelector('.fill');
+  var wps = scenes.map(function (s) {
+    var d = document.createElement('div'); d.className = 'wp'; d.style.setProperty('--c', s.dataset.c);
+    d.title = s.dataset.who; route.appendChild(d); return d;
+  });
+  function layoutWps() {
+    var top = scenes[0].offsetTop, bottom = scenes[scenes.length - 1].offsetTop + scenes[scenes.length - 1].offsetHeight;
+    scenes.forEach(function (s, i) { wps[i].style.top = ((s.offsetTop - top) / (bottom - top) * 100) + '%'; });
+    return [top, bottom];
+  }
+  var span = layoutWps();
+  if (!reduce) document.documentElement.classList.add('js');
+  var vids = Array.prototype.slice.call(document.querySelectorAll('.stage video'));
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { var v = e.target; if (e.isIntersecting) { if (!reduce) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } } else { v.pause(); } }); }, { threshold: 0.2 });
+    vids.forEach(function (v) { io.observe(v); });
+  }
+  function tick() {
+    var vh = window.innerHeight, y = window.scrollY;
+    var rp = Math.min(1, Math.max(0, (y + vh * 0.5 - span[0]) / (span[1] - span[0])));
+    fill.style.setProperty('--rp', rp); route.style.setProperty('--rp', rp);
+    scenes.forEach(function (s, i) {
+      var r = s.getBoundingClientRect();
+      var p = (-r.top) / Math.max(1, (r.height - vh));
+      if (s.dataset.scrub) {
+        var cv = s.querySelector('.clearv'), tv = s.querySelector('.tintv');
+        var g = Math.min(1, Math.max(0, (vh * 0.9 - r.top) / (vh * 0.9 + (r.height - vh) * 0.5)));
+        if (tv) tv.style.opacity = (1 - g).toFixed(3);
+        if (cv && tv && Math.abs(tv.currentTime - cv.currentTime) > 0.1) tv.currentTime = cv.currentTime;
+        var on = p > 0.66;
+        s.classList.toggle('on', on);
+        s.classList.toggle('done', p > 0.9);
+      } else {
+        s.classList.toggle('on', p > 0.22);
+        s.classList.toggle('done', p > 0.62);
+      }
+      wps[i].classList.toggle('lit', r.top < vh * 0.5);
+      wps[i].classList.toggle('now', r.top < vh * 0.5 && r.bottom > vh * 0.5);
+    });
+  }
+  var queued = false;
+  function onScroll() { if (!queued) { queued = true; requestAnimationFrame(function () { queued = false; tick(); }); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function () { span = layoutWps(); tick(); });
+  tick();
+})();
+</script>
+
+</body>
+</html>
