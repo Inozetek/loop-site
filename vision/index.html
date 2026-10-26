@@ -240,6 +240,7 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
 .phone .stack .card p { color: #E5E5EA; }
 .phone .stack .card .btns span { background: #2C2C2E; }
 .phone .stack .card .btns .go { background: linear-gradient(90deg, #00A6D9, #09DB98); }
+.scene[data-long] { height: 290svh; }
 </style>
 
 <header class="bar wrap">
@@ -262,7 +263,7 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
       <div class="device"><div class="breathe"><div class="phone" style="--wall: radial-gradient(120% 70% at 30% 10%, #123a4d, #0a1820 45%, #000)"><div class="scr"><div class="isl"></div><div class="clock">6:45</div><div class="date">Friday, October 23</div><div class="slot"><div class="card "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Juniper Vale added a surprise show tonight</h3><p>Announced last night. 8:15 PM, 20 min away. Leo&#x27;s already in, and Jess is free after 6. Are you in?</p><div class="btns"><span class="go">I&#x27;m in</span><span class="">Not tonight</span></div><div class="why">Announced at 11:40 PM last night. She&#x27;s a top artist for you, Jess and Leo, who share their music and plans with you in Loop.</div></div></div></div></div></div></div>
     </div>
   </section>
-  <section class="scene" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+  <section class="scene" data-done="0.6" data-long="1" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
     <div class="stage">
       <video src="media/s3.mp4?v=4" poster="media/s3.jpg?v=4" muted playsinline loop preload="metadata"></video>
       <div class="cap"><div class="who">Owen · 7:04 AM · The mirror</div><h2>Loop brings everyone in with one tap</h2><p>While he slept, Jess said yes too. Now Loop has one question left for him. One tap, and three people have a plan.</p></div>
@@ -381,7 +382,7 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
         s.classList.toggle('done', p > 0.7);
       } else {
         s.classList.toggle('on', p > 0.16);
-        s.classList.toggle('done', p > 0.52);
+        s.classList.toggle('done', p > (s.dataset.done ? +s.dataset.done : 0.52));
       }
       wps[i].classList.toggle('lit', r.top < vh * 0.5);
       wps[i].classList.toggle('now', r.top < vh * 0.5 && r.bottom > vh * 0.5);
