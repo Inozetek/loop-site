@@ -232,6 +232,25 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
 .bar nav a[aria-current] { color: var(--fg); }
 @media (max-width: 520px) { .bar nav a[aria-current] { display: none; } }
 .bar { position: fixed; padding-block: 12px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0)); }
+/* Walk scene: the home page lock-screen art and its 8 s notification loop (starts when the device rises). */
+.walkart { position: relative; width: min(300px, 74vw); }
+.walk-glow { position: absolute; left: 50%; top: 50%; width: 190%; height: 110%; transform: translate(-50%, -50%); background: radial-gradient(closest-side, rgba(46,206,255,0.30), rgba(0,125,163,0.10) 55%, transparent); pointer-events: none; }
+.walk-float { animation: walk-float 7s ease-in-out infinite; }
+@keyframes walk-float { 0%, 100% { transform: translate3d(0, -6px, 0); } 50% { transform: translate3d(0, 6px, 0); } }
+.walk-note { display: block; width: 100%; height: auto; position: relative; }
+.walk-note text { font-family: var(--body); text-rendering: geometricPrecision; }
+.walk-note .nt-1, .walk-note .nt-2, .walk-note .nt-3 { transform-box: fill-box; transform-origin: 50% 0; }
+.js .walk-note .nt-1, .js .walk-note .nt-2, .js .walk-note .nt-3 { opacity: 0; }
+.js .scene.on .walk-note .nt-1, .js .scene.on .walk-note .nt-2, .js .scene.on .walk-note .nt-3, .js .scene.on .walk-note .art-sheen { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: var(--ease); animation-delay: 0.5s; animation-fill-mode: both; }
+.js .scene.on .walk-note .nt-1 { animation-name: wn-1; }
+.js .scene.on .walk-note .nt-2 { animation-name: wn-2; }
+.js .scene.on .walk-note .nt-3 { animation-name: wn-3; }
+.js .scene.on .walk-note .art-sheen { animation-name: wn-sheen; animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1); }
+@keyframes wn-1 { 0%, 8% { opacity: 0; transform: translateY(-36px) scale(0.96); } 16%, 92% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
+@keyframes wn-2 { 0%, 34% { opacity: 0; transform: translateY(-36px) scale(0.96); } 42%, 92% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
+@keyframes wn-3 { 0%, 60% { opacity: 0; transform: translateY(-36px) scale(0.96); } 68%, 92% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
+@keyframes wn-sheen { 0%, 70% { transform: skewX(-14deg) translateX(0); } 100% { transform: skewX(-14deg) translateX(620px); } }
+@media (prefers-reduced-motion: reduce) { .js .walk-note .nt-1, .js .walk-note .nt-2, .js .walk-note .nt-3 { opacity: 1; animation: none !important; } .walk-float { animation: none; } }
 </style>
 
 <header class="bar wrap">
@@ -279,7 +298,60 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
     <div class="stage">
       <video src="media/s6.mp4" poster="media/s6.jpg" muted playsinline loop preload="metadata"></video>
       <div class="cap"><div class="who">Owen · 11:47 AM · Walking to lunch</div><h2>Loop keeps everyone in the same loop, and reads ahead</h2><p>Jess and Leo said yes while he was in meetings. Next week&#x27;s New York pitch is on the calendar too.</p></div>
-      <div class="device"><div class="breathe"><div class="phone"><div class="scr"><div class="isl"></div><div class="clock">11:49</div><div class="date">Friday, October 23</div><div class="slot"><div class="stack"><div class="card "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>11:47</span></div><h3>Tonight is set</h3><p>Jess and Leo are in. Lunch with Mom at 12:00, 9 min walk. She&#x27;s already there.</p><div class="btns"><span class="go">Walk there</span></div></div><div class="card "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Before your New York pitch</h3><p>Harlow &amp; Finch, saved in Loop, has suits 30% off through Sunday. 2 min off your walk. Tailored by Saturday, before you fly.</p><div class="btns"><span class="go">Stop after lunch</span><span class="">Not today</span></div><div class="why">Your New York pitch is on your calendar.</div></div></div></div></div></div></div></div>
+      <div class="device"><div class="breathe"><div class="walkart"><span class="walk-glow"></span><div class="walk-float">          <svg class="art art-note walk-note" viewBox="0 0 300 612" width="300" height="612" role="img" aria-label="Owen's lock screen: Jess and Leo are in for tonight, lunch with Mom in 9 minutes, and a suit sale on his walk before his New York pitch.">
+            
+            <defs>
+              <linearGradient id="wn-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
+              <linearGradient id="wn-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+              <linearGradient id="wn-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
+              <clipPath id="wn-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
+            </defs>
+            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#wn-edge)"/>
+            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
+            <g clip-path="url(#wn-scr)">
+              <circle cx="80" cy="170" r="120" fill="none" stroke="#00A6D9" stroke-opacity=".10" stroke-width="18"/>
+              <circle cx="220" cy="210" r="120" fill="none" stroke="#09DB98" stroke-opacity=".07" stroke-width="18"/>
+              <text x="150" y="104" font-size="13" font-weight="600" fill="#fff" fill-opacity=".7" text-anchor="middle">Friday</text>
+              <text x="150" y="168" font-size="60" font-weight="300" fill="#fff" fill-opacity=".92" text-anchor="middle" letter-spacing="-2">11:49</text>
+              <g class="nt-1">
+                <rect x="22" y="236" width="256" height="76" rx="20" fill="#1C1C1E" fill-opacity=".94"/>
+                <rect x="34" y="250" width="30" height="30" rx="8" fill="#000"/>
+                <circle cx="46" cy="265" r="5.6" fill="none" stroke="#00A6D9" stroke-width="1.8"/><circle cx="52.1" cy="265" r="5.6" fill="none" stroke="#09DB98" stroke-width="1.8"/>
+                <text x="74" y="259" font-size="9" font-weight="600" fill="#8E8E93" letter-spacing=".8">LOOP</text>
+                <text x="266" y="259" font-size="9" fill="#8E8E93" text-anchor="end">now</text>
+                <text x="74" y="278" font-size="13" font-weight="700" fill="#fff">Jess and Leo are in</text>
+                <text x="74" y="295" font-size="11" fill="#C7C7CC">Tonight is set. Doors at 7:30.</text>
+              </g>
+              <g class="nt-2">
+                <rect x="22" y="322" width="256" height="76" rx="20" fill="#1C1C1E" fill-opacity=".94"/>
+                <rect x="34" y="336" width="30" height="30" rx="8" fill="#000"/>
+                <circle cx="46" cy="351" r="5.6" fill="none" stroke="#00A6D9" stroke-width="1.8"/><circle cx="52.1" cy="351" r="5.6" fill="none" stroke="#09DB98" stroke-width="1.8"/>
+                <text x="74" y="345" font-size="9" font-weight="600" fill="#8E8E93" letter-spacing=".8">LOOP</text>
+                <text x="266" y="345" font-size="9" fill="#8E8E93" text-anchor="end">now</text>
+                <text x="74" y="364" font-size="13" font-weight="700" fill="#fff">Lunch with Mom at 12</text>
+                <text x="74" y="381" font-size="11" fill="#C7C7CC">She&#8217;s already there &#183; 9 min walk</text>
+              </g>
+              <g class="nt-3">
+                <rect x="22" y="408" width="256" height="92" rx="20" fill="#1C1C1E" fill-opacity=".94"/>
+                <rect x="34" y="422" width="30" height="30" rx="8" fill="#000"/>
+                <circle cx="46" cy="437" r="5.6" fill="none" stroke="#00A6D9" stroke-width="1.8"/><circle cx="52.1" cy="437" r="5.6" fill="none" stroke="#09DB98" stroke-width="1.8"/>
+                <text x="74" y="431" font-size="9" font-weight="600" fill="#8E8E93" letter-spacing=".8">LOOP</text>
+                <text x="266" y="431" font-size="9" fill="#8E8E93" text-anchor="end">now</text>
+                <text x="74" y="450" font-size="13" font-weight="700" fill="#fff">Before your New York pitch</text>
+                <text x="74" y="467" font-size="11" fill="#C7C7CC">Harlow &amp; Finch suits are 30% off,</text>
+                <text x="74" y="482" font-size="11" fill="#C7C7CC">2 min off your walk. Stop after lunch?</text>
+              </g>
+              <circle cx="62" cy="540" r="20" fill="#1C1C1E" fill-opacity=".8"/><circle cx="238" cy="540" r="20" fill="#1C1C1E" fill-opacity=".8"/>
+              <path d="M58 531 h8 l-1.5 5 v12 h-5 v-12 Z" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4" stroke-linejoin="round"/>
+              <rect x="229" y="534" width="18" height="13" rx="3" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4"/><circle cx="238" cy="540.5" r="3.2" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4"/>
+              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#wn-sheen)" transform="skewX(-14)"/>
+            </g>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#wn-glass)"/>
+            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
+            <rect x="110" y="586" width="80" height="4" rx="2" fill="#fff" opacity=".28"/>
+          </svg>
+</div></div></div></div>
     </div>
   </section>
   <section class="scene" data-c="#D98466" data-who="Linda" style="--c:#D98466">
