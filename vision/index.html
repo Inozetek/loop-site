@@ -215,16 +215,15 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
 .laptop .base { height: 12px; margin: 0 -4%; border-radius: 0 0 14px 14px; background: linear-gradient(#cfd2d6, #8e9297); }
 .phone .stack .card h3 { font-size: 16px; }
 .phone .stack .card p { font-size: 12.5px; }
-/* Walk scene: the home page's lock-screen motion. Notifications drop in from above one after
-   another (translateY -36px, scale .96 -> rest), then a cyan sheen sweeps the glass. */
-.js .scene .stack .card { opacity: 0; transform: translateY(-36px) scale(0.96); }
-.js .scene.on .stack .card { animation: nt-drop 0.75s var(--ease) 0.6s forwards; }
-.js .scene.on .stack .card + .card { animation-delay: 1.9s; }
-@keyframes nt-drop { to { opacity: 1; transform: none; } }
+/* Walk scene: the home page's lock-screen motion, driven by scroll rather than a timer. The first
+   notification drops in when the phone arrives, the second when the reader scrolls on, then a
+   cyan sheen sweeps the glass. Direct children only: the car scene's .states cards flip on .done. */
+.js .scene .stack > .card { opacity: 0; transform: translateY(-36px) scale(0.96); transition: opacity 0.75s var(--ease), transform 0.75s var(--ease); }
+.js .scene.on .stack > .card:first-child, .js .scene.done .stack > .card + .card { opacity: 1; transform: none; }
 .phone:has(.stack) .scr::after { content: ""; position: absolute; top: -10%; bottom: -10%; left: -70%; width: 45%; background: linear-gradient(90deg, transparent, rgba(159,234,255,0.14), transparent); transform: skewX(-14deg); pointer-events: none; opacity: 0; }
-.js .scene.on .phone:has(.stack) .scr::after { animation: v-sheen 1.5s cubic-bezier(0.45, 0, 0.2, 1) 2.9s both; }
+.js .scene.done .phone:has(.stack) .scr::after { animation: v-sheen 1.5s cubic-bezier(0.45, 0, 0.2, 1) 0.5s both; }
 @keyframes v-sheen { 0% { left: -70%; opacity: 1; } 100% { left: 140%; opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .js .scene .stack .card { opacity: 1; transform: none; animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .js .scene .stack > .card { opacity: 1; transform: none; animation: none !important; } }
 .cap p { color: #E3E8EC; text-shadow: 0 1px 3px rgba(0,0,0,0.85), 0 0 22px rgba(0,0,0,0.75); }
 .cap h2 { text-shadow: 0 1px 4px rgba(0,0,0,0.6), 0 2px 30px rgba(0,0,0,0.6); }
 .bar nav { display: flex; gap: 18px; }
@@ -241,9 +240,6 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
 .phone .stack .card .btns span { background: #2C2C2E; }
 .phone .stack .card .btns .go { background: linear-gradient(90deg, #00A6D9, #09DB98); }
 .scene[data-long] { height: 290svh; }
-.scene[data-xlong] { height: 460svh; }
-.js .scene.leave .device { opacity: 0; transform: translateY(-30px) scale(0.97); }
-.scene[data-car] { height: 542svh; }
 </style>
 
 <header class="bar wrap">
@@ -315,7 +311,7 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
       <div class="device"><div class="breathe"><div class="laptop"><div class="lid"><div class="lscr"><div class="states"><div class="card s1 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Owen's in New York next week too</h3><p>You&#x27;re both free Wednesday after 6. Bramble &amp; Rye, your favorite from last time, has a table for 2 at 7:30. 8 min from both hotels.</p><div class="btns"><span class="go">Book it</span><span class="">Not this trip</span></div><div class="why">You and Owen are close friends in Loop and share your work trips, and you saved Bramble &amp; Rye in March.</div></div><div class="card s2 "><div class="hd"><img src="media/loop-logo.svg" alt="">Loop<span>now</span></div><h3>Booked on OpenTable <span class="ok">✓</span></h3><p>Party of 2, Wednesday 7:30, Bramble &amp; Rye. Owen&#x27;s invited. I&#x27;ll remind you when to leave so you&#x27;re on time.</p></div></div></div></div><div class="base"></div></div></div></div>
     </div>
   </section>
-  <section class="scene" data-on="0.05" data-done="0.955" data-car="1" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
+  <section class="scene" data-done="0.55" data-long="1" data-c="#7FB8D0" data-who="Owen" style="--c:#7FB8D0">
     <div class="stage">
       <video src="media/s10.mp4?v=3" poster="media/s10.jpg?v=3" muted playsinline loop preload="metadata"></video>
       <div class="cap"><div class="who">Owen · 5:40 PM · Driving home</div><h2>Loop plans the pickup</h2><p>Jess at the studio, Leo at home, doors at 7:30. Eyes on the road, he just says &quot;Pick them up.&quot;</p></div>
@@ -386,7 +382,6 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
       } else {
         s.classList.toggle('on', p > (s.dataset.on ? +s.dataset.on : 0.16));
         s.classList.toggle('done', p > (s.dataset.done ? +s.dataset.done : 0.52));
-        if (s.dataset.leave) s.classList.toggle('leave', p > +s.dataset.leave);
       }
       wps[i].classList.toggle('lit', r.top < vh * 0.5);
       wps[i].classList.toggle('now', r.top < vh * 0.5 && r.bottom > vh * 0.5);
@@ -394,24 +389,6 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
   }
   var queued = false;
   function onScroll() { if (!queued) { queued = true; requestAnimationFrame(function () { queued = false; tick(); }); } }
-  /* One-click advance after "Route set": the first scroll down past it glides to the next scene's card. */
-  var lastY = window.scrollY, gliding = false;
-  window.addEventListener('scroll', function () {
-    var y = window.scrollY, down = y > lastY; lastY = y;
-    if (gliding || !down) return;
-    scenes.forEach(function (s) {
-      if (!s.dataset.car) return;
-      var vh = window.innerHeight, R = s.offsetHeight - vh, top = s.offsetTop;
-      var doneY = top + R * (+s.dataset.done);
-      var nx = s.nextElementSibling; if (!nx) return;
-      var target = nx.offsetTop + (nx.offsetHeight - vh) * 0.2;
-      if (y > doneY + vh * 0.12 && y < target - 40) {
-        gliding = true;
-        window.scrollTo({ top: target, behavior: reduce ? 'auto' : 'smooth' });
-        setTimeout(function () { gliding = false; lastY = window.scrollY; }, 1400);
-      }
-    });
-  }, { passive: true });
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', function () { span = layoutWps(); tick(); });
   tick();
