@@ -237,9 +237,26 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
 .shots figure { margin: 0; display: grid; gap: 10px; justify-items: center; scroll-snap-align: start; }
 .shots .shot { display: block; width: 100%; height: auto; border-radius: 26px; border: 6px solid #0e0e10; box-shadow: 0 0 0 1px #46484e, 0 14px 30px rgba(0,0,0,.3); background: #000; }
 .shots figcaption { font-family: var(--mono); font-size: 12.5px; color: var(--muted); text-align: center; }
+
+/* Cross-page nav */
+.site-nav { position: sticky; top: 0; z-index: 1000; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 12px max(16px, env(safe-area-inset-left, 0px)); display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.site-nav .home { display: inline-flex; align-items: center; gap: 8px; color: var(--fg); text-decoration: none; font-weight: 700; font-family: var(--display); font-size: 17px; }
+.site-nav .home img { width: 30px; height: 21px; }
+.site-nav nav { display: flex; gap: 18px; }
+.site-nav nav a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 500; white-space: nowrap; }
+.site-nav nav a:hover, .site-nav nav a:focus-visible { color: var(--fg); }
+.site-nav nav a[aria-current] { color: var(--fg); }
+@media (max-width: 520px) { .site-nav nav a[aria-current] { display: none; } .site-nav nav { gap: 14px; } .site-nav nav a { font-size: 14px; } }
+.cs-footer-links { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+.cs-footer-links a { color: var(--muted); text-decoration: none; font-weight: 500; }
+.cs-footer-links a:hover { color: var(--fg); }
 </style>
 </head>
 <body>
+<header class="site-nav">
+  <a class="home" href="/" aria-label="Loop home"><img src="/assets/loop-logo.svg" alt="" width="30" height="21">Loop</a>
+  <nav aria-label="Site"><a href="/">Home</a><a href="/vision/">A Day in the Loop</a><a href="/case-study/" aria-current="page">Case study</a></nav>
+</header>
 
 
 <main class="page">
@@ -679,7 +696,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
     </section>
   </div>
 
-  <footer>Nick Casey · Dallas, TX · Loop is patent pending (U.S. provisional application No. 64/101,733)</footer>
+  <footer><div class="cs-footer-links"><a href="/">Home</a><a href="/vision/">A Day in the Loop</a><a href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a></div>Nick Casey · Dallas, TX · Loop is patent pending (U.S. provisional application No. 64/101,733)</footer>
 </main>
 
 <script>
