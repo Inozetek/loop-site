@@ -394,6 +394,24 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
   }
   var queued = false;
   function onScroll() { if (!queued) { queued = true; requestAnimationFrame(function () { queued = false; tick(); }); } }
+  /* One-click advance after "Route set": the first scroll down past it glides to the next scene's card. */
+  var lastY = window.scrollY, gliding = false;
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY, down = y > lastY; lastY = y;
+    if (gliding || !down) return;
+    scenes.forEach(function (s) {
+      if (!s.dataset.car) return;
+      var vh = window.innerHeight, R = s.offsetHeight - vh, top = s.offsetTop;
+      var doneY = top + R * (+s.dataset.done);
+      var nx = s.nextElementSibling; if (!nx) return;
+      var target = nx.offsetTop + (nx.offsetHeight - vh) * 0.2;
+      if (y > doneY + vh * 0.12 && y < target - 40) {
+        gliding = true;
+        window.scrollTo({ top: target, behavior: reduce ? 'auto' : 'smooth' });
+        setTimeout(function () { gliding = false; lastY = window.scrollY; }, 1400);
+      }
+    });
+  }, { passive: true });
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', function () { span = layoutWps(); tick(); });
   tick();
