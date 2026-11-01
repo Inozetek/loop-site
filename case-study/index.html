@@ -250,6 +250,21 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
 .cs-footer-links { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
 .cs-footer-links a { color: var(--muted); text-decoration: none; font-weight: 500; }
 .cs-footer-links a:hover { color: var(--fg); }
+
+/* Competition: how Loop compares */
+.compare-wrap { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.compare { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 15px; line-height: 1.35; }
+.compare th, .compare td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
+.compare tr:last-child th, .compare tr:last-child td { border-bottom: none; }
+.compare thead th { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.compare tbody th { font-weight: 600; white-space: nowrap; }
+.compare th:first-child, .compare td:first-child { position: sticky; left: 0; background: var(--surface); }
+.compare td { color: var(--muted); }
+.compare tr.us th, .compare tr.us td { background: var(--tint); color: var(--fg); font-weight: 600; }
+.compare .yes { color: var(--waypoint); font-weight: 600; }
+.compare tr.us .yes { color: var(--route); }
+.scroll-hint { display: none; }
+@media (max-width: 640px) { .scroll-hint { display: block; } table.compare { min-width: 560px; font-size: 14px; } .compare th, .compare td { padding: 10px; } .compare tbody th { white-space: normal; width: 112px; } .compare thead th { font-size: 11px; } }
 </style>
 </head>
 <body>
@@ -638,6 +653,27 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
       </div>
     </section>
 
+
+    <section class="stop" id="competition">
+      <span class="eyebrow">Competition</span>
+      <h2>Each tool solves one piece. Loop plans the whole thing.</h2>
+      <p>The biggest real competitor is the group chat. Discovery apps suggest places but ignore your friends and your schedule, and invite apps only help once someone has already done the planning. Loop combines availability, interests and location in one plan.</p>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead><tr><th scope="col">Product</th><th scope="col">Knows who&rsquo;s free</th><th scope="col">Suggests what to do</th><th scope="col">Plans it with friends</th><th scope="col">Nudges at the right time</th></tr></thead>
+          <tbody>
+            <tr class="us"><th scope="row">Loop</th><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+            <tr><th scope="row">Group chat</th><td>No</td><td>No</td><td>By hand</td><td>No</td></tr>
+            <tr><th scope="row">Google Maps + Gemini</th><td>No</td><td class="yes">Yes</td><td>No</td><td>Minimal</td></tr>
+            <tr><th scope="row">Yelp</th><td>No</td><td class="yes">Yes</td><td>No</td><td>No</td></tr>
+            <tr><th scope="row">Partiful, Apple Invites</th><td>No</td><td>No</td><td>Invites only</td><td>No</td></tr>
+            <tr><th scope="row">Howbout</th><td>Shared calendars</td><td>No</td><td>Partial</td><td>No</td></tr>
+            <tr><th scope="row">Snap Map</th><td>Location only</td><td>No</td><td>No</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note scroll-hint">Swipe the table sideways to see every column.</p>
+    </section>
 
     <section class="stop" id="problems">
       <span class="eyebrow">Hard problems</span>
