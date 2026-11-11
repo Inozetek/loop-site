@@ -649,17 +649,25 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .how .hero-side { width: min(540px, 44vw); }
 @media (max-width: 900px) { .how-grid { grid-template-columns: minmax(0, 1fr); } .how .hero-side { width: 100%; max-width: 560px; } }
 /* headline static burst */
-.hero h1 em.s { position: relative; }
-.hero h1 em.s::before, .hero h1 em.s::after { content: attr(data-text); position: absolute; inset: 0; background: none; -webkit-text-fill-color: currentColor; opacity: 0; pointer-events: none; mix-blend-mode: screen; }
-.hero h1 em.s::before { color: #FF5CA8; }
-.hero h1 em.s::after { color: #5CF2FF; }
-.hero h1 em.s.static { animation: hs-main .62s steps(1) both; }
-.hero h1 em.s.static::before { animation: hs-a .62s steps(1) both; }
-.hero h1 em.s.static::after { animation: hs-b .62s steps(1) both; }
+em.s.tw { position: relative; }
+em.s.tw::before, em.s.tw::after { content: attr(data-text); position: absolute; inset: 0; background: none; -webkit-text-fill-color: currentColor; opacity: 0; pointer-events: none; mix-blend-mode: screen; }
+em.s.tw::before { color: #FF5CA8; }
+em.s.tw::after { color: #5CF2FF; }
+em.s.tw.static { animation: hs-main .62s steps(1) both; }
+em.s.tw.static::before { animation: hs-a .62s steps(1) both; }
+em.s.tw.static::after { animation: hs-b .62s steps(1) both; }
 @keyframes hs-main { 0%{transform:none} 15%{transform:translate(2px,0) skewX(-6deg)} 30%{transform:translate(-3px,0)} 50%{transform:translate(1px,0) skewX(3deg)} 70%{transform:translate(-1px,0)} 85%,100%{transform:none} }
 @keyframes hs-a { 0%{opacity:.9;clip-path:inset(10% 0 72% 0);transform:translate(-6px,0)} 15%{clip-path:inset(56% 0 22% 0);transform:translate(5px,0)} 30%{clip-path:inset(30% 0 50% 0);transform:translate(-3px,0)} 50%{clip-path:inset(78% 0 6% 0);transform:translate(6px,0)} 70%{clip-path:inset(2% 0 86% 0);transform:translate(-4px,0)} 85%{opacity:.6;clip-path:inset(44% 0 40% 0);transform:translate(2px,0)} 100%{opacity:0} }
 @keyframes hs-b { 0%{opacity:.9;clip-path:inset(62% 0 18% 0);transform:translate(6px,0)} 15%{clip-path:inset(20% 0 64% 0);transform:translate(-5px,0)} 30%{clip-path:inset(70% 0 10% 0);transform:translate(4px,0)} 50%{clip-path:inset(8% 0 76% 0);transform:translate(-6px,0)} 70%{clip-path:inset(46% 0 34% 0);transform:translate(3px,0)} 85%{opacity:.6;clip-path:inset(84% 0 2% 0);transform:translate(-2px,0)} 100%{opacity:0} }
-@media (prefers-reduced-motion: reduce) { .hero h1 em.s.static, .hero h1 em.s.static::before, .hero h1 em.s.static::after { animation: none; } }
+@media (prefers-reduced-motion: reduce) { em.s.tw.static, em.s.tw.static::before, em.s.tw.static::after { animation: none; } }
+/* "plan" wears the chrome-pearl finish */
+.hero h1 .pearl-word { background-image: linear-gradient(100deg, #ffffff 0%, #c9d2db 9%, #ffffff 17%, #bfe6ff 28%, #ffc8e8 40%, #f7fafc 50%, #c4ffe6 61%, #8e98a3 71%, #e8eeff 82%, #ffd6a8 91%, #ffffff 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; animation: pearl-word 7s linear infinite; filter: drop-shadow(0 0 18px rgba(191,230,255,.18)); }
+@keyframes pearl-word { from { background-position: 0% 0; } to { background-position: 200% 0; } }
+/* typing caret for the headline */
+em.s.tw .ch.off { visibility: hidden; }
+em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0 -0.055em 0 0.01em; vertical-align: -0.06em; border-radius: 2px; background: #5CF2FF; box-shadow: 0 0 12px rgba(92,242,255,.8); visibility: visible; animation: caret 0.9s steps(1) infinite; }
+@keyframes caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .hero h1 .pearl-word { animation: none; } }
 </style>
 </head>
 <body>
@@ -692,7 +700,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <div class="wrap hero-inner">
       <div class="hero-copy">
         <span class="label prism-in"><b>●</b>&nbsp; Now in beta on iPhone · Dallas&ndash;Fort Worth</span>
-        <h1 id="hero-title" class="prism-in">Your next plan, <em class="s" data-text="found before you ask.">found before you ask.</em></h1>
+        <h1 id="hero-title" class="prism-in" aria-label="Your next plan, found before you ask.">Your next <span class="pearl-word">plan</span>, <em class="s tw" data-tw="cycle">found before you ask.</em></h1>
         <p class="hero-sub">When you&rsquo;re free, Loop finds what to do and who to do it with.</p>
         <div class="hero-ctas">
           <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
@@ -713,7 +721,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <div class="wrap how-grid">
       <div class="how-copy">
         <span class="label prism-in">How Loop works</span>
-        <h2 class="prism-in" id="how-title">Four things Loop does <em class="s">so you don&rsquo;t have to.</em></h2>
+        <h2 class="prism-in" id="how-title">Four things Loop does <em class="s tw" data-tw="once">so you don&rsquo;t have to.</em></h2>
         <p class="prism-in">It finds the spot that&rsquo;s fair to everyone, lines up when you&rsquo;re all free, taps you when something&rsquo;s worth it, and gets sharper every time you go. Tap a scene, or tell it when you&rsquo;re free today.</p>
       </div>
       <div class="hero-side">
@@ -847,7 +855,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <div class="wrap sec-head">
       <div>
         <span class="label prism-in">A Friday in the Loop</span>
-        <h2 id="strip-title" class="prism-in">One Friday. <em class="s">Eleven moments</em> Loop handled.</h2>
+        <h2 id="strip-title" class="prism-in">One Friday. <em class="s tw">Eleven moments</em> Loop handled.</h2>
       </div>
       <p class="prism-in">From the 6:45 AM nudge to the ride home after the show. Drag through the day, or open the full story.</p>
     </div>
@@ -880,7 +888,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       <div class="sec-head">
         <div>
           <span class="label prism-in">What Loop does</span>
-          <h2 id="does-title" class="prism-in">Less planning. <em class="s">More showing up.</em></h2>
+          <h2 id="does-title" class="prism-in">Less planning. <em class="s tw">More showing up.</em></h2>
         </div>
         <p class="prism-in">Three things, done well, in one app.</p>
       </div>
@@ -923,7 +931,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       <div class="sec-head">
         <div>
           <span class="label prism-in">06 · How Loop picks the time</span>
-          <h2 id="plan-title" class="prism-in">Three calendars. <em class="s">One plan that fits.</em></h2>
+          <h2 id="plan-title" class="prism-in">Three calendars. <em class="s tw">One plan that fits.</em></h2>
         </div>
         <p class="prism-in">Loop lines up when everyone is free, then picks a time and place that&rsquo;s convenient for everyone. No group chat required.</p>
       </div>
@@ -980,7 +988,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <div class="wrap learns-grid">
       <div class="learns-copy">
         <span class="label prism-in">05 · It learns you</span>
-        <h2 id="learns-title" class="prism-in">The longer you use it, <em class="s">the more it gets you.</em></h2>
+        <h2 id="learns-title" class="prism-in">The longer you use it, <em class="s tw">the more it gets you.</em></h2>
         <p class="manifesto" id="manifesto">Loop learns from what you actually do, not what you tell it. Every place you visit, every event you save, every plan you make sharpens its sense of your taste. Over time it stops being an app you search and becomes the guide you trust. Until one morning you wake up to a list of things you didn&rsquo;t know you needed, on a day you couldn&rsquo;t have planned better yourself.</p>
       </div>
       <div class="chrome-stage" aria-hidden="true"><canvas id="chrome-loop"></canvas></div>
@@ -992,7 +1000,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       <div class="sec-head">
         <div>
           <span class="label prism-in">90-second tour</span>
-          <h2 id="demo-title" class="prism-in">The real app, <em class="s">on a real phone.</em></h2>
+          <h2 id="demo-title" class="prism-in">The real app, <em class="s tw">on a real phone.</em></h2>
         </div>
         <p class="prism-in">Asking for ideas, seeing why Loop picked a place, finding who&rsquo;s free, and the day drawn as a loop.</p>
       </div>
@@ -1008,10 +1016,10 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <div class="wrap">
       <span class="label prism-in" id="beliefs-title">What we believe</span>
       <ol class="belief-list">
-        <li class="belief">Your phone should get you <em class="s">off your phone.</em></li>
-        <li class="belief">Free time is too short to spend <em class="s">planning it.</em></li>
-        <li class="belief">The best nights start with someone saying <em class="s">&ldquo;let&rsquo;s go.&rdquo;</em></li>
-        <li class="belief belief-last">Loop is <em class="s">that someone.</em></li>
+        <li class="belief">Your phone should get you <em class="s tw">off your phone.</em></li>
+        <li class="belief">Free time is too short to spend <em class="s tw">planning it.</em></li>
+        <li class="belief">The best nights start with someone saying <em class="s tw">&ldquo;let&rsquo;s go.&rdquo;</em></li>
+        <li class="belief belief-last">Loop is <em class="s tw">that someone.</em></li>
       </ol>
       <a class="lnk beliefs-link" href="/note/"><span>Read the founder&rsquo;s note</span></a>
     </div>
@@ -1021,7 +1029,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <div class="wrap founding-grid">
       <div class="founding-copy">
         <span class="label prism-in">Founding Planners · Dallas</span>
-        <h2 id="founding-title" class="prism-in">Be one of the first <em class="s">hundred.</em></h2>
+        <h2 id="founding-title" class="prism-in">Be one of the first <em class="s tw">hundred.</em></h2>
         <p class="prism-in">Every friend group has a planner. If that&rsquo;s you, Loop was built for you. Founding Planners get in first and shape what ships next.</p>
         <ul class="perks fx">
           <li><span class="perk-n">01</span><span><b>Early access on iPhone.</b> Plan with your group before Loop opens to everyone.</span></li>
@@ -1047,7 +1055,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   <section class="close has-field" aria-labelledby="close-title" data-field="2">
     <div class="wrap">
       <span class="label prism-in">Launching in Dallas&ndash;Fort Worth</span>
-      <h2 id="close-title" class="prism-in">Never miss out. <em class="s">Get in the loop.</em></h2>
+      <h2 id="close-title" class="prism-in">Never miss out. <em class="s tw" data-tw="once">Get in the loop.</em></h2>
       <p class="prism-in">Free on iPhone while it&rsquo;s in beta. Android is on the way.</p>
       <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
       <ul class="cities" aria-label="Where Loop is launching">
@@ -1530,14 +1538,47 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 })();
 </script>
 <script>
+/* Serif accents: the hero line types, bursts into static and retypes; two type once on arrival; the rest get static bursts while on screen. */
 (function(){
-  var em=document.querySelector('#hero-title em.s'); if(!em) return;
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var vis=true;
-  if('IntersectionObserver' in window){ new IntersectionObserver(function(e){vis=e[0].isIntersecting;}).observe(em); }
-  function burst(){ if(vis && !document.hidden){ em.classList.remove('static'); void em.offsetWidth; em.classList.add('static'); } setTimeout(burst, 3800+Math.random()*2600); }
-  em.addEventListener('animationend', function(e){ if(e.animationName==='hs-main') em.classList.remove('static'); });
-  setTimeout(burst, 1400);
+  [].forEach.call(document.querySelectorAll('em.s.tw'), function(em, n){
+    var full=em.textContent, vis=false, started=false, chars=null, caret=document.createElement('span');
+    caret.className='caret'; em.setAttribute('data-text', full);
+    var h=em.closest('h1,h2,h3,p'); if(h && !h.getAttribute('aria-label')) h.setAttribute('aria-label', h.textContent.replace(/\s+/g,' ').trim());
+    function split(){ em.textContent=''; chars=full.split('').map(function(c){ var sp=document.createElement('span'); sp.className='ch'; sp.textContent=c; em.appendChild(sp); return sp; }); }
+    function put(i){ if(i<0) em.insertBefore(caret, chars[0]); else chars[i].after(caret); }
+    function type(i){
+      if(i>=chars.length){ setTimeout(function(){ caret.remove(); }, 1300); after(); return; }
+      chars[i].classList.remove('off'); put(i);
+      setTimeout(function(){ type(i+1); }, (chars[i].textContent===' '?110:52)+Math.random()*45);
+    }
+    var mode=em.getAttribute('data-tw')||'static', typedOnce=false;
+    function burst(){
+      if(!vis || document.hidden){ started=false; return; }
+      em.classList.remove('static'); void em.offsetWidth; em.classList.add('static');
+      setTimeout(burst, 4200+Math.random()*3600);
+    }
+    function after(){ if(mode==='cycle') setTimeout(cycle, 3600+Math.random()*1800); else setTimeout(burst, 3000+Math.random()*2000); }
+    function typeOut(){ put(-1); setTimeout(function(){ type(0); }, 380); }
+    function cycle(){
+      if(!vis || document.hidden){ started=false; return; }
+      if(!chars) split();
+      em.classList.remove('static'); void em.offsetWidth; em.classList.add('static');
+      setTimeout(function(){ chars.forEach(function(c){ c.classList.add('off'); }); }, 430);
+      setTimeout(typeOut, 700);
+    }
+    em.addEventListener('animationend', function(e){ if(e.animationName==='hs-main') em.classList.remove('static'); });
+    var first=true;
+    new IntersectionObserver(function(e){
+      vis=e[0].isIntersecting;
+      if(!vis || started) return;
+      started=true;
+      if(mode==='cycle') setTimeout(cycle, first ? 3600 : 900);
+      else if(mode==='once' && !typedOnce){ typedOnce=true; split(); chars.forEach(function(c){ c.classList.add('off'); }); setTimeout(typeOut, 900); }
+      else setTimeout(burst, first ? 2600 : 1200);
+      first=false;
+    }, {threshold: 0.6}).observe(em);
+  });
 })();
 </script>
 </body>
