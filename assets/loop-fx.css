@@ -24,9 +24,9 @@
 .fx:hover, .fx:focus-visible { --on: 1; }
 .fx-metal, .fx-pearl { position: absolute; inset: -30%; z-index: -1; pointer-events: none; border-radius: inherit; }
 .fx-metal { background: linear-gradient(118deg, #1b1e23 0%, #8e98a3 14%, #f7fafc 21%, #5d6670 29%, #16191e 44%, #b9c3cd 58%, #ffffff 64%, #4d555e 74%, #20242a 88%, #a7b1bb 100%);
-  background-size: 260% 260%; background-position: var(--mx) var(--my); filter: url(#lfx-liquid) brightness(1.35) contrast(1.1); opacity: calc(var(--on) * var(--fx) * 0.7); }
+  background-size: 260% 260%; background-position: var(--mx) var(--my); filter: url(#lfx-liquid); mix-blend-mode: hard-light; opacity: calc(var(--on) * var(--fx) * 0.6); }
 .fx-pearl { background: conic-gradient(from var(--angle) at var(--mx) var(--my), #ff9fd6, #b8a6ff, #8fd8ff, #2ECEFF, #09DB98, #e9ffb0, #ffd6a8, #ff9fd6);
-  mix-blend-mode: soft-light; opacity: calc(var(--on) * var(--fx) * 0.9); animation: lfx-turn 9s linear infinite; }
+  mix-blend-mode: overlay; opacity: calc(var(--on) * var(--fx) * 0.9); animation: lfx-turn 9s linear infinite; }
 @keyframes lfx-turn { to { --angle: 360deg; } }
 
 /* Light-page cards: a chrome-to-pearl edge lights up under the pointer */

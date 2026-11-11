@@ -118,15 +118,16 @@ em.s { font-family: var(--serif); font-style: italic; font-weight: 400; letter-s
 .fx-metal {
   background: linear-gradient(118deg, #1b1e23 0%, #8e98a3 14%, #f7fafc 21%, #5d6670 29%, #16191e 44%, #b9c3cd 58%, #ffffff 64%, #4d555e 74%, #20242a 88%, #a7b1bb 100%);
   background-size: 260% 260%; background-position: var(--mx) var(--my);
-  filter: url(#liquid) brightness(1.35) contrast(1.1);
-  opacity: calc(var(--on) * var(--fx) * 0.7);
+  filter: url(#liquid);
+  mix-blend-mode: hard-light;
+  opacity: calc(var(--on) * var(--fx) * 0.6);
 }
 .fx-pearl {
   background: conic-gradient(from var(--angle) at var(--mx) var(--my), #ff9fd6, #b8a6ff, #8fd8ff, #2ECEFF, #09DB98, #e9ffb0, #ffd6a8, #ff9fd6);
-  mix-blend-mode: soft-light; opacity: calc(var(--on) * var(--fx) * 0.9);
+  mix-blend-mode: overlay; opacity: calc(var(--on) * var(--fx) * 0.9);
   animation: turn 9s linear infinite;
 }
-.btn-ghost .fx-metal { mix-blend-mode: screen; filter: url(#liquid) contrast(1.2); opacity: calc(var(--on) * var(--fx) * 0.5); }
+.btn-ghost .fx-metal { mix-blend-mode: screen; filter: url(#liquid) contrast(1.2); opacity: calc(var(--on) * var(--fx) * 0.55); }
 .btn-ghost .fx-pearl { mix-blend-mode: overlay; }
 @keyframes turn { to { --angle: 360deg; } }
 
@@ -254,7 +255,7 @@ em.s { font-family: var(--serif); font-style: italic; font-weight: 400; letter-s
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
           mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
 .cell .rim .fx-metal, .cell .rim .fx-pearl { z-index: 0; mix-blend-mode: normal; }
-.cell .rim .fx-metal { opacity: calc(var(--on) * var(--fx)); filter: url(#liquid); }
+.cell .rim .fx-metal { opacity: calc(0.18 + var(--on) * var(--fx)); filter: url(#liquid); }
 .cell .rim .fx-pearl { mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.8); }
 .cell { transition: --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease), transform 0.5s var(--ease); }
 .cell:hover { transform: translateY(-3px); }
@@ -410,7 +411,8 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .rimmed > .rim { position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none; overflow: hidden; z-index: 5;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
           mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
-.rimmed > .rim .fx-metal { z-index: 0; mix-blend-mode: normal; filter: url(#liquid); opacity: calc(var(--on) * var(--fx)); }
+.rimmed > .rim .fx-metal { z-index: 0; mix-blend-mode: normal; filter: url(#liquid); opacity: calc(0.18 + var(--on) * var(--fx)); }
+.note-toggle.rimmed > .rim .fx-metal { opacity: calc(var(--on) * var(--fx)); }
 .rimmed > .rim .fx-pearl { z-index: 0; mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.85); }
 .fx.rimmed, .scene.fx, .perks.fx { transition: --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease), transform 0.5s var(--ease), box-shadow 0.5s var(--ease); }
 .scene.fx:hover .scene-img { box-shadow: 0 0 0 1px transparent, 0 24px 60px -24px rgba(46,206,255,0.45); }
@@ -440,7 +442,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .pd-card { position: relative; overflow: hidden; border-radius: 22px; padding: 24px; background: linear-gradient(180deg, rgba(24,31,37,0.85), rgba(12,16,19,0.9));
   box-shadow: 0 0 0 1px var(--line-2), 0 30px 80px -40px rgba(46,206,255,0.35); display: flex; flex-direction: column; gap: 8px; justify-content: center; outline: none; }
 .pd-card:hover, .pd-card:focus-visible { transform: translateY(-3px); box-shadow: 0 0 0 1px transparent, 0 40px 100px -40px rgba(46,206,255,0.6); }
-.pd-card-wash { position: absolute; inset: -30%; z-index: -1; mix-blend-mode: screen; opacity: calc(0.04 + var(--on) * 0.09) !important; filter: blur(34px); }
+.pd-card-wash { position: absolute; inset: -30%; z-index: -1; mix-blend-mode: screen; opacity: calc(0.03 + var(--on) * var(--fx) * 0.11) !important; mix-blend-mode: screen; }
 .pd-kicker { display: inline-flex; align-items: center; gap: 8px; font: 500 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); }
 .pd-spark { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 4px rgba(46,206,255,0.18), 0 0 14px rgba(46,206,255,0.9); }
 .pd-when { font: 500 13px/1 var(--mono); color: var(--muted); letter-spacing: 0.02em; margin-top: 6px; }
@@ -457,7 +459,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .pd-card:hover .face:nth-child(2) { transition-delay: 0.05s; } .pd-card:hover .face:nth-child(3) { transition-delay: 0.1s; }
 .pd-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px;
   color: #041016; background: linear-gradient(180deg, #FFFFFF 0%, #DCF5FF 100%); box-shadow: 0 10px 30px -10px rgba(46,206,255,0.7); transition: transform 0.3s var(--ease); }
-.pd-cta:hover { transform: translateX(2px); }
+.pd-cta:hover { transform: translate(2px, -1px); }
 .pd-who i.ph { overflow: hidden; padding: 0; }
 .pd-who i.ph img { width: 100%; height: 100%; object-fit: cover; }
 @media (prefers-reduced-motion: reduce) { .pd-card, .face, .lnk span, .lnk::after, .perks li::before { transition: none; } .lnk:hover span { animation: none; } }
@@ -747,7 +749,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
                 <span class="face" style="--c:#FFD166">L</span>
                 <span class="face face-you">You</span>
               </span>
-              <a class="pd-cta" href="https://testflight.apple.com/join/nhfZxpSc">Plan it<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="btn btn-sm fx pd-cta" href="https://testflight.apple.com/join/nhfZxpSc">Plan it<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
             </div>
           </div>
         </div>
