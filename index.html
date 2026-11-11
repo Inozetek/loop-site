@@ -252,6 +252,10 @@ em.s { font-family: var(--serif); font-style: italic; font-weight: 400; letter-s
 .c-plan { grid-column: span 2; grid-row: span 2; }
 .c-go { grid-column: span 3; min-height: 300px; }
 .c-learn { grid-column: span 3; justify-content: space-between; background: radial-gradient(120% 120% at 100% 0%, rgba(46,206,255,0.14) 0%, rgba(9,219,152,0.06) 40%, var(--surface) 70%); }
+.weighs { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.weighs li { font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 8px 11px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-2); background: rgba(4,6,7,0.35); transition: color 0.3s, box-shadow 0.4s; }
+.c-learn:hover .weighs li { color: var(--text); box-shadow: inset 0 0 0 1px rgba(143,216,255,0.45); }
+.c-learn:hover .weighs li:nth-child(2) { transition-delay: 0.06s; } .c-learn:hover .weighs li:nth-child(3) { transition-delay: 0.12s; } .c-learn:hover .weighs li:nth-child(4) { transition-delay: 0.18s; }
 .c-learn blockquote { margin: 0; font-family: var(--serif); font-size: clamp(26px, 2.6vw, 36px); line-height: 1.15; letter-spacing: -0.01em; }
 .cell .rim { position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none; overflow: hidden; z-index: 3;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
@@ -706,9 +710,10 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
         </article>
         <article class="cell c-learn fx rv" style="--d:3">
           <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
-          <span class="label prism-in">04 · Fits your budget</span>
-          <blockquote class="prism-in">Never farther, never pricier than it needs to be.</blockquote>
-          <p class="prism-in">Picks weigh price and distance for everyone in the plan, so the best option is also the easy yes.</p>
+          <span class="label prism-in">04 · Made for the whole group</span>
+          <blockquote class="prism-in">The next plan that makes sense for everyone.</blockquote>
+          <p class="prism-in">Loop learns each person&rsquo;s taste, budget and favorite spots, then suggests the event the whole group will actually want. Never farther or pricier than it needs to be, and no back-and-forth to get there.</p>
+          <ul class="weighs" aria-label="What Loop weighs for every plan"><li>Everyone&rsquo;s taste</li><li>Free time</li><li>Distance</li><li>Budget</li></ul>
         </article>
       </div>
     </div>
