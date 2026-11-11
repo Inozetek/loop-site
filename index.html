@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="styles.css?v=20261110c">
+  <link rel="stylesheet" href="styles.css?v=20261110e">
   <script>document.documentElement.classList.add('js');</script>
   <script src="app.js?v=20261110c" defer></script>
 </head>
@@ -75,6 +75,18 @@
       <div class="scroll-cue" aria-hidden="true"><span></span></div>
     </section>
 
+    <!-- Proof in numbers (a16z-style stat strip; every figure measured, see README) -->
+    <section class="stats" aria-label="Loop by the numbers">
+      <div class="wrap">
+        <dl class="stat-grid">
+          <div class="stat reveal" style="--d:0"><dt>Dallas places Loop knows</dt><dd>9,000+</dd></div>
+          <div class="stat reveal" style="--d:1"><dt>With photos and hours checked</dt><dd>3,000+</dd></div>
+          <div class="stat reveal" style="--d:2"><dt>To join the iPhone beta</dt><dd>$0</dd></div>
+          <div class="stat reveal" style="--d:3"><dt>Where Loop launches first</dt><dd>DFW</dd></div>
+        </dl>
+      </div>
+    </section>
+
     <!-- Demo: the real app -->
     <section class="demo" id="demo" aria-labelledby="demo-title">
       <div class="wrap">
@@ -84,6 +96,33 @@
         <p class="demo-note reveal" style="--d:3">90 seconds with Loop on iPhone. <a href="https://testflight.apple.com/join/nhfZxpSc">Try the beta on TestFlight</a></p>
       </div>
     </section>
+
+    <!-- What Loop does: three pillars -->
+    <section class="pillars" aria-labelledby="pillars-title">
+      <div class="wrap">
+        <h2 id="pillars-title" class="pillars-title reveal">What Loop does</h2>
+        <div class="pillar-grid">
+          <article class="pillar reveal" style="--d:1">
+            <h3>Find</h3>
+            <p>Real places and events near you, picked for your taste, with today&rsquo;s hours and a time that fits your day.</p>
+          </article>
+          <article class="pillar reveal" style="--d:2">
+            <h3>Plan</h3>
+            <p>Loop sees when your friends are free and suggests a spot that&rsquo;s fair for everyone. One invite, one plan.</p>
+          </article>
+          <article class="pillar reveal" style="--d:3">
+            <h3>Go</h3>
+            <p>A reminder before it starts, the route when it&rsquo;s time to leave, then Loop stays out of your way.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Photo band -->
+    <a class="band reveal" href="/vision/" aria-label="A Day in the Loop: Jess on her coffee run">
+      <img src="vision/media/s5.jpg" alt="Jess walks out of a coffee shop holding her cup" width="1920" height="1080" loading="lazy">
+      <span class="band-cap"><span class="band-time">Jess · Friday · 9:04 AM</span><span class="band-line">Loop spots what&rsquo;s nearby and worth the stop.</span></span>
+    </a>
 
     <!-- 2. It learns you -->
     <section class="learns" aria-labelledby="learns-title">
@@ -492,6 +531,12 @@
     </section>
 
     <!-- 4. Closing -->
+    <!-- Photo band -->
+    <a class="band reveal" href="/vision/" aria-label="A Day in the Loop: three friends leaving a show">
+      <img src="vision/media/s12.jpg" alt="Owen, Jess and a friend laugh outside a theater at night" width="1920" height="1080" loading="lazy">
+      <span class="band-cap"><span class="band-time">Owen · Friday · 10:52 PM</span><span class="band-line">One plan, the whole night.</span></span>
+    </a>
+
     <section class="closing" aria-labelledby="close-title">
       <div class="rings rings-close" aria-hidden="true">
         <span class="ring ring-a"></span>
