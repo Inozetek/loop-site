@@ -460,6 +460,11 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .pd-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px;
   color: #041016; background: linear-gradient(180deg, #FFFFFF 0%, #DCF5FF 100%); box-shadow: 0 10px 30px -10px rgba(46,206,255,0.7); transition: transform 0.3s var(--ease); }
 .pd-cta:hover { transform: translate(2px, -1px); }
+/* Hero alert wears the plan card's finish: resting chrome edge, pearl wash and full chrome under the pointer */
+.notif.fx { overflow: hidden; }
+.js .notif.fx { transition: opacity 0.9s var(--ease), transform 0.9s var(--ease), box-shadow 0.5s var(--ease), --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease); }
+.notif.fx:hover { box-shadow: 0 0 0 1px transparent, 0 30px 80px -30px rgba(0,0,0,0.8), 0 30px 90px -40px rgba(46,206,255,0.55), inset 0 1px 0 rgba(255,255,255,0.08); }
+.notif-wash { position: absolute; inset: -30%; z-index: -1; opacity: calc(0.03 + var(--on) * var(--fx) * 0.11) !important; mix-blend-mode: screen; }
 .pd-who i.ph { overflow: hidden; padding: 0; }
 .pd-who i.ph img { width: 100%; height: 100%; object-fit: cover; }
 @media (prefers-reduced-motion: reduce) { .pd-card, .face, .lnk span, .lnk::after, .perks li::before { transition: none; } .lnk:hover span { animation: none; } }
@@ -597,7 +602,8 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
             <button type="button" class="chip fx" data-k="busy" aria-pressed="false"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>Busy today</button>
           </div>
         </div>
-      <div class="notif" role="status" aria-live="polite">
+      <div class="notif fx rimmed" role="status" aria-live="polite">
+        <span class="notif-wash fx-pearl" aria-hidden="true"></span>
         <div class="notif-top"><img src="/assets/loop-logo.svg" alt="" width="26" height="18"><span class="notif-app">Loop</span><span class="notif-time">now</span></div>
         <p class="notif-title" id="n-title">Jess and Leo are free at 7</p>
         <p class="notif-body" id="n-body">Food trucks at Klyde Warren Park, 1.2 mi from all three of you. About $15 each. Plan it?</p>
