@@ -276,6 +276,48 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   .js .rv, .js .notif { opacity: 1; transform: none; transition: none; }
   .scene-img img, .cell, .btn { transition: none; }
 }
+
+/* ---------- It learns you: words light up as you scroll ---------- */
+.learns { padding-block: clamp(80px, 14vh, 160px); }
+.learns-title { margin: 14px 0 32px; font-weight: 600; font-size: clamp(52px, 9vw, 128px); line-height: 0.95; letter-spacing: -0.05em; }
+.manifesto { margin: 0; max-width: 24em; font-size: clamp(26px, 3.4vw, 46px); line-height: 1.22; letter-spacing: -0.025em; font-weight: 500; }
+.manifesto .w { color: rgba(242, 245, 247, 0.16); transition: color 0.25s linear; }
+.manifesto .w.lit { color: var(--text); }
+.manifesto .w.hi { background: linear-gradient(100deg, #CFF4FF, var(--cyan) 50%, var(--green)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* ---------- Prism reveal (after a16z speedrun) ----------
+   The text wipes in left to right, and a band of chrome-pearl light rides the leading
+   edge, then burns off. The light is a clone of the heading clipped to the letters, so
+   serif accents and gradients line up exactly. */
+@property --front { syntax: '<percentage>'; inherits: true; initial-value: 110%; }
+.prism-in { position: relative; width: fit-content; max-width: 100%; }
+.js .prism-in { --front: -12%; -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--front) - 2%), transparent calc(var(--front) + 6%)); mask-image: linear-gradient(90deg, #000 calc(var(--front) - 2%), transparent calc(var(--front) + 6%)); }
+.js .prism-in.go { animation: prism-front 2.1s cubic-bezier(0.2, 0.55, 0.35, 1) forwards; }
+.js .prism-in.done { -webkit-mask-image: none; mask-image: none; }
+@keyframes prism-front { to { --front: 112%; } }
+.prism-light {
+  position: absolute; inset: 0; pointer-events: none; display: block;
+  -webkit-mask-image: linear-gradient(90deg, transparent calc(var(--front) - 26%), #000 calc(var(--front) - 8%), #000 calc(var(--front) + 1%), transparent calc(var(--front) + 4%));
+          mask-image: linear-gradient(90deg, transparent calc(var(--front) - 26%), #000 calc(var(--front) - 8%), #000 calc(var(--front) + 1%), transparent calc(var(--front) + 4%));
+}
+.prism-light, .prism-light * {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background: linear-gradient(90deg, #ffffff 0%, #8fd8ff 18%, #2ECEFF 32%, #b8a6ff 48%, #ff9fd6 62%, #ffd6a8 78%, #09DB98 100%) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  filter: drop-shadow(0 0 14px rgba(46, 206, 255, 0.45));
+}
+.prism-in.done .prism-light { display: none; }
+
+/* ---------- Scroll chrome: tiles pick up a faint moving sheen while on screen ---------- */
+.cell.in-view { --on: 0.4; }
+.cell.in-view:hover { --on: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .prism-in { -webkit-mask-image: none; mask-image: none; animation: none; }
+  .prism-light { display: none; }
+  .manifesto .w { color: var(--text); }
+}
 </style>
 </head>
 <body>
@@ -338,10 +380,10 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
         <span class="label">Measured Nov 2026</span>
       </div>
       <dl class="stat-grid">
-        <div class="stat rv"><dt>Dallas places Loop knows</dt><dd>9,000<small>+</small></dd></div>
-        <div class="stat rv" style="--d:1"><dt>With photos and hours checked</dt><dd>3,000<small>+</small></dd></div>
-        <div class="stat rv" style="--d:2"><dt>To join the iPhone beta</dt><dd>$0</dd></div>
-        <div class="stat rv" style="--d:3"><dt>Patent pending on finding the time and place that works for everyone</dt><dd>1<small>patent</small></dd></div>
+        <div class="stat rv"><dt>Dallas places Loop knows</dt><dd class="prism-in">9,000<small>+</small></dd></div>
+        <div class="stat rv" style="--d:1"><dt>With photos and hours checked</dt><dd class="prism-in">3,000<small>+</small></dd></div>
+        <div class="stat rv" style="--d:2"><dt>To join the iPhone beta</dt><dd class="prism-in">$0</dd></div>
+        <div class="stat rv" style="--d:3"><dt>Patent pending on finding the time and place that works for everyone</dt><dd class="prism-in">1<small>patent</small></dd></div>
       </dl>
     </div>
   </section>
@@ -350,7 +392,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <div class="wrap sec-head">
       <div>
         <span class="label">A Friday in the Loop</span>
-        <h2 id="strip-title">One Friday. <em class="s">Eleven moments</em> Loop handled.</h2>
+        <h2 id="strip-title" class="prism-in">One Friday. <em class="s">Eleven moments</em> Loop handled.</h2>
       </div>
       <p>From the 6:45 AM nudge to the ride home after the show. Drag through the day, or open the full story.</p>
     </div>
@@ -383,7 +425,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       <div class="sec-head">
         <div>
           <span class="label">What Loop does</span>
-          <h2 id="does-title">Less planning. <em class="s">More showing up.</em></h2>
+          <h2 id="does-title" class="prism-in">Less planning. <em class="s">More showing up.</em></h2>
         </div>
         <p>Three things, done well, in one app.</p>
       </div>
@@ -392,30 +434,38 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
           <span class="cell-media" aria-hidden="true"><img src="media/s5.jpg" alt="" loading="lazy"><video class="cell-video" data-src="media/coffee.mp4" muted playsinline loop preload="none" tabindex="-1"></video></span>
           <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
           <span class="label">01 · Find</span>
-          <h3>What&rsquo;s worth doing, <em class="s">right now.</em></h3>
+          <h3 class="prism-in">What&rsquo;s worth doing, <em class="s">right now.</em></h3>
           <p>Real places and events near you, picked for your taste, with today&rsquo;s hours and a time that fits your day.</p>
         </article>
         <article class="cell c-plan fx rv" style="--d:1">
           <span class="cell-media" aria-hidden="true"><img src="media/s3-wide.jpg" alt="" loading="lazy" style="object-position: 62% 50%"></span>
           <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
           <span class="label">02 · Plan</span>
-          <h3>Fair to <em class="s">everyone.</em></h3>
+          <h3 class="prism-in">Fair to <em class="s">everyone.</em></h3>
           <p>Loop sees who&rsquo;s free and suggests a spot that works for the whole group. One invite, one plan.</p>
         </article>
         <article class="cell c-go fx rv" style="--d:2">
           <span class="cell-media" aria-hidden="true"><img src="media/nav-map-wide.jpg" alt="" loading="lazy"></span>
           <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
           <span class="label">03 · Go</span>
-          <h3>Then it gets <em class="s">out of the way.</em></h3>
+          <h3 class="prism-in">Then it gets <em class="s">out of the way.</em></h3>
           <p>A reminder before it starts and the route when it&rsquo;s time to leave.</p>
         </article>
         <article class="cell c-learn fx rv" style="--d:3">
           <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
-          <span class="label">The part that compounds</span>
-          <blockquote>&ldquo;Every place you go and every plan you make sharpens its sense of your taste.&rdquo;</blockquote>
-          <p>Over time Loop stops being an app you search and becomes the guide you trust.</p>
+          <span class="label">04 · Fits your budget</span>
+          <blockquote>Never farther, never pricier than it needs to be.</blockquote>
+          <p>Picks weigh price and distance for everyone in the plan, so the best option is also the easy yes.</p>
         </article>
       </div>
+    </div>
+  </section>
+
+  <section class="sec learns" aria-labelledby="learns-title" style="padding-top: 0">
+    <div class="wrap">
+      <span class="label">The part that compounds</span>
+      <h2 id="learns-title" class="learns-title prism-in">It learns <em class="s">you.</em></h2>
+      <p class="manifesto" id="manifesto">Loop learns from what you actually do, not what you tell it. Every place you visit, every event you save, every plan you make sharpens its sense of your taste. Over time it stops being an app you search and becomes the guide you trust. Until one morning you wake up to a list of things you didn&rsquo;t know you needed, on a day you couldn&rsquo;t have planned better yourself.</p>
     </div>
   </section>
 
@@ -424,7 +474,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       <div class="sec-head">
         <div>
           <span class="label">90-second tour</span>
-          <h2 id="demo-title">The real app, <em class="s">on a real phone.</em></h2>
+          <h2 id="demo-title" class="prism-in">The real app, <em class="s">on a real phone.</em></h2>
         </div>
         <p>Asking for ideas, seeing why Loop picked a place, finding who&rsquo;s free, and the day drawn as a loop.</p>
       </div>
@@ -437,7 +487,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   <section class="close" aria-labelledby="close-title">
     <div class="wrap">
       <span class="label">Launching in Dallas&ndash;Fort Worth</span>
-      <h2 id="close-title">Never miss out. <em class="s">Get in the loop.</em></h2>
+      <h2 id="close-title" class="prism-in">Never miss out. <em class="s">Get in the loop.</em></h2>
       <p>Free on iPhone while it&rsquo;s in beta. Android is on the way.</p>
       <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
     </div>
@@ -515,6 +565,67 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     el.addEventListener('pointermove', move);
     el.addEventListener('pointerleave', function () { el.style.removeProperty('--mx'); el.style.removeProperty('--my'); });
   });
+
+
+  // Prism reveal: clone each heading as a light layer, run once when it scrolls in
+  var prisms = document.querySelectorAll('.prism-in');
+  if (reduce || !('IntersectionObserver' in window)) {
+    prisms.forEach(function (el) { el.classList.add('done'); });
+  } else {
+    prisms.forEach(function (el) {
+      var light = document.createElement('span');
+      light.className = 'prism-light';
+      light.setAttribute('aria-hidden', 'true');
+      light.innerHTML = el.innerHTML;
+      el.appendChild(light);
+      el.addEventListener('animationend', function () { el.classList.add('done'); }, { once: true });
+    });
+    var pio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('go'); pio.unobserve(e.target); } });
+    }, { threshold: 0.4, rootMargin: '0px 0px -8% 0px' });
+    prisms.forEach(function (el) { pio.observe(el); });
+  }
+
+  // Manifesto: words light up with scroll; the last few glow in Loop colors
+  var man = document.getElementById('manifesto');
+  if (man && !reduce) {
+    var words = man.textContent.trim().split(/\s+/);
+    man.innerHTML = words.map(function (w) { return '<span class="w">' + w.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</span>'; }).join(' ');
+    var spans = man.querySelectorAll('.w');
+    var hiFrom = words.length - 8;
+    var ticking = false;
+    function lightWords() {
+      ticking = false;
+      var r = man.getBoundingClientRect(), vh = window.innerHeight;
+      var p = Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (r.height + vh * 0.35)));
+      var n = Math.round(p * spans.length);
+      spans.forEach(function (s, i) { s.classList.toggle('lit', i < n); s.classList.toggle('hi', i < n && i >= hiFrom); });
+    }
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(lightWords); } }, { passive: true });
+    lightWords();
+  }
+
+  // Scroll chrome: tiles carry a faint sheen while on screen, and the light slides with scroll
+  var cells = document.querySelectorAll('.cell');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle('in-view', e.isIntersecting); }); }, { threshold: 0.5 });
+    cells.forEach(function (c) { cio.observe(c); });
+    var cTick = false;
+    window.addEventListener('scroll', function () {
+      if (cTick) return; cTick = true;
+      requestAnimationFrame(function () {
+        cTick = false;
+        var vh = window.innerHeight;
+        cells.forEach(function (c) {
+          if (!c.classList.contains('in-view') || c.matches(':hover')) return;
+          var r = c.getBoundingClientRect();
+          var t = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+          c.style.setProperty('--mx', (10 + t * 80) + '%');
+          c.style.setProperty('--my', (90 - t * 80) + '%');
+        });
+      });
+    }, { passive: true });
+  }
 
   // Film strip: buttons + drag to scroll on desktop
   var strip = document.getElementById('strip');
