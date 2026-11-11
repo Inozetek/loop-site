@@ -453,6 +453,16 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 @media (prefers-reduced-motion: reduce) { .pd-card, .face, .lnk span, .lnk::after, .perks li::before { transition: none; } .lnk:hover span { animation: none; } }
 /* Choreography is scrubbed by scroll in JS: scrolling down winds it forward, up winds it back. */
 .pd-legs path { stroke-dasharray: 4 4; }
+/* Once everyone is connected: light flows along each route into the meetup, and the meetup pulses */
+.pd-live { opacity: 0; }
+.pd-flow path { stroke-dasharray: 1 11; animation: pd-flow 1.1s linear infinite; filter: drop-shadow(0 0 2px rgba(191,240,255,0.9)); }
+@keyframes pd-flow { to { stroke-dashoffset: -12; } }
+.pd-ring { transform-box: fill-box; transform-origin: center; animation: pd-ring 2.4s cubic-bezier(.2,.7,.3,1) infinite; }
+.pd-ring.r2 { animation-delay: 1.2s; }
+@keyframes pd-ring { 0% { transform: scale(1); opacity: 0.85; } 100% { transform: scale(4.2); opacity: 0; } }
+.pd-glow.alive { animation: pd-breathe 2.4s ease-in-out infinite; }
+@keyframes pd-breathe { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.9); } }
+@media (prefers-reduced-motion: reduce) { .pd-flow path, .pd-ring, .pd-glow.alive { animation: none; } .pd-ring { opacity: 0.4; } }
 .pd-place { font: 500 9.5px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; fill: rgba(242,245,247,0.62); text-transform: uppercase; }
 .pd-place.pin-l { fill: #F2F5F7; font-size: 10.5px; }
 @media (max-width: 760px) {
@@ -705,6 +715,11 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
             <circle class="pd-glow" cx="168" cy="104" r="46" fill="url(#pdg)"/>
             <g class="pd-legs" stroke-width="1.5" fill="none" stroke-dasharray="4 4">
               <path d="M58 52 L168 104" stroke="#2ECEFF"/><path d="M276 66 L168 104" stroke="#ff9fd6"/><path d="M120 176 L168 104" stroke="#09DB98"/>
+            </g>
+            <g class="pd-live">
+              <g class="pd-flow" stroke-width="2.2" fill="none" stroke-linecap="round"><path d="M58 52 L168 104" stroke="#bff0ff"/><path d="M276 66 L168 104" stroke="#ffd1ec"/><path d="M120 176 L168 104" stroke="#bfffe6"/></g>
+              <circle class="pd-ring" cx="168" cy="104" r="10" fill="none" stroke="#2ECEFF" stroke-width="1.5"/>
+              <circle class="pd-ring r2" cx="168" cy="104" r="10" fill="none" stroke="#09DB98" stroke-width="1.2"/>
             </g>
             <g class="pd-dots"><circle cx="58" cy="52" r="5" fill="#2ECEFF"/><circle cx="276" cy="66" r="5" fill="#ff9fd6"/><circle cx="120" cy="176" r="5" fill="#09DB98"/></g>
             <g class="pd-pin"><circle cx="168" cy="104" r="9" fill="#F2F5F7"/><circle cx="168" cy="104" r="4" fill="#040607"/></g>
@@ -1122,7 +1137,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     var ov = pd.querySelector('.pd-overlap');
     var dots = pd.querySelectorAll('.pd-dots circle');
     var legs = pd.querySelectorAll('.pd-legs path');
-    var pin = pd.querySelector('.pd-pin'), glow = pd.querySelector('.pd-glow');
+    var pin = pd.querySelector('.pd-pin'), glow = pd.querySelector('.pd-glow'), live = pd.querySelector('.pd-live');
     var places = pd.querySelectorAll('.pd-place');
     var card = pd.querySelector('.pd-card');
     function seg(p, a, b) { var x = Math.max(0, Math.min(1, (p - a) / (b - a))); return 1 - Math.pow(1 - x, 3); }
@@ -1134,6 +1149,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       var lo = 1 - seg(p, 0.98, 1.1); places.forEach(function (t) { var i = +t.dataset.i; t.style.opacity = (i < 3 ? seg(p, 0.5 + i * 0.03, 0.6 + i * 0.03) : seg(p, 0.76, 0.86)) * lo; });
       legs.forEach(function (l, i) { var k = seg(p, 0.56 + i * 0.03, 0.74 + i * 0.03); l.style.opacity = k > 0 ? 1 : 0; l.style.strokeDashoffset = (120 * (1 - k)).toFixed(1); });
       var g = seg(p, 0.72, 0.84); pop(pin, g); pop(glow, g);
+      var lv = seg(p, 0.82, 0.92); live.style.opacity = lv; glow.classList.toggle('alive', lv > 0.5);
       var c = seg(p, 0.8, 0.94); card.style.opacity = c; card.style.transform = c >= 1 ? '' : 'translateY(' + (14 * (1 - c)).toFixed(1) + 'px)';
     }
     if (reduce) { renderPd(1); }
