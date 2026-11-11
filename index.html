@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Loop – Your Personal AI Assistant</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Loop – Your Personal AI Assistant</title>
   <meta name="description" content="The AI assistant that finds your best plans before you ask. Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time that works for everyone.">
   <meta name="theme-color" content="#000000">
   <meta name="color-scheme" content="dark">
@@ -11,8 +11,8 @@
   <meta property="og:description" content="The AI assistant that finds your best plans before you ask. Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time that works for everyone.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://loopaiapp.com/">
-  <link rel="icon" type="image/svg+xml" href="assets/loop-logo.svg?v=5">
-  <link rel="icon" type="image/png" href="assets/favicon.png?v=5">
+  <link rel="icon" type="image/svg+xml" href="/assets/loop-logo.svg?v=5">
+  <link rel="icon" type="image/png" href="/assets/favicon.png?v=5">
     <meta property="og:site_name" content="Loop">
   <meta property="og:image" content="https://loopaiapp.com/assets/og-loop.png?v=2">
   <meta property="og:image:width" content="1200">
@@ -22,570 +22,1076 @@
   <meta name="twitter:title" content="Loop – Your personal AI assistant">
   <meta name="twitter:description" content="The AI assistant that finds your best plans before you ask. Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time that works for everyone.">
   <meta name="twitter:image" content="https://loopaiapp.com/assets/og-loop.png?v=2">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="styles.css?v=20261110f">
-  <script>document.documentElement.classList.add('js');</script>
-  <script src="app.js?v=20261110f" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Concept: an editorial tech page. Film for proof of the vision, mono labels for the
+   machine, a serif italic for the human moment. Black with a cold blue bias, Loop cyan
+   and green as light sources, chrome only on what you touch. */
+:root {
+  color-scheme: dark;
+  --bg: #040607;
+  --surface: #0b0f12;
+  --surface-2: #11161a;
+  --line: rgba(220, 240, 255, 0.09);
+  --line-2: rgba(220, 240, 255, 0.16);
+  --text: #F2F5F7;
+  --muted: #9AA4AD;
+  --dim: #5E6871;
+  --cyan: #2ECEFF;
+  --cyan-deep: #00A6D9;
+  --green: #09DB98;
+  --sans: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  --maxw: 1240px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fx: 0.75;
+}
+@property --on { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --mx { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+@property --my { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+@property --angle { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 16px/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img, video { max-width: 100%; display: block; }
+a { color: inherit; }
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+.label {
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.label b { color: var(--cyan); font-weight: 500; }
+em.s { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+/* ---------- Nav ---------- */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  padding-top: env(safe-area-inset-top, 0px);
+  transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled { background: rgba(4, 6, 7, 0.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom-color: var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; letter-spacing: -0.02em; font-size: 17px; }
+.brand img { width: 30px; height: auto; }
+.nav-links { display: flex; align-items: center; gap: 26px; }
+.nav-links a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+@media (max-width: 720px) { .nav-links .hide-sm { display: none; } }
+
+/* ---------- Buttons (chrome finish on touch) ---------- */
+.btn {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 50px; padding: 0 26px; border-radius: 999px;
+  font: 600 16px/1 var(--sans); letter-spacing: -0.01em; text-decoration: none;
+  color: #041016; background: linear-gradient(180deg, #FFFFFF 0%, #DCF5FF 100%);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 12px 44px -10px rgba(46, 206, 255, 0.6);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: scale(0.98); }
+.btn-sm { min-height: 38px; padding: 0 16px; font-size: 14px; }
+.btn-ghost { background: rgba(255,255,255,0.04); color: var(--text); box-shadow: 0 0 0 1px var(--line-2); }
+.fx:hover, .fx:focus-visible, .fx.is-on { --on: 1; }
+.fx-metal, .fx-pearl { position: absolute; inset: -30%; z-index: -1; pointer-events: none; border-radius: inherit; }
+.fx-metal {
+  background: linear-gradient(118deg, #1b1e23 0%, #8e98a3 14%, #f7fafc 21%, #5d6670 29%, #16191e 44%, #b9c3cd 58%, #ffffff 64%, #4d555e 74%, #20242a 88%, #a7b1bb 100%);
+  background-size: 260% 260%; background-position: var(--mx) var(--my);
+  filter: url(#liquid) brightness(1.35) contrast(1.1);
+  opacity: calc(var(--on) * var(--fx) * 0.7);
+}
+.fx-pearl {
+  background: conic-gradient(from var(--angle) at var(--mx) var(--my), #ff9fd6, #b8a6ff, #8fd8ff, #2ECEFF, #09DB98, #e9ffb0, #ffd6a8, #ff9fd6);
+  mix-blend-mode: soft-light; opacity: calc(var(--on) * var(--fx) * 0.9);
+  animation: turn 9s linear infinite;
+}
+.btn-ghost .fx-metal { mix-blend-mode: screen; filter: url(#liquid) contrast(1.2); opacity: calc(var(--on) * var(--fx) * 0.5); }
+.btn-ghost .fx-pearl { mix-blend-mode: overlay; }
+@keyframes turn { to { --angle: 360deg; } }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; min-height: min(100svh, 980px); display: flex; align-items: flex-end; overflow: hidden; isolation: isolate; }
+.hero-media { position: absolute; inset: 0; z-index: -2; }
+.hero-media img, .hero-media video { width: 100%; height: 100%; object-fit: cover; object-position: 40% 50%; }
+.hero-media video { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s var(--ease); }
+.hero-media video.playing { opacity: 1; }
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(4,6,7,0.55) 0%, rgba(4,6,7,0.05) 28%, rgba(4,6,7,0.2) 55%, rgba(4,6,7,0.96) 100%),
+    linear-gradient(90deg, rgba(4,6,7,0.7) 0%, rgba(4,6,7,0) 60%);
+}
+.hero-inner { padding-block: 140px clamp(48px, 9vh, 96px); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: end; width: 100%; }
+.hero-copy { display: grid; gap: 22px; max-width: 900px; min-width: 0; }
+.hero h1 { margin: 0; font-weight: 600; font-size: clamp(46px, 8.4vw, 112px); line-height: 0.95; letter-spacing: -0.045em; text-wrap: balance; }
+.hero h1 em.s { display: block; font-size: 1.04em; line-height: 0.95; background: linear-gradient(100deg, #CFF4FF 0%, var(--cyan) 45%, var(--green) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-bottom: 0.06em; }
+.hero-sub { margin: 0; font-size: clamp(17px, 1.6vw, 20px); color: rgba(242,245,247,0.78); max-width: 34em; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+/* Live notification card */
+.notif {
+  width: 100%;
+  padding: 16px; border-radius: 22px;
+  background: rgba(20, 26, 31, 0.55);
+  backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  box-shadow: 0 0 0 1px rgba(46, 206, 255, 0.28), 0 30px 80px -30px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.08);
+  display: grid; gap: 10px;
+}
+.js .notif { opacity: 0; transform: translateY(24px) scale(0.98); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+.js .notif.show { opacity: 1; transform: none; }
+.notif-top { display: flex; align-items: center; gap: 10px; }
+.notif-top img { width: 26px; height: auto; }
+.notif-app { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; flex: 1; }
+.notif-time { font: 400 12px/1 var(--mono); color: var(--dim); }
+.notif-title { font-weight: 600; font-size: 16px; letter-spacing: -0.01em; margin: 0; }
+.notif-body { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.45; }
+.notif-actions { display: flex; gap: 8px; margin-top: 2px; }
+.notif-actions span { flex: 1; text-align: center; padding: 9px 0; border-radius: 999px; font-size: 13px; font-weight: 600; }
+.notif-actions .yes { background: linear-gradient(100deg, var(--cyan-deep), var(--green)); color: #021014; }
+.notif-actions .no { background: rgba(255,255,255,0.07); color: var(--text); }
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- Ticker ---------- */
+.ticker { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; white-space: nowrap; }
+.ticker-track { display: inline-flex; gap: 48px; padding: 16px 0; animation: tick 48s linear infinite; }
+.ticker span { font: 500 13px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+.ticker span i { font-style: normal; color: var(--cyan); margin-right: 12px; }
+@keyframes tick { to { transform: translateX(-50%); } }
+
+/* ---------- Stats ---------- */
+.stats { padding-block: clamp(64px, 10vh, 120px); }
+.stats-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
+.stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); margin: 0; }
+.stat { padding: 28px 24px 0; border-left: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat dd { margin: 0; order: -1; font-weight: 600; font-size: clamp(40px, 5.4vw, 76px); letter-spacing: -0.05em; line-height: 0.95; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stat dt { font-size: 14px; color: var(--muted); max-width: 15em; }
+.stat dd small { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 0.62em; letter-spacing: 0; color: var(--cyan); margin-left: 4px; }
+@media (max-width: 760px) {
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 32px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+}
+
+/* ---------- Section heads ---------- */
+.sec { padding-block: clamp(72px, 12vh, 140px); }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: 24px 48px; align-items: end; margin-bottom: clamp(36px, 6vh, 64px); }
+.sec-head h2 { margin: 12px 0 0; font-weight: 600; font-size: clamp(36px, 5.4vw, 72px); line-height: 1; letter-spacing: -0.04em; text-wrap: balance; }
+.sec-head p { margin: 0; color: var(--muted); font-size: 17px; }
+@media (max-width: 820px) { .sec-head { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- Film strip ---------- */
+.strip-wrap { position: relative; }
+.strip {
+  display: grid; grid-auto-flow: column; grid-auto-columns: clamp(220px, 24vw, 300px); gap: 16px;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+  padding-left: max(20px, calc((100vw - var(--maxw)) / 2 + 20px));
+  padding-right: max(20px, calc((100vw - var(--maxw)) / 2 + 20px));
+  scroll-padding-left: max(20px, calc((100vw - var(--maxw)) / 2 + 20px));
+  padding-bottom: 8px; scrollbar-width: none; cursor: grab;
+}
+.strip::-webkit-scrollbar { display: none; }
+.strip.dragging { cursor: grabbing; scroll-snap-type: none; }
+.scene { scroll-snap-align: start; display: grid; gap: 14px; text-decoration: none; color: inherit; min-width: 0; }
+.scene-img { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 4 / 5; background: var(--surface); box-shadow: 0 0 0 1px var(--line); }
+.scene-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease); -webkit-user-drag: none; user-select: none; }
+.scene:hover .scene-img img { transform: scale(1.05); }
+.scene-num { position: absolute; top: 12px; left: 12px; font: 500 11px/1 var(--mono); letter-spacing: 0.08em; padding: 6px 8px; border-radius: 999px; background: rgba(4,6,7,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: var(--text); }
+.scene .label { color: var(--muted); }
+.scene p { margin: 0; font-size: 17px; line-height: 1.35; letter-spacing: -0.01em; font-weight: 500; }
+.strip-ctrl { display: flex; gap: 8px; }
+.strip-ctrl button {
+  width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--surface-2); color: var(--text); box-shadow: 0 0 0 1px var(--line-2);
+  display: grid; place-items: center; transition: background 0.2s;
+}
+.strip-ctrl button:hover { background: #1a2126; }
+.strip-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
+.strip-foot a { font-size: 15px; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--line-2); padding-bottom: 2px; }
+
+/* ---------- Bento ---------- */
+.bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: minmax(220px, auto); gap: 16px; }
+.cell {
+  position: relative; overflow: hidden; isolation: isolate;
+  border-radius: 24px; background: var(--surface); box-shadow: 0 0 0 1px var(--line);
+  padding: 28px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; min-width: 0;
+}
+.cell h3 { margin: 0; font-weight: 600; font-size: clamp(26px, 2.6vw, 36px); letter-spacing: -0.035em; line-height: 1.05; }
+.cell p { margin: 0; color: var(--muted); font-size: 16px; max-width: 30em; }
+.cell .label { margin-bottom: 4px; }
+.cell-media { position: absolute; inset: 0; z-index: -1; }
+.cell-media img, .cell-media video { width: 100%; height: 100%; object-fit: cover; }
+.cell-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,6,7,0) 30%, rgba(4,6,7,0.92) 100%); }
+.c-find { grid-column: span 4; grid-row: span 2; min-height: 520px; }
+.c-plan { grid-column: span 2; grid-row: span 2; }
+.c-go { grid-column: span 3; min-height: 300px; }
+.c-learn { grid-column: span 3; justify-content: space-between; background: radial-gradient(120% 120% at 100% 0%, rgba(46,206,255,0.14) 0%, rgba(9,219,152,0.06) 40%, var(--surface) 70%); }
+.c-learn blockquote { margin: 0; font-family: var(--serif); font-size: clamp(26px, 2.6vw, 36px); line-height: 1.15; letter-spacing: -0.01em; }
+.cell .rim { position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none; overflow: hidden; z-index: 3;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.cell .rim .fx-metal, .cell .rim .fx-pearl { z-index: 0; mix-blend-mode: normal; }
+.cell .rim .fx-metal { opacity: calc(var(--on) * var(--fx)); filter: url(#liquid); }
+.cell .rim .fx-pearl { mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.8); }
+.cell { transition: --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease), transform 0.5s var(--ease); }
+.cell:hover { transform: translateY(-3px); }
+@media (max-width: 900px) {
+  .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .c-find, .c-plan, .c-go, .c-learn { grid-column: span 2; grid-row: auto; }
+  .c-find { min-height: 440px; }
+  .c-plan { min-height: 420px; }
+}
+
+/* ---------- Demo ---------- */
+.demo-box { border-radius: 28px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); background: var(--surface); }
+.demo-box video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #000; }
+
+/* ---------- Closing ---------- */
+.close { position: relative; text-align: center; padding-block: clamp(110px, 20vh, 220px); overflow: hidden; isolation: isolate; }
+.close::before { content: ""; position: absolute; left: 50%; top: 50%; width: min(1100px, 140vw); aspect-ratio: 1; transform: translate(-50%, -50%); z-index: -1;
+  background: radial-gradient(closest-side, rgba(46,206,255,0.18), rgba(9,219,152,0.07) 45%, rgba(4,6,7,0) 70%); }
+.close h2 { margin: 18px auto 0; font-weight: 600; font-size: clamp(48px, 9vw, 128px); line-height: 0.95; letter-spacing: -0.05em; max-width: 11em; text-wrap: balance; }
+.close p { color: var(--muted); font-size: 18px; margin: 24px auto 36px; max-width: 30em; }
+
+/* ---------- Footer ---------- */
+footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(safe-area-inset-bottom, 0px)); }
+.foot { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; align-items: center; }
+.foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+.foot-links a { font-size: 14px; color: var(--muted); text-decoration: none; }
+.foot-links a:hover { color: var(--text); }
+
+/* ---------- Reveal ---------- */
+.js .rv { opacity: 0; transform: translateY(26px); transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: calc(var(--d, 0) * 90ms); }
+.js .rv.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track, .fx-pearl { animation: none; }
+  .js .rv, .js .notif { opacity: 1; transform: none; transition: none; }
+  .scene-img img, .cell, .btn { transition: none; }
+}
+
+/* ---------- It learns you: copy left, 3D chrome Loop mark right ---------- */
+.learns-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 48px; align-items: center; }
+.learns-copy { display: grid; gap: 22px; min-width: 0; }
+.learns-copy h2 { margin: 0; font-weight: 600; font-size: clamp(36px, 5.2vw, 68px); line-height: 1; letter-spacing: -0.04em; text-wrap: balance; }
+.manifesto { margin: 6px 0 0; max-width: 30em; font-size: clamp(19px, 1.7vw, 23px); line-height: 1.55; letter-spacing: -0.01em; font-weight: 400; }
+.manifesto .w { color: rgba(242, 245, 247, 0.2); transition: color 0.3s linear; }
+.manifesto .w.lit { color: rgba(242, 245, 247, 0.92); }
+.manifesto .w.hi { background: linear-gradient(100deg, #CFF4FF, var(--cyan) 50%, var(--green)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.chrome-stage { position: relative; aspect-ratio: 1; width: 100%; max-width: 560px; justify-self: center; }
+.chrome-stage::before { content: ""; position: absolute; inset: 12%; border-radius: 50%; background: radial-gradient(closest-side, rgba(46,206,255,0.16), rgba(9,219,152,0.06) 55%, rgba(4,6,7,0) 75%); filter: blur(10px); }
+.chrome-stage canvas { position: relative; width: 100%; height: 100%; display: block; }
+@media (max-width: 860px) {
+  .learns-grid { grid-template-columns: minmax(0, 1fr); }
+  .chrome-stage { order: -1; max-width: 340px; }
+}
+
+/* ---------- Prism reveal (after a16z speedrun) ----------
+   The text wipes in left to right, and a band of chrome-pearl light rides the leading
+   edge, then burns off. The light is a clone of the heading clipped to the letters, so
+   serif accents and gradients line up exactly. */
+@property --front { syntax: '<percentage>'; inherits: true; initial-value: 110%; }
+.prism-in { position: relative; width: fit-content; max-width: 100%; }
+.js .prism-in { --front: -12%; -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--front) - 2%), transparent calc(var(--front) + 6%)); mask-image: linear-gradient(90deg, #000 calc(var(--front) - 2%), transparent calc(var(--front) + 6%)); }
+.js .prism-in.go { animation: prism-front 2.1s cubic-bezier(0.2, 0.55, 0.35, 1) forwards; }
+.js .prism-in.done { -webkit-mask-image: none; mask-image: none; }
+@keyframes prism-front { to { --front: 112%; } }
+.prism-light {
+  position: absolute; inset: 0; pointer-events: none; display: block;
+  -webkit-mask-image: linear-gradient(90deg, transparent calc(var(--front) - 26%), #000 calc(var(--front) - 8%), #000 calc(var(--front) + 1%), transparent calc(var(--front) + 4%));
+          mask-image: linear-gradient(90deg, transparent calc(var(--front) - 26%), #000 calc(var(--front) - 8%), #000 calc(var(--front) + 1%), transparent calc(var(--front) + 4%));
+}
+.prism-light, .prism-light * {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background: linear-gradient(90deg, #ffffff 0%, #8fd8ff 18%, #2ECEFF 32%, #b8a6ff 48%, #ff9fd6 62%, #ffd6a8 78%, #09DB98 100%) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  filter: drop-shadow(0 0 14px rgba(46, 206, 255, 0.45));
+}
+.prism-in.done .prism-light { display: none; }
+
+/* ---------- Scroll chrome: tiles pick up a faint moving sheen while on screen ---------- */
+.cell.in-view { --on: 0.4; }
+.cell.in-view:hover { --on: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .prism-in { -webkit-mask-image: none; mask-image: none; animation: none; }
+  .prism-light { display: none; }
+  .manifesto .w { color: var(--text); }
+}
+
+/* ---------- Prism field: spectral lines bent by fractal noise, moving with scroll ---------- */
+.has-field { position: relative; isolation: isolate; }
+.prism-field { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 50%, #000 30%, transparent 80%);
+          mask-image: radial-gradient(70% 60% at 50% 50%, #000 30%, transparent 80%); }
+.prism-field svg { position: absolute; left: -10%; top: -20%; width: 120%; height: 140%; mix-blend-mode: screen; opacity: 0.55; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .prism-field svg { opacity: 0.35; } }
+
+/* ---------- Free-today chips in the hero (the app's own control, chrome on hover) ---------- */
+.hero-side { display: grid; gap: 14px; width: min(452px, 100%); min-width: 0; }
+.free-today { display: grid; gap: 10px; }
+.js .free-today { opacity: 0; transform: translateY(16px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+.js .free-today.show { opacity: 1; transform: none; }
+.chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px; margin: -2px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; }
+.chip {
+  position: relative; isolation: isolate; overflow: hidden;
+  font: 500 14px/1 var(--sans); color: rgba(242,245,247,0.78); cursor: pointer;
+  padding: 10px 14px; border-radius: 999px; border: 1px solid var(--line-2);
+  background: rgba(10, 14, 17, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  transition: color 0.2s, --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease), transform 0.3s var(--ease);
+}
+.chip:hover { transform: translateY(-1px); }
+.chip[aria-pressed="true"] { color: var(--text); border-color: transparent; background: rgba(20, 28, 33, 0.75); --on: 1; }
+.chip .rim { position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; overflow: hidden;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.chip .rim .fx-metal { z-index: 0; mix-blend-mode: normal; filter: url(#liquid); opacity: calc(var(--on) * var(--fx)); }
+.chip .rim .fx-pearl { z-index: 0; mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.85); }
+.notif.swap { animation: notif-swap 0.55s var(--ease); }
+@keyframes notif-swap { 0% { opacity: 0.2; transform: translateY(10px) scale(0.985); } 100% { opacity: 1; transform: none; } }
+
+/* ---------- Plan demo: three timelines slide together, the overlap glows, a pick lands ---------- */
+.pd { border-radius: 28px; background: linear-gradient(180deg, var(--surface) 0%, #080b0e 100%); box-shadow: 0 0 0 1px var(--line); padding: clamp(20px, 3vw, 40px); display: grid; gap: 24px; }
+.pd-time { padding-left: 96px; font: 500 11px/1 var(--mono); letter-spacing: 0.08em; color: var(--dim); }
+.pd-axis { position: relative; display: block; height: 12px; }
+.pd-axis span { position: absolute; left: calc(var(--x) * 100%); transform: translateX(calc(var(--x) * -100%)); white-space: nowrap; }
+.pd-rows { position: relative; display: grid; gap: 14px; }
+.pd-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: center; }
+.pd-who { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--muted); }
+.pd-who i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--sans); color: #041016; background: var(--c); }
+.pd-track { position: relative; height: 34px; border-radius: 10px; background: rgba(220,240,255,0.03); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.pd-track b { position: absolute; top: 4px; bottom: 4px; left: calc(var(--a) / 8 * 100% + 2px); width: calc((var(--b) - var(--a)) / 8 * 100% - 4px); border-radius: 7px; transition: transform 1s var(--ease), opacity 0.8s var(--ease); }
+.pd-track .busy { background: repeating-linear-gradient(135deg, rgba(220,240,255,0.06) 0 6px, rgba(220,240,255,0.02) 6px 12px); }
+.pd-track .free { background: linear-gradient(90deg, rgba(46,206,255,0.22), rgba(9,219,152,0.22)); box-shadow: inset 0 0 0 1px rgba(46,206,255,0.35); }
+.pd-overlap { position: absolute; top: -10px; bottom: -10px; left: calc(96px + (100% - 96px) * var(--a) / 8); width: calc((100% - 96px) * (var(--b) - var(--a)) / 8); border-radius: 12px;
+  box-shadow: 0 0 0 1.5px rgba(46,206,255,0.9), 0 0 40px rgba(46,206,255,0.35); background: linear-gradient(180deg, rgba(46,206,255,0.10), rgba(9,219,152,0.08)); pointer-events: none; }
+.pd-overlap span { position: absolute; bottom: -26px; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--cyan); }
+.pd-result { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 20px; align-items: stretch; margin-top: 30px; }
+.pd-map { width: 100%; height: auto; border-radius: 18px; background: #070a0c; box-shadow: inset 0 0 0 1px var(--line); }
+.pd-card { border-radius: 18px; padding: 22px; background: rgba(20,26,31,0.6); box-shadow: inset 0 0 0 1px rgba(46,206,255,0.28); display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+.pd-card-title { margin: 0; font-weight: 600; font-size: clamp(24px, 2.4vw, 32px); letter-spacing: -0.03em; }
+.pd-card-body { margin: 0; color: var(--muted); font-size: 15px; }
+.pd-replay { align-self: flex-start; margin-top: 6px; font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: none; border: 0; border-bottom: 1px solid var(--line-2); padding: 0 0 3px; cursor: pointer; }
+.pd-replay:hover { color: var(--text); }
+/* Choreography (runs when .play is added) */
+.js .pd .pd-track .free { opacity: 0; transform: scaleX(0.4); transform-origin: left center; }
+.js .pd .pd-overlap { opacity: 0; transform: scaleY(0.6); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.js .pd .pd-legs path { stroke-dashoffset: 120; opacity: 0; transition: stroke-dashoffset 1.2s var(--ease), opacity 0.4s; }
+.js .pd .pd-dots circle, .js .pd .pd-pin, .js .pd .pd-glow { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.4); transition: opacity 0.5s var(--ease), transform 0.6s cubic-bezier(.34,1.56,.64,1); }
+.js .pd .pd-card { opacity: 0; transform: translateY(14px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.pd.play .pd-row:nth-child(1) .free { transition-delay: 0.1s; } .pd.play .pd-row:nth-child(2) .free { transition-delay: 0.35s; } .pd.play .pd-row:nth-child(3) .free { transition-delay: 0.6s; }
+.pd.play .pd-track .free { opacity: 1; transform: none; }
+.pd.play .pd-overlap { opacity: 1; transform: none; transition-delay: 1.4s; }
+.pd.play .pd-dots circle { opacity: 1; transform: none; transition-delay: 2s; }
+.pd.play .pd-legs path { opacity: 1; stroke-dashoffset: 0; transition-delay: 2.3s; }
+.pd.play .pd-glow, .pd.play .pd-pin { opacity: 1; transform: none; transition-delay: 2.9s; }
+.pd.play .pd-card { opacity: 1; transform: none; transition-delay: 3.2s; }
+@media (max-width: 760px) {
+  .pd-result { grid-template-columns: minmax(0, 1fr); }
+  .pd-time, .pd-row { grid-template-columns: 64px minmax(0, 1fr); }
+  .pd-time { padding-left: 64px; font-size: 10px; }
+  .pd-overlap { left: calc(64px + (100% - 64px) * var(--a) / 8); width: calc((100% - 64px) * (var(--b) - var(--a)) / 8); }
+  .pd-who { font-size: 13px; gap: 6px; }
+  .pd-who i { width: 22px; height: 22px; }
+}
+
+/* ---------- Founding Planners: holographic chrome card that tilts with the pointer ---------- */
+.founding-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.founding-copy { display: grid; gap: 20px; justify-items: start; min-width: 0; }
+.founding-copy h2 { margin: 0; font-weight: 600; font-size: clamp(38px, 5.4vw, 72px); line-height: 1; letter-spacing: -0.045em; text-wrap: balance; }
+.founding-copy > p { margin: 0; color: var(--muted); font-size: 18px; max-width: 30em; }
+.perks { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 0; width: 100%; border-top: 1px solid var(--line); }
+.perks li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; padding: 16px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 16px; }
+.perks b { color: var(--text); font-weight: 600; }
+.perk-n { font: 500 12px/1.6 var(--mono); color: var(--cyan); letter-spacing: 0.08em; }
+.card-stage { perspective: 1200px; display: grid; place-items: center; }
+.fcard {
+  --rx: 0deg; --ry: 0deg; --gx: 50%; --gy: 50%;
+  position: relative; width: min(420px, 100%); aspect-ratio: 1.586; border-radius: 22px; overflow: hidden;
+  transform: rotateX(var(--rx)) rotateY(var(--ry)); transform-style: preserve-3d; transition: transform 0.6s var(--ease);
+  background: linear-gradient(135deg, #0f1418 0%, #1a2228 45%, #0b0f12 100%);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 40px 90px -30px rgba(46,206,255,0.45), 0 20px 40px -20px rgba(0,0,0,0.8);
+}
+.fcard::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; z-index: 3; pointer-events: none;
+  background: linear-gradient(118deg, #5d6670, #f7fafc 20%, #8e98a3 35%, #16191e 50%, #ffffff 66%, #4d555e 80%, #a7b1bb);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.fcard-holo { position: absolute; inset: -20%; z-index: 1; opacity: 0.32; mix-blend-mode: screen;
+  background: conic-gradient(from var(--angle) at var(--gx) var(--gy), #ff9fd6, #b8a6ff, #8fd8ff, #2ECEFF, #09DB98, #e9ffb0, #ffd6a8, #ff9fd6);
+  filter: blur(28px) saturate(0.9); animation: turn 14s linear infinite; }
+.fcard-glare { position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(60% 50% at var(--gx) var(--gy), rgba(255,255,255,0.28), rgba(255,255,255,0) 60%); mix-blend-mode: overlay; }
+.fcard-in { position: absolute; inset: 0; z-index: 4; padding: 24px 26px; display: flex; flex-direction: column; justify-content: space-between; }
+.fcard-top { display: flex; align-items: center; gap: 12px; font: 500 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: rgba(242,245,247,0.85); }
+.fcard-num { font-weight: 600; font-size: clamp(40px, 5vw, 60px); letter-spacing: -0.04em; line-height: 1; color: #fff; text-shadow: 0 2px 20px rgba(46,206,255,0.35); font-variant-numeric: tabular-nums; }
+.fcard-num small { font: 400 0.42em/1 var(--mono); letter-spacing: 0.04em; color: rgba(242,245,247,0.55); margin-left: 6px; }
+.fcard-foot { display: flex; justify-content: space-between; font: 500 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,245,247,0.6); }
+.fcard::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: overlay; opacity: 0.5;
+  background: repeating-linear-gradient(115deg, rgba(255,255,255,0.07) 0 1px, rgba(255,255,255,0) 1px 5px); }
+@media (max-width: 860px) { .founding-grid { grid-template-columns: minmax(0, 1fr); } .card-stage { order: -1; } }
+@media (prefers-reduced-motion: reduce) { .fcard-holo { animation: none; } .fcard { transition: none; } }
+
+/* ---------- Founder note: editorial column, serif pull quote ---------- */
+.note { border-top: 1px solid var(--line); }
+.note-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+.note-side { position: sticky; top: 110px; display: grid; gap: 22px; min-width: 0; }
+.note-pull { margin: 0; font-weight: 600; font-size: clamp(40px, 5.6vw, 80px); line-height: 0.98; letter-spacing: -0.045em; text-wrap: balance; }
+.note-pull em.s { display: block; background: linear-gradient(100deg, #CFF4FF 0%, var(--cyan) 50%, var(--green) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-bottom: 0.06em; }
+.note-letter { max-width: 36em; min-width: 0; }
+.note-title { margin: 0 0 22px; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(28px, 2.6vw, 36px); letter-spacing: -0.01em; }
+.note-letter p { margin: 0 0 1.1em; font-size: 18px; line-height: 1.7; color: rgba(242,245,247,0.82); }
+.note-letter p:first-of-type::first-letter { font-family: var(--serif); font-size: 3.4em; float: left; line-height: 0.82; padding: 0.06em 0.1em 0 0; color: var(--cyan); }
+.sig { display: grid; gap: 8px; margin-top: 30px !important; }
+.sig-name { font-family: var(--serif); font-style: italic; font-size: 40px; line-height: 1; color: var(--text); }
+@media (max-width: 860px) { .note-grid { grid-template-columns: minmax(0, 1fr); } .note-side { position: static; } }
+</style>
 </head>
-<body class="unveil">
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="liquid" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.010 0.032" numOctaves="2" seed="7">
+      <animate attributeName="baseFrequency" dur="14s" repeatCount="indefinite" values="0.010 0.032; 0.014 0.024; 0.009 0.036; 0.010 0.032"/>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" scale="22" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
 
-  <a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Loop home"><img src="/assets/loop-logo.svg" alt="" width="30" height="21"><span>Loop</span></a>
+    <nav class="nav-links" aria-label="Site">
+      <a class="hide-sm" href="/vision/">A Day in the Loop</a>
+      <a class="hide-sm" href="/case-study/">Case study</a>
+      <a class="btn btn-sm fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the beta</a>
+    </nav>
+  </div>
+</header>
 
-  <header class="nav" id="nav">
-    <a class="nav-brand" href="#top" aria-label="Loop home">
-      <img src="assets/loop-logo.svg" alt="" width="34" height="24">
-      <span>Loop</span>
-    </a>
-    <div class="nav-right">
-      <nav class="nav-links" aria-label="Site">
-        <a href="/vision/">A Day in the Loop</a>
-        <a href="/case-study/">Case study</a>
-      </nav>
-      <a class="pill pill-sm nav-cta" href="https://testflight.apple.com/join/nhfZxpSc">Try the beta</a>
+<main id="top">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-media" aria-hidden="true">
+      <img id="hero-still" src="/assets/home/hero.jpg" alt="" width="1600" height="900">
+      <video id="hero-video" data-src="/assets/home/hero.mp4" muted playsinline preload="none" tabindex="-1"></video>
     </div>
-  </header>
-
-  <main id="main">
-
-    <!-- 1. Hero -->
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="rings" aria-hidden="true">
-        <span class="ring ring-a"></span>
-        <span class="ring ring-b"></span>
-        <span class="halo"></span>
-      </div>
-
-      <div class="hero-inner">
-        <p class="eyebrow reveal">Now in beta on iPhone</p>
-        <h1 id="hero-title" class="display reveal" style="--d:1">Loop</h1>
-        <p class="hero-sub reveal" style="--d:2">The AI assistant that finds your best plans before you ask</p>
-        <p class="hero-promise reveal" style="--d:3">Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time that works for everyone.</p>
-        <div class="reveal" style="--d:4">
-          <a class="pill" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
-          <a class="pill pill-ghost" href="#demo">Watch the demo</a>
-        </div>
-        <a class="hero-vision reveal" style="--d:5" href="/vision/" aria-label="A Day in the Loop: see where Loop is heading">
-          <img src="assets/vision-still.jpg?v=4" alt="Owen reads a Loop invite on his bathroom mirror" width="960" height="540" loading="lazy">
-          <span class="hero-vision-label">A Day in the Loop<svg class="breathing-arrow" viewBox="0 0 512 512" aria-hidden="true"><circle cx="256" cy="256" r="208" fill="#00A6D9"/><path d="M268 160l96 96-96 96M352 256H152" fill="none" stroke="#000" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </a>
-      </div>
-
-      <div class="scroll-cue" aria-hidden="true"><span></span></div>
-    </section>
-
-    <!-- Proof in numbers (a16z-style stat strip; every figure measured, see README) -->
-    <section class="stats" aria-label="Loop by the numbers">
-      <div class="wrap">
-        <dl class="stat-grid">
-          <div class="stat reveal" style="--d:0"><dt>Dallas places Loop knows</dt><dd>9,000+</dd></div>
-          <div class="stat reveal" style="--d:1"><dt>With photos and hours checked</dt><dd>3,000+</dd></div>
-          <div class="stat reveal" style="--d:2"><dt>To join the iPhone beta</dt><dd>$0</dd></div>
-          <div class="stat reveal" style="--d:3"><dt>Where Loop launches first</dt><dd>DFW</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <!-- Demo: the real app -->
-    <section class="demo" id="demo" aria-labelledby="demo-title">
-      <div class="wrap">
-        <p class="eyebrow reveal">Demo</p>
-        <h2 id="demo-title" class="headline reveal" style="--d:1">Take a quick <span class="grad">tour.</span></h2>
-        <div class="demo-wrap reveal" style="--d:2"><video class="demo-video" src="assets/loop-demo-v12.mp4" poster="assets/loop-demo-poster-v12.jpg" controls playsinline preload="metadata" aria-label="A 97-second tour of Loop running on a phone: asking for ideas, browsing picks, seeing why Loop picked a place, finding which friends are free, planning a stop, and the day drawn as a loop on a map."></video><button type="button" class="demo-sound" aria-label="Turn on sound">&#128264; Tap for sound</button></div>
-        <p class="demo-note reveal" style="--d:3">90 seconds with Loop on iPhone. <a href="https://testflight.apple.com/join/nhfZxpSc">Try the beta on TestFlight</a></p>
-      </div>
-    </section>
-
-    <!-- What Loop does: three pillars -->
-    <section class="pillars" aria-labelledby="pillars-title">
-      <div class="wrap">
-        <h2 id="pillars-title" class="pillars-title reveal">What Loop does</h2>
-        <div class="pillar-grid">
-          <article class="pillar reveal" style="--d:1">
-            <h3>Find</h3>
-            <p>Real places and events near you, picked for your taste, with today&rsquo;s hours and a time that fits your day.</p>
-          </article>
-          <article class="pillar reveal" style="--d:2">
-            <h3>Plan</h3>
-            <p>Loop sees when your friends are free and suggests a spot that&rsquo;s fair for everyone. One invite, one plan.</p>
-          </article>
-          <article class="pillar reveal" style="--d:3">
-            <h3>Go</h3>
-            <p>A reminder before it starts, the route when it&rsquo;s time to leave, then Loop stays out of your way.</p>
-          </article>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <span class="label prism-in"><b>●</b>&nbsp; Now in beta on iPhone · Dallas&ndash;Fort Worth</span>
+        <h1 id="hero-title" class="prism-in">Your best plans, <em class="s">found before you ask.</em></h1>
+        <p class="hero-sub">Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time and place that works for everyone.</p>
+        <div class="hero-ctas">
+          <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
+          <a class="btn btn-ghost fx" href="/vision/">See a Day in the Loop</a>
         </div>
       </div>
-    </section>
-
-    <!-- Photo band -->
-    <a class="band reveal" href="/vision/" aria-label="A Day in the Loop: Jess on her coffee run">
-      <img src="vision/media/s5.jpg" alt="Jess walks out of a coffee shop holding her cup" width="1920" height="1080" loading="lazy">
-      <video class="band-video" data-src="assets/bands/coffee.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
-      <span class="band-cap"><span class="band-time">Jess · Friday · 9:04 AM</span><span class="band-line">Loop spots what&rsquo;s nearby and worth the stop.</span></span>
-    </a>
-
-    <!-- 2. It learns you -->
-    <section class="learns" aria-labelledby="learns-title">
-      <div class="wrap">
-        <p class="eyebrow reveal">The magic</p>
-        <h2 id="learns-title" class="headline reveal" style="--d:1">It learns <span class="grad">you.</span></h2>
-        <p class="manifesto" data-scrub-words>Loop learns from what you actually do, not what you tell it. Every place you visit, every event you save, every plan you make sharpens its sense of your taste. Over time it stops being an app you search and becomes the guide you trust. Until one morning you wake up to a list of things you didn&rsquo;t know you needed, on a day you couldn&rsquo;t have planned better yourself.</p>
-      </div>
-    </section>
-
-    <!-- Sensing -->
-    <section class="teaser teaser-center" aria-labelledby="sense-title">
-      <div class="wrap teaser-grid">
-        <div class="teaser-copy">
-          <p class="eyebrow reveal">Always on your side</p>
-          <h2 id="sense-title" class="headline reveal" style="--d:1">It notices, so you <span class="grad">don&rsquo;t miss.</span></h2>
-          <p class="lede reveal" style="--d:2">A friend nearby and free for lunch.<br>Happy hour on your way home, right as your meeting ends.</p>
-          <p class="lede reveal" style="--d:3; margin-top: 0.75em">Loop senses the moments too good to pass up and tells you while there&rsquo;s still time to say yes.</p>
+      <div class="hero-side">
+        <div class="free-today" role="group" aria-label="When are you free today? Pick one to see what Loop would suggest">
+          <span class="label">Free today?</span>
+          <div class="chips">
+            <button type="button" class="chip fx" data-k="now" aria-pressed="false"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>Now</button>
+            <button type="button" class="chip fx" data-k="lunch" aria-pressed="false"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>Lunch</button>
+            <button type="button" class="chip fx" data-k="after5" aria-pressed="true"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>After 5</button>
+            <button type="button" class="chip fx" data-k="tonight" aria-pressed="false"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>Tonight</button>
+            <button type="button" class="chip fx" data-k="busy" aria-pressed="false"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>Busy today</button>
+          </div>
         </div>
-        <figure class="stage" data-scrub style="--i:4">
-          <span class="stage-glow" aria-hidden="true"></span>
-          <div class="tilt"><div class="float">
-          <svg class="art art-note" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="note-t">
-            <title id="note-t">Lock screen: Loop notifies you that Maya is five minutes away and free for lunch, then that your meeting ends at five and there&#8217;s half-off happy hour on your way home until seven, then that James confirmed tonight&#8217;s group dinner.</title>
-            <defs>
-              <linearGradient id="note-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
-              <linearGradient id="note-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
-              <linearGradient id="note-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
-              <clipPath id="note-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
-            </defs>
-            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#note-edge)"/>
-            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
-            <g clip-path="url(#note-scr)">
-              <circle cx="80" cy="170" r="120" fill="none" stroke="#00A6D9" stroke-opacity=".10" stroke-width="18"/>
-              <circle cx="220" cy="210" r="120" fill="none" stroke="#09DB98" stroke-opacity=".07" stroke-width="18"/>
-              <text x="150" y="104" font-size="13" font-weight="600" fill="#fff" fill-opacity=".7" text-anchor="middle">Friday</text>
-              <text x="150" y="168" font-size="60" font-weight="300" fill="#fff" fill-opacity=".92" text-anchor="middle" letter-spacing="-2">12:04</text>
-              <g class="nt-1">
-                <rect x="22" y="236" width="256" height="76" rx="20" fill="#1C1C1E" fill-opacity=".94"/>
-                <rect x="34" y="250" width="30" height="30" rx="8" fill="#000"/>
-                <circle cx="46" cy="265" r="5.6" fill="none" stroke="#00A6D9" stroke-width="1.8"/><circle cx="52.1" cy="265" r="5.6" fill="none" stroke="#09DB98" stroke-width="1.8"/>
-                <text x="74" y="259" font-size="9" font-weight="600" fill="#8E8E93" letter-spacing=".8">LOOP</text>
-                <text x="266" y="259" font-size="9" fill="#8E8E93" text-anchor="end">now</text>
-                <text x="74" y="278" font-size="13" font-weight="700" fill="#fff">Maya is 5 min away</text>
-                <text x="74" y="295" font-size="11" fill="#C7C7CC">Free until 1:30 &#8212; lunch?</text>
-              </g>
-              <g class="nt-2">
-                <rect x="22" y="322" width="256" height="76" rx="20" fill="#1C1C1E" fill-opacity=".94"/>
-                <rect x="34" y="336" width="30" height="30" rx="8" fill="#000"/>
-                <circle cx="46" cy="351" r="5.6" fill="none" stroke="#00A6D9" stroke-width="1.8"/><circle cx="52.1" cy="351" r="5.6" fill="none" stroke="#09DB98" stroke-width="1.8"/>
-                <text x="74" y="345" font-size="9" font-weight="600" fill="#8E8E93" letter-spacing=".8">LOOP</text>
-                <text x="266" y="345" font-size="9" fill="#8E8E93" text-anchor="end">now</text>
-                <text x="74" y="364" font-size="13" font-weight="700" fill="#fff">Happy hour on the way home</text>
-                <text x="74" y="381" font-size="11" fill="#C7C7CC">Meeting ends at 5 &#183; &#189;-off till 7. Go?</text>
-              </g>
-              <g class="nt-3">
-                <rect x="22" y="408" width="256" height="92" rx="20" fill="#1C1C1E" fill-opacity=".94"/>
-                <rect x="34" y="422" width="30" height="30" rx="8" fill="#000"/>
-                <circle cx="46" cy="437" r="5.6" fill="none" stroke="#00A6D9" stroke-width="1.8"/><circle cx="52.1" cy="437" r="5.6" fill="none" stroke="#09DB98" stroke-width="1.8"/>
-                <text x="74" y="431" font-size="9" font-weight="600" fill="#8E8E93" letter-spacing=".8">LOOP</text>
-                <text x="266" y="431" font-size="9" fill="#8E8E93" text-anchor="end">now</text>
-                <text x="74" y="450" font-size="13" font-weight="700" fill="#fff">Group plan confirmed</text>
-                <text x="74" y="467" font-size="11" fill="#C7C7CC">James confirmed &#8212; dinner with your</text>
-                <text x="74" y="482" font-size="11" fill="#C7C7CC">group tonight at 8 PM.</text>
-              </g>
-              <circle cx="62" cy="540" r="20" fill="#1C1C1E" fill-opacity=".8"/><circle cx="238" cy="540" r="20" fill="#1C1C1E" fill-opacity=".8"/>
-              <path d="M58 531 h8 l-1.5 5 v12 h-5 v-12 Z" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4" stroke-linejoin="round"/>
-              <rect x="229" y="534" width="18" height="13" rx="3" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4"/><circle cx="238" cy="540.5" r="3.2" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4"/>
-              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#note-sheen)" transform="skewX(-14)"/>
+      <div class="notif" role="status" aria-live="polite">
+        <div class="notif-top"><img src="/assets/loop-logo.svg" alt="" width="26" height="18"><span class="notif-app">Loop</span><span class="notif-time">now</span></div>
+        <p class="notif-title" id="n-title">Jess and Leo are free at 7</p>
+        <p class="notif-body" id="n-body">Food trucks at Klyde Warren Park, 1.2 mi from all three of you. About $15 each. Plan it?</p>
+        <div class="notif-actions"><span class="yes">Plan it</span><span class="no">Not tonight</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span><i>01</i>Finds what&rsquo;s worth doing</span><span><i>02</i>Knows when friends are free</span><span><i>03</i>Picks a spot fair to everyone</span><span><i>04</i>Fits your budget</span><span><i>05</i>Learns your taste</span><span><i>06</i>Stays out of your way</span>
+      <span><i>01</i>Finds what&rsquo;s worth doing</span><span><i>02</i>Knows when friends are free</span><span><i>03</i>Picks a spot fair to everyone</span><span><i>04</i>Fits your budget</span><span><i>05</i>Learns your taste</span><span><i>06</i>Stays out of your way</span>
+    </div>
+  </div>
+
+  <section class="stats has-field" aria-labelledby="stats-title" data-field="1">
+    <div class="wrap">
+      <div class="stats-head">
+        <span class="label prism-in" id="stats-title">Loop / by the numbers</span>
+        <span class="label prism-in">Measured Nov 2026</span>
+      </div>
+      <dl class="stat-grid">
+        <div class="stat rv"><dt class="prism-in">Dallas places Loop knows</dt><dd class="prism-in">9,000<small>+</small></dd></div>
+        <div class="stat rv" style="--d:1"><dt class="prism-in">With photos and hours checked</dt><dd class="prism-in">3,000<small>+</small></dd></div>
+        <div class="stat rv" style="--d:2"><dt class="prism-in">To join the iPhone beta</dt><dd class="prism-in">$0</dd></div>
+        <div class="stat rv" style="--d:3"><dt class="prism-in">Patent pending on finding the time and place that works for everyone</dt><dd class="prism-in">1<small>patent</small></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="strip-title" style="padding-top: 0">
+    <div class="wrap sec-head">
+      <div>
+        <span class="label prism-in">A Friday in the Loop</span>
+        <h2 id="strip-title" class="prism-in">One Friday. <em class="s">Eleven moments</em> Loop handled.</h2>
+      </div>
+      <p class="prism-in">From the 6:45 AM nudge to the ride home after the show. Drag through the day, or open the full story.</p>
+    </div>
+    <div class="strip-wrap">
+      <div class="strip" id="strip" tabindex="0" aria-label="Scenes from A Day in the Loop">
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s1-clear.jpg" alt="Owen asleep as his phone lights up" width="560" height="700" loading="lazy"><span class="scene-num">01</span></span><span class="label prism-in">Owen · 6:45 AM</span><p class="prism-in">Loop knows when your people are free.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s3.jpg" alt="Owen reads a Loop invite on his bathroom mirror" width="560" height="700" loading="lazy"><span class="scene-num">02</span></span><span class="label prism-in">Owen · 7:04 AM</span><p class="prism-in">Loop brings everyone in with one tap.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s4.jpg" alt="Jess sketching at her desk" width="560" height="700" loading="lazy"><span class="scene-num">03</span></span><span class="label prism-in">Jess · 8:51 AM</span><p class="prism-in">Everyone gets the same plan, with what they need.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s5.jpg" alt="Jess walks out of a coffee shop" width="560" height="700" loading="lazy"><span class="scene-num">04</span></span><span class="label prism-in">Jess · 9:04 AM</span><p class="prism-in">Loop spots what&rsquo;s nearby and worth the stop.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s6.jpg" alt="Owen walking to lunch in Dallas" width="560" height="700" loading="lazy"><span class="scene-num">05</span></span><span class="label prism-in">Owen · 11:47 AM</span><p class="prism-in">Loop keeps everyone on the same page.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s7.jpg" alt="Linda at a lunch table checking her phone" width="560" height="700" loading="lazy"><span class="scene-num">06</span></span><span class="label prism-in">Linda · 11:58 AM</span><p class="prism-in">Loop fills the table.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s8.jpg" alt="Nina walking in New York" width="560" height="700" loading="lazy"><span class="scene-num">07</span></span><span class="label prism-in">Nina · 2:36 PM · New York</span><p class="prism-in">Loop checks the invite against your travel.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s9.jpg" alt="Marco working late at a Lisbon cafe" width="560" height="700" loading="lazy"><span class="scene-num">08</span></span><span class="label prism-in">Marco · 8:22 PM · Lisbon</span><p class="prism-in">Loop notices when your trips overlap.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s10.jpg" alt="Owen driving home with the route on screen" width="560" height="700" loading="lazy"><span class="scene-num">09</span></span><span class="label prism-in">Owen · 5:40 PM</span><p class="prism-in">Loop plans the pickup.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s11.jpg" alt="Three friends at a concert" width="560" height="700" loading="lazy"><span class="scene-num">10</span></span><span class="label prism-in">Owen · 8:12 PM</span><p class="prism-in">Loop goes quiet once you&rsquo;re all there.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s12.jpg" alt="Friends laughing outside a theater" width="560" height="700" loading="lazy"><span class="scene-num">11</span></span><span class="label prism-in">Owen · 10:52 PM</span><p class="prism-in">Loop knows who else is out tonight.</p></a>
+      </div>
+    </div>
+    <div class="wrap strip-foot">
+      <div class="strip-ctrl">
+        <button type="button" id="strip-prev" aria-label="Previous scenes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button type="button" id="strip-next" aria-label="Next scenes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <a href="/vision/">Watch the full story &rarr;</a>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="does-title" style="padding-top: 0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="label prism-in">What Loop does</span>
+          <h2 id="does-title" class="prism-in">Less planning. <em class="s">More showing up.</em></h2>
+        </div>
+        <p class="prism-in">Three things, done well, in one app.</p>
+      </div>
+      <div class="bento">
+        <article class="cell c-find fx rv">
+          <span class="cell-media" aria-hidden="true"><img src="/assets/home/s5.jpg" alt="" loading="lazy"><video class="cell-video" data-src="/assets/home/coffee.mp4" muted playsinline loop preload="none" tabindex="-1"></video></span>
+          <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
+          <span class="label prism-in">01 · Find</span>
+          <h3 class="prism-in">What&rsquo;s worth doing, <em class="s">right now.</em></h3>
+          <p class="prism-in">Real places and events near you, picked for your taste, with today&rsquo;s hours and a time that fits your day.</p>
+        </article>
+        <article class="cell c-plan fx rv" style="--d:1">
+          <span class="cell-media" aria-hidden="true"><img src="/assets/home/s3-wide.jpg" alt="" loading="lazy" style="object-position: 62% 50%"></span>
+          <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
+          <span class="label prism-in">02 · Plan</span>
+          <h3 class="prism-in">Fair to <em class="s">everyone.</em></h3>
+          <p class="prism-in">Loop sees who&rsquo;s free and suggests a spot that works for the whole group. One invite, one plan.</p>
+        </article>
+        <article class="cell c-go fx rv" style="--d:2">
+          <span class="cell-media" aria-hidden="true"><img src="/assets/home/nav-map-wide.jpg" alt="" loading="lazy"></span>
+          <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
+          <span class="label prism-in">03 · Go</span>
+          <h3 class="prism-in">Then it gets <em class="s">out of the way.</em></h3>
+          <p class="prism-in">A reminder before it starts and the route when it&rsquo;s time to leave.</p>
+        </article>
+        <article class="cell c-learn fx rv" style="--d:3">
+          <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
+          <span class="label prism-in">04 · Fits your budget</span>
+          <blockquote class="prism-in">Never farther, never pricier than it needs to be.</blockquote>
+          <p class="prism-in">Picks weigh price and distance for everyone in the plan, so the best option is also the easy yes.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="sec plan-demo" aria-labelledby="plan-title" style="padding-top: 0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="label prism-in">06 · How Loop picks the time</span>
+          <h2 id="plan-title" class="prism-in">Three calendars. <em class="s">One answer.</em></h2>
+        </div>
+        <p class="prism-in">Loop lines up when everyone is free, then finds the spot that&rsquo;s fair to all of you. No group chat required.</p>
+      </div>
+      <div class="pd" id="pd">
+        <div class="pd-time" aria-hidden="true"><span class="pd-axis"><span style="--x:0">3 PM</span><span style="--x:.25">5 PM</span><span style="--x:.5">7 PM</span><span style="--x:.75">9 PM</span><span style="--x:1">11 PM</span></span></div>
+        <div class="pd-rows">
+          <div class="pd-row"><span class="pd-who"><i style="--c:#2ECEFF">Y</i>You</span><span class="pd-track"><b class="busy" style="--a:0;--b:3.5"></b><b class="free" style="--a:3.5;--b:8"></b></span></div>
+          <div class="pd-row"><span class="pd-who"><i style="--c:#ff9fd6">J</i>Jess</span><span class="pd-track"><b class="busy" style="--a:0;--b:2"></b><b class="free" style="--a:2;--b:6.5"></b><b class="busy" style="--a:6.5;--b:8"></b></span></div>
+          <div class="pd-row"><span class="pd-who"><i style="--c:#09DB98">L</i>Leo</span><span class="pd-track"><b class="busy" style="--a:0;--b:4"></b><b class="free" style="--a:4;--b:8"></b></span></div>
+          <div class="pd-overlap" style="--a:4;--b:6.5" aria-hidden="true"><span>Everyone&rsquo;s free</span></div>
+        </div>
+        <div class="pd-result">
+          <svg class="pd-map" viewBox="0 0 320 200" aria-hidden="true">
+            <defs><radialGradient id="pdg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#2ECEFF" stop-opacity=".35"/><stop offset="1" stop-color="#2ECEFF" stop-opacity="0"/></radialGradient></defs>
+            <g class="pd-streets" stroke="rgba(220,240,255,.08)" stroke-width="1" fill="none">
+              <path d="M0 40 L320 70"/><path d="M0 120 L320 95"/><path d="M0 170 L320 185"/><path d="M60 0 L90 200"/><path d="M170 0 L150 200"/><path d="M260 0 L250 200"/><path d="M0 80 C 120 60, 200 150, 320 130"/>
             </g>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#note-glass)"/>
-            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
-            <rect x="110" y="586" width="80" height="4" rx="2" fill="#fff" opacity=".28"/>
-          </svg>
-          </div></div>
-        </figure>
-      </div>
-    </section>
-
-    <!-- 3. Teasers -->
-    <section class="teaser" aria-labelledby="t1-title">
-      <div class="wrap teaser-grid">
-        <div class="teaser-copy">
-          <p class="eyebrow reveal">01</p>
-          <h2 id="t1-title" class="headline reveal" style="--d:1">Ask it.</h2>
-          <p class="lede reveal" style="--d:2">Say what you&rsquo;re in the mood for, in your own words. Loop answers with real places, chosen from what it has learned you love, and a time that fits your day.</p>
-        </div>
-        <figure class="stage" data-scrub style="--i:0">
-          <span class="stage-glow" aria-hidden="true"></span>
-          <div class="tilt"><div class="float">
-          <svg class="art art-ask" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="ask-t">
-            <title id="ask-t">Ask Loop: you type live music tonight, Loop answers with two picks near you and a venue card slides in.</title>
-            <defs>
-              <linearGradient id="ask-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
-              <linearGradient id="ask-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
-              <linearGradient id="ask-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
-              <clipPath id="ask-img1"><path d="M26 304 V218 a18 18 0 0 1 18 -18 H218 a18 18 0 0 1 18 18 V304 Z"/></clipPath>
-              <clipPath id="ask-img2"><path d="M246 304 V218 a18 18 0 0 1 18 -18 H378 a18 18 0 0 1 18 18 V304 Z"/></clipPath>
-              <clipPath id="ask-bar"><rect x="26" y="474" width="206" height="40" rx="20"/></clipPath>
-              <clipPath id="ask-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
-            </defs>
-            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#ask-edge)"/>
-            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
-            <g clip-path="url(#ask-scr)">
-              <g opacity="1.0">
-                <circle cx="39" cy="74" r="7.5" fill="none" stroke="#00A6D9" stroke-width="2.6"/>
-                <circle cx="47.2" cy="74" r="7.5" fill="none" stroke="#09DB98" stroke-width="2.6"/>
-                <text x="62" y="78.5" font-size="13" font-weight="600" fill="#fff" fill-opacity=".85">Ask Loop</text>
-                <circle cx="146" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><circle cx="146" cy="74" r="5" fill="none" stroke="#2ECEFF" stroke-width="1.4"/><path d="M146 71.5 V74 L147.8 75.4" fill="none" stroke="#2ECEFF" stroke-width="1.3" stroke-linecap="round"/>
-                <circle cx="172" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><rect x="167" y="70" width="10" height="9" rx="2" fill="none" stroke="#2ECEFF" stroke-width="1.3"/><path d="M167 73 H177" stroke="#2ECEFF" stroke-width="1.1"/>
-                <rect x="194" y="62" width="80" height="24" rx="12" fill="#1C1C1E" stroke="#fff" stroke-opacity=".08"/>
-                <text x="234" y="77.5" font-size="10" font-weight="600" fill="#fff" text-anchor="middle">Browse feed</text>
-              </g>
-              <g class="ask-q">
-                <rect x="132" y="104" width="142" height="34" rx="17" fill="#00A6D9"/>
-                <text x="203" y="126" font-size="13" font-weight="500" fill="#fff" text-anchor="middle">Live music tonight?</text>
-              </g>
-              <g class="ask-a">
-                <rect x="26" y="150" width="206" height="36" rx="16" fill="#1C1C1E"/>
-                <text x="40" y="173" font-size="13" fill="#fff" fill-opacity=".92">Two picks near you tonight.</text>
-              </g>
-              <g class="ask-card">
-                <rect x="26" y="200" width="210" height="220" rx="18" fill="#1C1C1E" stroke="#fff" stroke-opacity=".06"/>
-                <image href="assets/photo-meyerson-interior.webp" x="26" y="200" width="210" height="104" preserveAspectRatio="xMidYMid slice" clip-path="url(#ask-img1)"/>
-                <text x="40" y="327" font-size="13" font-weight="700" fill="#fff">Meyerson Symphony Center</text>
-                <rect x="40" y="337" width="94" height="20" rx="6" fill="#00A6D9" fill-opacity=".16"/><text x="87" y="351" font-size="11" font-weight="600" fill="#2ECEFF" text-anchor="middle">Tonight &#183; 8 PM</text>
-                <rect x="140" y="337" width="72" height="20" rx="6" fill="#09DB98" fill-opacity=".14"/><text x="176" y="351" font-size="11" font-weight="600" fill="#09DB98" text-anchor="middle">Live music</text>
-                <text x="40" y="376" font-size="12" fill="#8E8E93">Concert hall &#183; 2.1 mi</text>
-                <rect x="40" y="386" width="160" height="24" rx="12" fill="#00A6D9"/>
-                <text x="120" y="402" font-size="11" font-weight="600" fill="#fff" text-anchor="middle">Add to Tonight 8:00 PM</text>
-                <rect x="246" y="200" width="150" height="220" rx="18" fill="#1C1C1E"/>
-                <image href="assets/photo-music-factory.webp" x="246" y="200" width="150" height="104" preserveAspectRatio="xMidYMid slice" clip-path="url(#ask-img2)"/>
-                <text x="260" y="327" font-size="13" font-weight="700" fill="#fff">Toyota Music Factory</text>
-              </g>
-              <g class="ask-chips">
-                <rect x="26" y="434" width="100" height="28" rx="14" fill="#00A6D9" fill-opacity=".08" stroke="#00A6D9" stroke-opacity=".45"/>
-                <text x="76" y="452" font-size="12" font-weight="600" fill="#2ECEFF" text-anchor="middle">Closer to me</text>
-                <rect x="132" y="434" width="96" height="28" rx="14" fill="#00A6D9" fill-opacity=".08" stroke="#00A6D9" stroke-opacity=".45"/>
-                <text x="180" y="452" font-size="12" font-weight="600" fill="#2ECEFF" text-anchor="middle">Tomorrow?</text>
-              </g>
-              <rect x="26" y="474" width="210" height="40" rx="20" fill="#1C1C1E" stroke="#fff" stroke-opacity=".06"/>
-              <text class="ask-ph" x="44" y="499" font-size="13" fill="#8E8E93">Ask Loop anything&#8230;</text>
-              <g clip-path="url(#ask-bar)">
-              <text class="ask-typed" x="44" y="499" font-size="13" fill="#fff">Live music tonight?</text>
-              <rect class="ask-cover" x="40" y="480" width="188" height="28" fill="#1C1C1E"/>
-              <rect class="ask-caret" x="43" y="486" width="1.5" height="16" fill="#2ECEFF"/>
-              </g>
-              <g class="ask-send">
-                <circle cx="252" cy="494" r="12" fill="#00A6D9"/>
-                <path d="M252 499 V489 M247.8 493 L252 488.8 L256.2 493" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </g>
-              <g opacity="1.0">
-                <rect x="24" y="528" width="252" height="50" rx="25" fill="#111113" stroke="#fff" stroke-opacity=".08"/>
-                <rect x="110" y="532" width="80" height="42" rx="21" fill="#2C2C2E"/>
-                <circle cx="71" cy="545" r="6" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M75.5 549.5 L79.5 553.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
-                <text x="73" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">Search</text>
-                <path transform="translate(141.5 539.5) scale(0.03320)" d="M208 512a24.84 24.84 0 01-23.34-16l-39.84-103.6a16.06 16.06 0 00-9.19-9.19L32 343.34a25 25 0 010-46.68l103.6-39.84a16.06 16.06 0 009.19-9.19L184.66 144a25 25 0 0146.68 0l39.84 103.6a16.06 16.06 0 009.19 9.19l103 39.63a25.49 25.49 0 0116.63 24.1 24.82 24.82 0 01-16 22.82l-103.6 39.84a16.06 16.06 0 00-9.19 9.19L231.34 496A24.84 24.84 0 01208 512zM88 176a14.67 14.67 0 01-13.69-9.4l-16.86-43.84a7.28 7.28 0 00-4.21-4.21L9.4 101.69a14.67 14.67 0 010-27.38l43.84-16.86a7.31 7.31 0 004.21-4.21L74.16 9.79A15 15 0 0186.23.11a14.67 14.67 0 0115.46 9.29l16.86 43.84a7.31 7.31 0 004.21 4.21l43.84 16.86a14.67 14.67 0 010 27.38l-43.84 16.86a7.28 7.28 0 00-4.21 4.21l-16.86 43.84A14.67 14.67 0 0188 176zM400 256a16 16 0 01-14.93-10.26l-22.84-59.37a8 8 0 00-4.6-4.6l-59.37-22.84a16 16 0 010-29.86l59.37-22.84a8 8 0 004.6-4.6l22.67-58.95a16.45 16.45 0 0113.17-10.57 16 16 0 0116.86 10.15l22.84 59.37a8 8 0 004.6 4.6l59.37 22.84a16 16 0 010 29.86l-59.37 22.84a8 8 0 00-4.6 4.6l-22.84 59.37A16 16 0 01400 256z" fill="#2ECEFF"/>
-                <text x="150" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">For You</text>
-                <circle cx="228" cy="546" r="8" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="228" cy="544" r="2.8" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M223.2 551.6 a5.4 4.4 0 0 1 9.6 0" fill="none" stroke="#fff" stroke-width="1.4"/>
-                <text x="228" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">Alex</text>
-              </g>
-              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#ask-sheen)" transform="skewX(-14)"/>
+            <circle class="pd-glow" cx="168" cy="104" r="46" fill="url(#pdg)"/>
+            <g class="pd-legs" stroke-width="1.5" fill="none" stroke-dasharray="4 4">
+              <path d="M58 52 L168 104" stroke="#2ECEFF"/><path d="M276 66 L168 104" stroke="#ff9fd6"/><path d="M120 176 L168 104" stroke="#09DB98"/>
             </g>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#ask-glass)"/>
-            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
-            <rect x="110" y="586" width="80" height="4" rx="2" fill="#fff" opacity=".28"/>
+            <g class="pd-dots"><circle cx="58" cy="52" r="5" fill="#2ECEFF"/><circle cx="276" cy="66" r="5" fill="#ff9fd6"/><circle cx="120" cy="176" r="5" fill="#09DB98"/></g>
+            <g class="pd-pin"><circle cx="168" cy="104" r="9" fill="#F2F5F7"/><circle cx="168" cy="104" r="4" fill="#040607"/></g>
           </svg>
-          </div></div>
-        </figure>
-      </div>
-    </section>
-
-    <section class="teaser teaser-flip" aria-labelledby="t2-title">
-      <div class="wrap teaser-grid">
-        <div class="teaser-copy">
-          <p class="eyebrow reveal">02</p>
-          <h2 id="t2-title" class="headline reveal" style="--d:1">Plan with friends.</h2>
-          <p class="lede reveal" style="--d:2">Loop suggests who to bring, finds when everyone&rsquo;s free, and picks a spot that&rsquo;s fair to reach for everyone. The group chat can rest.</p>
-        </div>
-        <figure class="stage stage-green" data-scrub style="--i:1">
-          <span class="stage-glow" aria-hidden="true"></span>
-          <div class="tilt"><div class="float">
-          <svg class="art art-plan" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="plan-t">
-            <title id="plan-t">Plan Group Activity: Loop picks a friend, shows when you are both free and how far each of you is, then Send Invite lights up.</title>
-            <defs>
-              <linearGradient id="plan-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
-              <linearGradient id="plan-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
-              <linearGradient id="plan-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
-              <clipPath id="plan-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
-            </defs>
-            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#plan-edge)"/>
-            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
-            <g clip-path="url(#plan-scr)">
-              <g opacity="0.35">
-                <circle cx="39" cy="74" r="7.5" fill="none" stroke="#00A6D9" stroke-width="2.6"/>
-                <circle cx="47.2" cy="74" r="7.5" fill="none" stroke="#09DB98" stroke-width="2.6"/>
-                <text x="62" y="78.5" font-size="13" font-weight="600" fill="#fff" fill-opacity=".85">Ask Loop</text>
-                <circle cx="146" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><circle cx="146" cy="74" r="5" fill="none" stroke="#2ECEFF" stroke-width="1.4"/><path d="M146 71.5 V74 L147.8 75.4" fill="none" stroke="#2ECEFF" stroke-width="1.3" stroke-linecap="round"/>
-                <circle cx="172" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><rect x="167" y="70" width="10" height="9" rx="2" fill="none" stroke="#2ECEFF" stroke-width="1.3"/><path d="M167 73 H177" stroke="#2ECEFF" stroke-width="1.1"/>
-                <rect x="194" y="62" width="80" height="24" rx="12" fill="#1C1C1E" stroke="#fff" stroke-opacity=".08"/>
-                <text x="234" y="77.5" font-size="10" font-weight="600" fill="#fff" text-anchor="middle">Browse feed</text>
-              </g>
-              <rect x="14" y="98" width="272" height="520" rx="28" fill="#111113"/>
-              <rect x="130" y="107" width="40" height="4" rx="2" fill="#48484A"/>
-              <text x="32" y="146" font-size="18" font-weight="700" fill="#fff">Plan Group Activity</text>
-              <rect x="30" y="164" width="240" height="292" rx="18" fill="#1C1C1E"/>
-              <text x="48" y="194" font-size="15" font-weight="700" fill="#fff">Select Friends</text>
-              <text x="48" y="212" font-size="10.5" fill="#A1A1A6">Choose 1&#8211;5 friends to invite</text>
-              <rect x="44" y="226" width="212" height="180" rx="14" fill="none" stroke="#2ECEFF" stroke-opacity=".35"/>
-              <path d="M62 240 l2.2 5.8 5.8 2.2 -5.8 2.2 -2.2 5.8 -2.2 -5.8 -5.8 -2.2 5.8 -2.2 Z" fill="#2ECEFF"/>
-              <text x="74" y="252" font-size="9.5" font-weight="700" fill="#fff" fill-opacity=".85" letter-spacing="1.2">SUGGESTED</text>
-              <g transform="translate(56 262)">
-                <rect width="156" height="100" rx="12" fill="#2C2C2E"/>
-                <rect class="plan-on" width="156" height="100" rx="12" fill="#00A6D9"/>
-                <circle cx="18" cy="20" r="11" fill="#fff"/><text x="18" y="24" font-size="10" font-weight="700" fill="#00A6D9" text-anchor="middle">M</text>
-                <text x="36" y="24.5" font-size="13" font-weight="600" fill="#fff">Maya</text>
-                <g class="plan-check"><circle cx="82" cy="20" r="7" fill="#fff"/><path d="M78.5 20 l2.4 2.4 4.4 -4.6" fill="none" stroke="#00A6D9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
-                <g class="plan-free"><rect x="10" y="34" width="86" height="18" rx="9" fill="#fff" fill-opacity=".2"/><text x="53" y="46.5" font-size="9.5" font-weight="500" fill="#fff" text-anchor="middle">Free 7&#8211;9 PM</text></g>
-                <text class="plan-pick" x="12" y="67" font-size="10" font-weight="700" fill="#fff">&#10003; Loop&#8217;s pick</text>
-                <g class="plan-dist"><rect x="10" y="74" width="138" height="18" rx="9" fill="#fff" fill-opacity=".2"/><text x="79" y="86.5" font-size="9.5" font-weight="500" fill="#fff" text-anchor="middle">20 min from Harbor &amp; Oak</text></g>
-              </g>
-              <g transform="translate(56 370)">
-                <rect width="112" height="28" rx="10" fill="#2C2C2E"/>
-                <circle cx="15" cy="14" r="9" fill="#00A6D9"/><text x="15" y="17.5" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">J</text>
-                <text x="30" y="18.5" font-size="12" fill="#fff">Jordan</text>
-              </g>
-              <g class="plan-sum">
-                <text x="48" y="426" font-size="10" fill="#C7C7CC">Good plan with Maya &#8212; you&#8217;re both free</text>
-                <text x="48" y="441" font-size="10" fill="#C7C7CC">and it&#8217;s about 20 minutes for each of you.</text>
-              </g>
-              <g class="plan-send">
-                <rect x="30" y="532" width="240" height="44" rx="14" fill="#00A6D9"/>
-                <rect class="plan-send-off" x="30" y="532" width="240" height="44" rx="14" fill="#2C2C2E"/>
-                <text x="150" y="559" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">Send Invite</text>
-              </g>
-              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#plan-sheen)" transform="skewX(-14)"/>
-            </g>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#plan-glass)"/>
-            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
-            <rect x="110" y="586" width="80" height="4" rx="2" fill="#fff" opacity=".28"/>
-          </svg>
-          </div></div>
-        </figure>
-      </div>
-    </section>
-
-    <section class="teaser" aria-labelledby="t3-title">
-      <div class="wrap teaser-grid">
-        <div class="teaser-copy">
-          <p class="eyebrow reveal">03</p>
-          <h2 id="t3-title" class="headline reveal" style="--d:1">Your day, <span class="grad">connected.</span></h2>
-          <p class="lede reveal" style="--d:2">The places you love and the people you love them with, strung into one loop: from home, through the day, and back again.</p>
-        </div>
-        <figure class="stage" data-scrub style="--i:2">
-          <span class="stage-glow" aria-hidden="true"></span>
-          <div class="tilt"><div class="float">
-          <svg class="art art-day" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="day-t">
-            <title id="day-t">Today's Loop: a route drawn from home, through the day's stops, and back home.</title>
-            <defs>
-              <linearGradient id="day-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
-              <linearGradient id="day-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
-              <linearGradient id="day-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
-              <clipPath id="day-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
-            </defs>
-            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#day-edge)"/>
-            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
-            <g clip-path="url(#day-scr)">
-              <rect x="14" y="76" width="272" height="54" fill="#0e0e0f"/>
-              <rect x="14" y="130" width="272" height="46" fill="#060606"/>
-              <rect x="25" y="47" width="80" height="23" rx="11.5" fill="#0a0a0a" stroke="#3A3A3C"/>
-              <path d="M37.5 54.5 l-3.5 4 3.5 4" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <text x="71" y="62.2" font-size="9.5" font-weight="600" fill="#fff" text-anchor="middle">September</text>
-              <text x="161" y="63" font-size="12" font-weight="500" fill="#fff" text-anchor="middle">September 2026</text>
-              <rect x="223" y="47" width="52" height="23" rx="11.5" fill="#0a0a0a" stroke="#3A3A3C"/>
-              <circle cx="235" cy="57.5" r="3.6" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M237.7 60.2 l2.6 2.6" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
-              <line x1="249" y1="52" x2="249" y2="65" stroke="#48484A"/>
-              <path d="M256 54.5 h12 M258 58.5 h8 M260 62.5 h4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
-              <text x="37.6" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">S</text><text x="75" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">M</text><text x="112.4" y="96" font-size="7" font-weight="700" fill="#09DB98" text-anchor="middle">T</text><text x="149.9" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">W</text><text x="187" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">T</text><text x="224.4" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">F</text><text x="261.8" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">S</text><circle cx="112.4" cy="113" r="13" fill="#1C1C1E" stroke="#48484A" stroke-width="1.2"/><text x="37.6" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">27</text><text x="75" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">28</text><text x="112.4" y="117" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">29</text><text x="149.9" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">30</text><text x="187" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">1</text><text x="224.4" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">2</text><text x="261.8" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">3</text>
-              <rect x="138" y="139" width="24" height="3" rx="1.5" fill="#48484A"/>
-              <text x="30" y="166" font-size="14" font-weight="700" fill="#fff">Tuesday, Sep 29</text>
-              <rect x="145" y="155" width="31" height="14" rx="7" fill="#0f2a20"/><text x="160.5" y="165" font-size="8" font-weight="700" fill="#09DB98" text-anchor="middle">Today</text>
-              <path d="M198.5 160 v7.5 h9 v-7.5 M203 163 v-9 M200 157 l3 -3 3 3" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="217" y="150" width="53" height="23" rx="11.5" fill="#0a0a0a" stroke="#3A3A3C"/>
-              <circle cx="232" cy="161.5" r="4.6" fill="none" stroke="#fff" stroke-width="1.3"/>
-              <circle cx="232" cy="156.9" r="1.5" fill="#fff"/><circle cx="236.4" cy="163" r="1.5" fill="#fff"/><circle cx="227.6" cy="163" r="1.5" fill="#fff"/>
-              <line x1="244" y1="155" x2="244" y2="168" stroke="#48484A"/>
-              <path d="M257 157 v9 M252.5 161.5 h9" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
-              <image class="day-anim" href="assets/loop-connected.svg" x="14" y="176" width="272" height="294"/>
-              <image class="day-static" href="assets/loop-connected-static.svg" x="14" y="176" width="272" height="294"/>
-              <rect x="25" y="188" width="250" height="34" rx="10" fill="#000" opacity=".25"/>
-              <rect x="25" y="186" width="250" height="34" rx="10" fill="#1C1C1E" stroke="#fff" stroke-opacity=".1"/>
-              <path d="M36 199 h9 l-2.4 -2.4 M45 207 h-9 l2.4 2.4" fill="none" stroke="#00A6D9" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-              <text x="50" y="207" font-size="10" font-weight="700" fill="#fff">Commute</text>
-              <line x1="101" y1="195" x2="101" y2="211" stroke="#3A3A3C"/>
-              <circle cx="117" cy="203" r="5" fill="none" stroke="#09DB98" stroke-width="1.2"/><path d="M117 200.5 v5 M114.5 203 h5" stroke="#09DB98" stroke-width="1.2" stroke-linecap="round"/>
-              <text x="127" y="207" font-size="10" font-weight="700" fill="#fff">Add stops to your Loop</text>
-              <rect x="14" y="470" width="272" height="130" fill="#000"/>
-              <rect x="22" y="478" width="256" height="46" rx="12" fill="#1C1C1E"/><rect x="32" y="486" width="3" height="30" rx="1.5" fill="#FB923C"/><text x="44" y="492" font-size="10" fill="#8E8E93">12:30 PM</text><text x="44" y="507" font-size="12" font-weight="700" fill="#fff">Lunch &#183; Maya</text><text x="44" y="519" font-size="10" fill="#8E8E93">Harbor &amp; Oak</text>
-              <rect x="22" y="530" width="256" height="46" rx="12" fill="#1C1C1E"/><rect x="32" y="538" width="3" height="30" rx="1.5" fill="#F472B6"/><text x="44" y="544" font-size="10" fill="#8E8E93">2:00 PM</text><text x="44" y="559" font-size="12" font-weight="700" fill="#fff">Live music</text><text x="44" y="571" font-size="10" fill="#8E8E93">Meyerson Symphony Center</text>
-              <rect x="22" y="582" width="256" height="46" rx="12" fill="#1C1C1E"/><rect x="32" y="590" width="3" height="30" rx="1.5" fill="#A78BFA"/><text x="44" y="596" font-size="10" fill="#8E8E93">8:00 PM</text><text x="44" y="611" font-size="12" font-weight="700" fill="#fff">Dinner with the group</text><text x="44" y="623" font-size="10" fill="#8E8E93">Group plan</text>
-              <rect x="32" y="549" width="236" height="41" rx="20.5" fill="#0c0c0d" stroke="#fff" stroke-opacity=".07"/>
-              <rect x="180" y="551" width="85" height="37" rx="18.5" fill="#262628"/>
-              <circle cx="78" cy="563" r="5" fill="none" stroke="#fff" stroke-width="1.7"/><path d="M81.8 566.8 l3.2 3.2" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
-              <text x="79" y="583" font-size="7" font-weight="700" fill="#fff" text-anchor="middle">Search</text>
-              <path transform="translate(141.5 558.0) scale(0.03320)" d="M208 512a24.84 24.84 0 01-23.34-16l-39.84-103.6a16.06 16.06 0 00-9.19-9.19L32 343.34a25 25 0 010-46.68l103.6-39.84a16.06 16.06 0 009.19-9.19L184.66 144a25 25 0 0146.68 0l39.84 103.6a16.06 16.06 0 009.19 9.19l103 39.63a25.49 25.49 0 0116.63 24.1 24.82 24.82 0 01-16 22.82l-103.6 39.84a16.06 16.06 0 00-9.19 9.19L231.34 496A24.84 24.84 0 01208 512zM88 176a14.67 14.67 0 01-13.69-9.4l-16.86-43.84a7.28 7.28 0 00-4.21-4.21L9.4 101.69a14.67 14.67 0 010-27.38l43.84-16.86a7.31 7.31 0 004.21-4.21L74.16 9.79A15 15 0 0186.23.11a14.67 14.67 0 0115.46 9.29l16.86 43.84a7.31 7.31 0 004.21 4.21l43.84 16.86a14.67 14.67 0 010 27.38l-43.84 16.86a7.28 7.28 0 00-4.21 4.21l-16.86 43.84A14.67 14.67 0 0188 176zM400 256a16 16 0 01-14.93-10.26l-22.84-59.37a8 8 0 00-4.6-4.6l-59.37-22.84a16 16 0 010-29.86l59.37-22.84a8 8 0 004.6-4.6l22.67-58.95a16.45 16.45 0 0113.17-10.57 16 16 0 0116.86 10.15l22.84 59.37a8 8 0 004.6 4.6l59.37 22.84a16 16 0 010 29.86l-59.37 22.84a8 8 0 00-4.6 4.6l-22.84 59.37A16 16 0 01400 256z" fill="#fff"/>
-              <text x="150" y="583" font-size="7" font-weight="700" fill="#fff" text-anchor="middle">For You</text>
-              <circle cx="222.5" cy="565" r="7" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="222.5" cy="563" r="2.5" fill="#fff"/><path d="M218 569.8 a5 4 0 0 1 9 0" fill="#fff"/>
-              <text x="222.5" y="583" font-size="7" font-weight="700" fill="#fff" text-anchor="middle">Alex</text>
-              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#day-sheen)" transform="skewX(-14)"/>
-            </g>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#day-glass)"/>
-            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
-            <rect x="112" y="593" width="76" height="3" rx="1.5" fill="#fff" opacity=".35"/>
-          </svg>
-          </div></div>
-        </figure>
-      </div>
-    </section>
-
-    <section class="teaser teaser-flip" aria-labelledby="t4-title">
-      <div class="wrap teaser-grid">
-        <div class="teaser-copy">
-          <p class="eyebrow reveal">04</p>
-          <h2 id="t4-title" class="headline reveal" style="--d:1">One tap. <span class="grad">Sharper picks.</span></h2>
-          <p class="lede reveal" style="--d:2">Your free time, your plans, the way you use it. Loop learns from all of it and suggests better things to do over time. One tap after a plan confirms where you actually went, so every pick lands you closer to your ultimate day.</p>
-        </div>
-        <figure class="stage stage-green" data-scrub style="--i:3">
-          <span class="stage-glow" aria-hidden="true"></span>
-          <div class="tilt"><div class="float">
-          <svg class="art art-learn" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="learn-t">
-            <title id="learn-t">Did you make it? You tap I was there, and Loop confirms it is learning from the visit.</title>
-            <defs>
-              <linearGradient id="learn-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
-              <linearGradient id="learn-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
-              <linearGradient id="learn-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
-              <clipPath id="learn-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
-            </defs>
-            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#learn-edge)"/>
-            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
-            <g clip-path="url(#learn-scr)">
-              <g opacity="0.3">
-                <circle cx="39" cy="74" r="7.5" fill="none" stroke="#00A6D9" stroke-width="2.6"/>
-                <circle cx="47.2" cy="74" r="7.5" fill="none" stroke="#09DB98" stroke-width="2.6"/>
-                <text x="62" y="78.5" font-size="13" font-weight="600" fill="#fff" fill-opacity=".85">Ask Loop</text>
-                <circle cx="146" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><circle cx="146" cy="74" r="5" fill="none" stroke="#2ECEFF" stroke-width="1.4"/><path d="M146 71.5 V74 L147.8 75.4" fill="none" stroke="#2ECEFF" stroke-width="1.3" stroke-linecap="round"/>
-                <circle cx="172" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><rect x="167" y="70" width="10" height="9" rx="2" fill="none" stroke="#2ECEFF" stroke-width="1.3"/><path d="M167 73 H177" stroke="#2ECEFF" stroke-width="1.1"/>
-                <rect x="194" y="62" width="80" height="24" rx="12" fill="#1C1C1E" stroke="#fff" stroke-opacity=".08"/>
-                <text x="234" y="77.5" font-size="10" font-weight="600" fill="#fff" text-anchor="middle">Browse feed</text>
-              </g>
-              <g opacity=".3">
-                <text x="150" y="124" font-size="24" font-weight="700" fill="#fff" text-anchor="middle">Evening, Alex.</text>
-                <text x="150" y="148" font-size="13" font-weight="600" fill="#fff" text-anchor="middle">Plan something tomorrow.</text>
-                <rect x="26" y="474" width="248" height="40" rx="20" fill="#1C1C1E"/>
-              </g>
-              <g opacity="0.3">
-                <rect x="24" y="528" width="252" height="50" rx="25" fill="#111113" stroke="#fff" stroke-opacity=".08"/>
-                <rect x="110" y="532" width="80" height="42" rx="21" fill="#2C2C2E"/>
-                <circle cx="71" cy="545" r="6" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M75.5 549.5 L79.5 553.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
-                <text x="73" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">Search</text>
-                <path transform="translate(141.5 539.5) scale(0.03320)" d="M208 512a24.84 24.84 0 01-23.34-16l-39.84-103.6a16.06 16.06 0 00-9.19-9.19L32 343.34a25 25 0 010-46.68l103.6-39.84a16.06 16.06 0 009.19-9.19L184.66 144a25 25 0 0146.68 0l39.84 103.6a16.06 16.06 0 009.19 9.19l103 39.63a25.49 25.49 0 0116.63 24.1 24.82 24.82 0 01-16 22.82l-103.6 39.84a16.06 16.06 0 00-9.19 9.19L231.34 496A24.84 24.84 0 01208 512zM88 176a14.67 14.67 0 01-13.69-9.4l-16.86-43.84a7.28 7.28 0 00-4.21-4.21L9.4 101.69a14.67 14.67 0 010-27.38l43.84-16.86a7.31 7.31 0 004.21-4.21L74.16 9.79A15 15 0 0186.23.11a14.67 14.67 0 0115.46 9.29l16.86 43.84a7.31 7.31 0 004.21 4.21l43.84 16.86a14.67 14.67 0 010 27.38l-43.84 16.86a7.28 7.28 0 00-4.21 4.21l-16.86 43.84A14.67 14.67 0 0188 176zM400 256a16 16 0 01-14.93-10.26l-22.84-59.37a8 8 0 00-4.6-4.6l-59.37-22.84a16 16 0 010-29.86l59.37-22.84a8 8 0 004.6-4.6l22.67-58.95a16.45 16.45 0 0113.17-10.57 16 16 0 0116.86 10.15l22.84 59.37a8 8 0 004.6 4.6l59.37 22.84a16 16 0 010 29.86l-59.37 22.84a8 8 0 00-4.6 4.6l-22.84 59.37A16 16 0 01400 256z" fill="#2ECEFF"/>
-                <text x="150" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">For You</text>
-                <circle cx="228" cy="546" r="8" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="228" cy="544" r="2.8" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M223.2 551.6 a5.4 4.4 0 0 1 9.6 0" fill="none" stroke="#fff" stroke-width="1.4"/>
-                <text x="228" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">Alex</text>
-              </g>
-              <g transform="translate(0 -72)">
-              <g class="learn-modal">
-                <rect x="30" y="236" width="240" height="236" rx="24" fill="#1C1C1E" stroke="#fff" stroke-opacity=".06"/>
-                <text x="52" y="276" font-size="17" font-weight="700" fill="#fff">Did you make it?</text>
-                <path d="M242 266 l10 10 M252 266 l-10 10" stroke="#8E8E93" stroke-width="1.8" stroke-linecap="round"/>
-                <line x1="30" y1="296" x2="270" y2="296" stroke="#fff" stroke-opacity=".08"/>
-                <path d="M62 336 c-6 -7 -8 -10 -8 -13 a8 8 0 0 1 16 0 c0 3 -2 6 -8 13 Z" fill="#00A6D9"/><circle cx="62" cy="323" r="2.6" fill="#1C1C1E"/>
-                <text x="78" y="331" font-size="13" font-weight="600" fill="#fff">Harbor &amp; Oak</text>
-                <text x="150" y="362" font-size="10.5" fill="#A1A1A6" text-anchor="middle">Quick check so Loop only learns</text>
-                <text x="150" y="377" font-size="10.5" fill="#A1A1A6" text-anchor="middle">from places you actually went.</text>
-                <rect x="46" y="394" width="100" height="60" rx="14" fill="#0D2A21" stroke="#09DB98" stroke-width="1.5"/>
-                <rect class="learn-yes-off" x="46" y="394" width="100" height="60" rx="14" fill="#2C2C2E"/>
-                <circle class="learn-tap" cx="96" cy="424" r="30" fill="#09DB98"/>
-                <circle cx="96" cy="414" r="8.5" fill="none" stroke="#09DB98" stroke-width="1.8"/><path d="M92.2 414 l2.6 2.6 4.6 -5" fill="none" stroke="#09DB98" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <text x="96" y="441" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">I was there</text>
-                <rect x="154" y="394" width="100" height="60" rx="14" fill="#2C2C2E"/>
-                <circle cx="204" cy="414" r="8.5" fill="none" stroke="#8E8E93" stroke-width="1.8"/><path d="M200.8 410.8 l6.4 6.4 M207.2 410.8 l-6.4 6.4" stroke="#8E8E93" stroke-width="1.8" stroke-linecap="round"/>
-                <text x="204" y="441" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">Didn&#8217;t go</text>
-              </g>
-              <g class="learn-toast">
-                <rect x="46" y="494" width="208" height="36" rx="18" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".3"/>
-                <circle class="learn-pulse" cx="72" cy="512" r="9" fill="none" stroke="#2ECEFF" stroke-width="1.5"/>
-                <circle class="learn-pulse learn-pulse-2" cx="72" cy="512" r="9" fill="none" stroke="#09DB98" stroke-width="1.5"/>
-                <circle cx="69" cy="512" r="5.5" fill="none" stroke="#00A6D9" stroke-width="2"/><circle cx="75" cy="512" r="5.5" fill="none" stroke="#09DB98" stroke-width="2"/>
-                <text x="90" y="516" font-size="11.5" font-weight="600" fill="#fff">Got it &#8212; Loop is learning.</text>
-              </g>
-              </g>
-              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#learn-sheen)" transform="skewX(-14)"/>
-            </g>
-            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#learn-glass)"/>
-            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
-            <rect x="110" y="586" width="80" height="4" rx="2" fill="#fff" opacity=".28"/>
-          </svg>
-          </div></div>
-        </figure>
-      </div>
-    </section>
-
-    <!-- 4. Closing -->
-    <!-- Photo band -->
-    <a class="band reveal" href="/vision/" aria-label="A Day in the Loop: three friends leaving a show">
-      <img src="vision/media/s12.jpg" alt="Owen, Jess and a friend laugh outside a theater at night" width="1920" height="1080" loading="lazy">
-      <video class="band-video" data-src="assets/bands/night.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
-      <span class="band-cap"><span class="band-time">Owen · Friday · 10:52 PM</span><span class="band-line">One plan, the whole night.</span></span>
-    </a>
-
-    <section class="closing" aria-labelledby="close-title">
-      <div class="rings rings-close" aria-hidden="true">
-        <span class="ring ring-a"></span>
-        <span class="ring ring-b"></span>
-      </div>
-      <div class="wrap closing-inner">
-        <h2 id="close-title" class="closer reveal">Never miss out again. <span class="grad">Get in the loop.</span></h2>
-        <p class="lede center reveal" style="--d:1">Loop keeps you close to the people and places you care about most, and the longer you use it, the sharper it gets.<br>Every plan at the best time, place and price, including the ones you didn&rsquo;t know to look for. Now in beta on iPhone.</p>
-        <div class="reveal" style="--d:2">
-          <a class="pill" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
-          <p class="android-note">On Android? <a href="mailto:support@loopaiapp.com?subject=Notify%20me%20(Android)">Get notified</a></p>
+          <div class="pd-card">
+            <span class="label">Loop&rsquo;s pick</span>
+            <p class="pd-card-title">Thursday, 7:00 PM</p>
+            <p class="pd-card-body">Food trucks at Klyde Warren Park. 11, 13 and 12 minutes away for you, Jess and Leo. About $15 each.</p>
+            <button type="button" class="pd-replay" id="pd-replay">Replay</button>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </main>
+  <section class="sec learns has-field" aria-labelledby="learns-title" style="padding-top: 0" data-field="3">
+    <div class="wrap learns-grid">
+      <div class="learns-copy">
+        <span class="label prism-in">05 · It learns you</span>
+        <h2 id="learns-title" class="prism-in">The longer you use it, <em class="s">the more it gets you.</em></h2>
+        <p class="manifesto" id="manifesto">Loop learns from what you actually do, not what you tell it. Every place you visit, every event you save, every plan you make sharpens its sense of your taste. Over time it stops being an app you search and becomes the guide you trust. Until one morning you wake up to a list of things you didn&rsquo;t know you needed, on a day you couldn&rsquo;t have planned better yourself.</p>
+      </div>
+      <div class="chrome-stage" aria-hidden="true"><canvas id="chrome-loop"></canvas></div>
+    </div>
+  </section>
 
-  <!-- 5. Footer -->
-  <footer class="site-footer">
-    <div class="footer-links">
+  <section class="sec" aria-labelledby="demo-title" style="padding-top: 0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="label prism-in">90-second tour</span>
+          <h2 id="demo-title" class="prism-in">The real app, <em class="s">on a real phone.</em></h2>
+        </div>
+        <p class="prism-in">Asking for ideas, seeing why Loop picked a place, finding who&rsquo;s free, and the day drawn as a loop.</p>
+      </div>
+      <div class="demo-box rv">
+        <video src="/assets/loop-demo-v12.mp4" poster="/assets/loop-demo-poster-v12.jpg" controls playsinline preload="none" aria-label="A 97-second tour of Loop running on a phone."></video>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="sec note" aria-labelledby="note-title">
+    <div class="wrap note-grid">
+      <div class="note-side">
+        <span class="label prism-in">A note from the founder</span>
+        <p class="note-pull prism-in" aria-hidden="true">From your phone <em class="s">into the plan.</em></p>
+      </div>
+      <article class="note-letter">
+        <h2 id="note-title" class="note-title">Why I&rsquo;m building Loop</h2>
+        <p>In college I wanted a better map of my day: where my next class was and the fastest way to get there. Somewhere along the way I realized the same idea could do something much bigger. It could connect me with my friends and the things I didn&rsquo;t want to miss.</p>
+        <p>That idea never left me. Our phones already know where we are, when we&rsquo;re free and what we love. Yet making plans with friends still means a group chat that goes nowhere, calendars nobody checks, and a &ldquo;we should hang out soon&rdquo; that never happens. Busy lives get in the way of the moments that matter most.</p>
+        <p>Loop is built to change that. It learns the people and places you love, notices when everyone is free and suggests a plan that works for all of you. Then it gets out of the way so you can actually be there.</p>
+        <p>Social networks were supposed to bring us closer, but most of them keep us on our phones. Loop does the opposite. It brings you from your phone into the plan, the way social networks should.</p>
+        <p>We&rsquo;re starting in Dallas, doing one thing really well. As Loop grows, it will take on more of the planning and remembering that busy lives crowd out, until it becomes the smart assistant that keeps you in the loop with everything you care about.</p>
+        <p>I&rsquo;d love for you to grow with it.</p>
+        <p class="sig"><span class="sig-name">Nick</span><span class="label">Founder, Loop</span></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec founding has-field" aria-labelledby="founding-title" data-field="4">
+    <div class="wrap founding-grid">
+      <div class="founding-copy">
+        <span class="label prism-in">Founding Planners · Dallas</span>
+        <h2 id="founding-title" class="prism-in">Be one of the first <em class="s">hundred.</em></h2>
+        <p class="prism-in">Every friend group has a planner. If that&rsquo;s you, Loop was built for you. Founding Planners get in first and shape what ships next.</p>
+        <ul class="perks">
+          <li><span class="perk-n">01</span><span><b>Early access on iPhone.</b> Plan with your group before Loop opens to everyone.</span></li>
+          <li><span class="perk-n">02</span><span><b>A direct line to the founder.</b> Your feedback goes straight into the app.</span></li>
+          <li><span class="perk-n">03</span><span><b>First look at what&rsquo;s next.</b> New features reach you before anyone else.</span></li>
+        </ul>
+        <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Claim a spot</a>
+      </div>
+      <div class="card-stage" aria-hidden="true">
+        <div class="fcard" id="fcard">
+          <div class="fcard-holo"></div>
+          <div class="fcard-glare"></div>
+          <div class="fcard-in">
+            <div class="fcard-top"><img src="/assets/loop-logo.svg" alt="" width="34" height="24"><span>Founding Planner</span></div>
+            <div class="fcard-num">N&ordm; 001<small>/100</small></div>
+            <div class="fcard-foot"><span>Dallas&ndash;Fort Worth</span><span>Est. 2026</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="close has-field" aria-labelledby="close-title" data-field="2">
+    <div class="wrap">
+      <span class="label prism-in">Launching in Dallas&ndash;Fort Worth</span>
+      <h2 id="close-title" class="prism-in">Never miss out. <em class="s">Get in the loop.</em></h2>
+      <p class="prism-in">Free on iPhone while it&rsquo;s in beta. Android is on the way.</p>
+      <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="label prism-in">Loop · Dallas, TX · Patent pending</span>
+    <nav class="foot-links" aria-label="Footer">
       <a href="/vision/">A Day in the Loop</a>
       <a href="/case-study/">Case study</a>
-      <a href="support.html">Support</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
-    </div>
-    <p class="copyright">Dallas is our launch city, so beta recommendations cover Dallas&ndash;Fort Worth.</p>
-    <p class="copyright">&copy; 2026 Loop</p>
-  </footer>
+      <a href="/support.html">Support</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </nav>
+  </div>
+</footer>
 
 <script>
-// Demo video: plays when scrolled into view (with sound if the browser allows, else muted with a "Tap for sound" button), pauses when scrolled away.
 (function () {
-  var v = document.querySelector('.demo-video'), b = document.querySelector('.demo-sound');
-  if (!v || !b || !('IntersectionObserver' in window)) return;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var started = false;
-  function soundOn(restart) { v.muted = false; b.classList.remove('show'); if (restart) v.currentTime = 0; v.play().catch(function () {}); }
-  function start() { started = true; v.muted = false; v.play().catch(function () { v.muted = true; b.classList.add('show'); v.play().catch(function () {}); }); }
-  b.addEventListener('click', function (e) { e.stopPropagation(); soundOn(true); });
-  v.addEventListener('volumechange', function () { if (!v.muted) b.classList.remove('show'); });
-  new IntersectionObserver(function (es) {
-    es.forEach(function (en) {
-      if (en.isIntersecting && en.intersectionRatio >= 0.5) { if (!started) start(); else if (v.paused && v.dataset.autopaused) { delete v.dataset.autopaused; v.play().catch(function () {}); } }
-      else if (!en.isIntersecting && started && !v.paused) { v.dataset.autopaused = '1'; v.pause(); }
+  var doc = document.documentElement;
+  doc.classList.add('js');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var saveData = navigator.connection && navigator.connection.saveData;
+  var big = window.innerWidth >= 700;
+  if (reduce) { var svg = document.querySelector('svg'); if (svg && svg.pauseAnimations) svg.pauseAnimations(); }
+
+
+  // Nav background after scroll
+  var nav = document.getElementById('nav');
+  function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 24); }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // Reveal
+  var rv = document.querySelectorAll('.rv');
+  if (reduce || !('IntersectionObserver' in window)) {
+    rv.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    rv.forEach(function (el) { io.observe(el); });
+  }
+
+
+  // Free-today chips drive the alert, the same control people tap in the app
+  var ft = document.querySelector('.free-today');
+  var nT = document.getElementById('n-title'), nB = document.getElementById('n-body');
+  var copy = {
+    now: ['Katy Trail is 10 minutes away', 'Jess is out walking near the trail too. Want to meet at the Knox entrance in 20?'],
+    lunch: ['Leo is free for lunch at 12:15', 'Tacos four blocks from both of your offices. Under $15. Save him a seat?'],
+    after5: ['Jess and Leo are free at 7', 'Food trucks at Klyde Warren Park, 1.2 mi from all three of you. About $15 each. Plan it?'],
+    tonight: ['Live music in Deep Ellum at 9', 'Three of your friends are already going. Doors at 8:30, $12 at the door. Join them?'],
+    busy: ['Got it, today is full', 'Saturday afternoon is open for you, Jess and Leo. Want Loop to hold it?']
+  };
+  var _show = showNotif;
+  showNotif = function () { _show(); if (ft) ft.classList.add('show'); };
+  document.querySelectorAll('.chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      document.querySelectorAll('.chip').forEach(function (o) { o.setAttribute('aria-pressed', String(o === c)); });
+      var t = copy[c.dataset.k]; if (!t) return;
+      nT.textContent = t[0]; nB.textContent = t[1];
+      showNotif();
+      notif.classList.remove('swap'); void notif.offsetWidth; notif.classList.add('swap');
     });
-  }, { threshold: [0, 0.5] }).observe(v);
+  });
+
+  // Videos: play only while visible, never on phones, Save-Data or reduced motion
+  function lazyVideo(v) {
+    if (reduce || saveData || !big || !('IntersectionObserver' in window)) return;
+    var vio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) {
+          if (!v.getAttribute('src')) { v.src = v.dataset.src; v.addEventListener('playing', function () { v.classList.add('playing'); v.style.opacity = 1; }, { once: true }); }
+          var p = v.play(); if (p && p.catch) p.catch(function () {});
+        } else { v.pause(); }
+      });
+    }, { threshold: 0.2 });
+    vio.observe(v);
+  }
+  var hv = document.getElementById('hero-video'); if (hv) lazyVideo(hv);
+  // Hero: the phone lights up in the clip (~2s), then the Loop alert arrives.
+  var notif = document.querySelector('.notif');
+  var still = document.getElementById('hero-still');
+  var heroVideo = document.getElementById('hero-video');
+  var shown = false;
+  function showNotif() { if (!shown) { shown = true; notif.classList.add('show'); } }
+  function useLitStill(delay) { still.src = '/assets/home/hero-lit.jpg'; setTimeout(showNotif, delay); }
+  if (reduce || saveData || !big) {
+    useLitStill(reduce ? 0 : 900);
+  } else {
+    heroVideo.addEventListener('timeupdate', function () { if (heroVideo.currentTime >= 2.6) showNotif(); });
+    heroVideo.addEventListener('ended', showNotif);
+    setTimeout(function () { if (!heroVideo.classList.contains('playing')) useLitStill(0); }, 5000);
+  }
+
+  document.querySelectorAll('.cell-video').forEach(function (v) { v.style.position = 'absolute'; v.style.inset = '0'; v.style.opacity = 0; v.style.transition = 'opacity 1s'; lazyVideo(v); });
+
+  // Chrome finish: light follows the pointer
+  document.querySelectorAll('.fx').forEach(function (el) {
+    if (el.classList.contains('btn')) {
+      var m = document.createElement('span'); m.className = 'fx-metal'; m.setAttribute('aria-hidden', 'true');
+      var p = document.createElement('span'); p.className = 'fx-pearl'; p.setAttribute('aria-hidden', 'true');
+      el.insertBefore(p, el.firstChild); el.insertBefore(m, el.firstChild);
+    }
+    function move(e) {
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', Math.max(0, Math.min(100, (e.clientX - r.left) / r.width * 100)) + '%');
+      el.style.setProperty('--my', Math.max(0, Math.min(100, (e.clientY - r.top) / r.height * 100)) + '%');
+    }
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerleave', function () { el.style.removeProperty('--mx'); el.style.removeProperty('--my'); });
+  });
+
+
+  // Prism reveal: clone each heading as a light layer, run once when it scrolls in
+  var prisms = document.querySelectorAll('.prism-in');
+  if (reduce || !('IntersectionObserver' in window)) {
+    prisms.forEach(function (el) { el.classList.add('done'); });
+  } else {
+    prisms.forEach(function (el) {
+      var light = document.createElement('span');
+      light.className = 'prism-light';
+      light.setAttribute('aria-hidden', 'true');
+      light.innerHTML = el.innerHTML;
+      el.appendChild(light);
+      el.addEventListener('animationend', function () { el.classList.add('done'); }, { once: true });
+    });
+    var pio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('go'); pio.unobserve(e.target); } });
+    }, { threshold: 0.4, rootMargin: '0px 0px -8% 0px' });
+    prisms.forEach(function (el) { pio.observe(el); });
+  }
+
+  // Manifesto: words light up with scroll; the last few glow in Loop colors
+  var man = document.getElementById('manifesto');
+  if (man && !reduce) {
+    var words = man.textContent.trim().split(/\s+/);
+    man.innerHTML = words.map(function (w) { return '<span class="w">' + w.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</span>'; }).join(' ');
+    var spans = man.querySelectorAll('.w');
+    var hiFrom = words.length - 8;
+    var ticking = false;
+    function lightWords() {
+      ticking = false;
+      var r = man.getBoundingClientRect(), vh = window.innerHeight;
+      var p = Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (r.height + vh * 0.35)));
+      var n = Math.round(p * spans.length);
+      spans.forEach(function (s, i) { s.classList.toggle('lit', i < n); s.classList.toggle('hi', i < n && i >= hiFrom); });
+    }
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(lightWords); } }, { passive: true });
+    lightWords();
+  }
+
+  // Scroll chrome: tiles carry a faint sheen while on screen, and the light slides with scroll
+  var cells = document.querySelectorAll('.cell');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle('in-view', e.isIntersecting); }); }, { threshold: 0.5 });
+    cells.forEach(function (c) { cio.observe(c); });
+    var cTick = false;
+    window.addEventListener('scroll', function () {
+      if (cTick) return; cTick = true;
+      requestAnimationFrame(function () {
+        cTick = false;
+        var vh = window.innerHeight;
+        cells.forEach(function (c) {
+          if (!c.classList.contains('in-view') || c.matches(':hover')) return;
+          var r = c.getBoundingClientRect();
+          var t = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+          c.style.setProperty('--mx', (10 + t * 80) + '%');
+          c.style.setProperty('--my', (90 - t * 80) + '%');
+        });
+      });
+    }, { passive: true });
+  }
+
+
+  // 3D chrome Loop mark: two linked rings, raymarched in a fragment shader
+  (function () {
+    var cv = document.getElementById('chrome-loop');
+    if (!cv) return;
+    var gl = cv.getContext('webgl', { premultipliedAlpha: true, alpha: true, antialias: false });
+    if (!gl) { cv.parentNode.style.display = 'none'; return; }
+    var vs = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+    var fs = [
+      'precision highp float;',
+      'uniform vec2 uRes;uniform float uTime;uniform vec2 uRot;uniform vec2 uOff;',
+      'mat3 rx(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,-s,0.,s,c);}',
+      'mat3 ry(float a){float c=cos(a),s=sin(a);return mat3(c,0.,s,0.,1.,0.,-s,0.,c);}',
+      'float tor(vec2 q,float r){return length(q)-r;}',
+      'float map(vec3 p){p=ry(uRot.y)*rx(uRot.x)*p;',
+      ' vec3 a=p-vec3(-0.62,0.,0.);vec3 b=p-vec3(0.62,0.,0.);',
+      ' float d1=tor(vec2(length(a.xy)-1.0,a.z),0.27);',
+      ' float d2=tor(vec2(length(b.xz)-1.0,b.y),0.27);',
+      ' return min(d1,d2);}',
+      'vec3 nrm(vec3 p){vec2 e=vec2(0.0015,0.);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}',
+      'vec3 env(vec3 d){float y=d.y;float a=atan(d.x,d.z);',
+      ' vec3 c=mix(vec3(0.015,0.02,0.025),vec3(0.09,0.11,0.13),smoothstep(-0.3,0.7,y));',
+      ' c+=vec3(1.)*smoothstep(0.55,0.8,y)*1.7;',
+      ' c+=vec3(0.75,0.88,1.)*exp(-pow((y-0.04)*12.,2.))*0.9;',
+      ' c+=vec3(0.18,0.81,1.)*smoothstep(0.93,1.,cos(a-1.1))*1.4*smoothstep(-0.4,0.3,y);',
+      ' c+=vec3(1.,0.55,0.84)*smoothstep(0.95,1.,cos(a+2.1))*1.1*smoothstep(-0.4,0.4,y);',
+      ' c+=vec3(0.04,0.86,0.6)*smoothstep(0.95,1.,cos(a+0.3))*0.9;',
+      ' c+=vec3(1.,0.84,0.66)*smoothstep(0.97,1.,cos(a-2.7))*0.7;',
+      ' return c;}',
+      'void main(){vec2 uv=(gl_FragCoord.xy-0.5*uRes)/uRes.y-uOff;',
+      ' vec3 ro=vec3(0.,0.,7.3);vec3 rd=normalize(vec3(uv,-1.55));',
+      ' float t=0.;float d;bool hit=false;',
+      ' for(int i=0;i<110;i++){d=map(ro+rd*t);if(d<0.0008){hit=true;break;}t+=d;if(t>12.)break;}',
+      ' if(!hit){gl_FragColor=vec4(0.);return;}',
+      ' vec3 p=ro+rd*t;vec3 n=nrm(p);vec3 v=-rd;vec3 r=reflect(rd,n);',
+      ' float fac=clamp(dot(n,v),0.,1.);float fres=pow(1.-fac,3.);',
+      ' vec3 irid=0.5+0.5*cos(6.2831*(vec3(0.,0.33,0.67)+fac*1.5+uTime*0.025));',
+      ' vec3 col=env(r)*mix(vec3(0.93,0.96,1.),irid,0.32);',
+      ' col+=fres*0.35*irid;',
+      ' col=col/(1.+col*0.85);col=pow(col,vec3(0.9));',
+      ' gl_FragColor=vec4(col,1.);}'
+    ].join('\n');
+    function sh(type, src) { var o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; }
+    var v = sh(gl.VERTEX_SHADER, vs), f = sh(gl.FRAGMENT_SHADER, fs);
+    if (!v || !f) { cv.parentNode.style.display = 'none'; return; }
+    var prog = gl.createProgram(); gl.attachShader(prog, v); gl.attachShader(prog, f); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { cv.parentNode.style.display = 'none'; return; }
+    gl.useProgram(prog);
+    var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    var uRes = gl.getUniformLocation(prog, 'uRes'), uTime = gl.getUniformLocation(prog, 'uTime'), uRot = gl.getUniformLocation(prog, 'uRot'), uOff = gl.getUniformLocation(prog, 'uOff');
+    var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    function size() { var r = cv.getBoundingClientRect(); cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr)); gl.viewport(0, 0, cv.width, cv.height); }
+    size(); window.addEventListener('resize', size);
+    var px = 0, py = 0, tx = 0, ty = 0, visible = false, start = performance.now();
+    cv.parentNode.parentNode.addEventListener('pointermove', function (e) { var r = cv.getBoundingClientRect(); tx = ((e.clientX - r.left) / r.width - 0.5) * 0.9; ty = ((e.clientY - r.top) / r.height - 0.5) * 0.6; });
+    function frame(now) {
+      var t = (now - start) / 1000;
+      var r = cv.getBoundingClientRect();
+      var scroll = (window.innerHeight - r.top) / (window.innerHeight + r.height);
+      px += (tx - px) * 0.06; py += (ty - py) * 0.06;
+      gl.uniform2f(uRes, cv.width, cv.height);
+      gl.uniform1f(uTime, t);
+      // Free tumble: incommensurate sine waves on both axes, so the path never visibly repeats
+      var rx = reduce ? 0.5 : 0.45 + 0.75 * Math.sin(t * 0.23) + 0.35 * Math.sin(t * 0.71 + 1.3);
+      var ry = reduce ? 0.6 : t * 0.28 + 0.6 * Math.sin(t * 0.17 + 0.4);
+      gl.uniform2f(uRot, rx + scroll * 0.5 + py, ry + px + scroll * 0.9);
+      // Drift: the mark floats on a slow diagonal and vertical path inside its stage
+      var ox = reduce ? 0 : 0.09 * Math.sin(t * 0.19) + 0.05 * Math.sin(t * 0.53 + 2.1);
+      var oy = reduce ? 0 : 0.11 * Math.sin(t * 0.27 + 0.8) + 0.04 * Math.cos(t * 0.61);
+      gl.uniform2f(uOff, ox, oy);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      if (visible && !reduce) requestAnimationFrame(frame);
+    }
+    if (reduce) { requestAnimationFrame(frame); return; }
+    new IntersectionObserver(function (es) { es.forEach(function (e) { var was = visible; visible = e.isIntersecting; if (visible && !was) requestAnimationFrame(frame); }); }, { threshold: 0.05 }).observe(cv);
+  })();
+
+
+  // Prism fields: thin spectral lines, bent by a fractal-noise displacement that drifts with scroll
+  (function () {
+    var NS = 'http://www.w3.org/2000/svg';
+    var fields = [];
+    document.querySelectorAll('[data-field]').forEach(function (sec, k) {
+      var id = 'pf' + k;
+      var lines = '';
+      for (var i = 0; i < 46; i++) {
+        var y = 20 + i * 13 + (i % 3) * 2;
+        lines += '<path d="M -50 ' + y + ' C 300 ' + (y - 24) + ', 700 ' + (y + 30) + ', 1250 ' + (y - 6) + '" stroke="url(#' + id + 'g)" stroke-width="' + (i % 5 === 0 ? 1.6 : 0.8) + '" fill="none" opacity="' + (0.35 + (i % 4) * 0.15) + '"/>';
+      }
+      var wrap = document.createElement('div');
+      wrap.className = 'prism-field';
+      wrap.setAttribute('aria-hidden', 'true');
+      wrap.innerHTML = '<svg viewBox="0 0 1200 640" preserveAspectRatio="none">' +
+        '<defs><linearGradient id="' + id + 'g" x1="0" x2="1" y1="0" y2="0">' +
+        '<stop offset="0" stop-color="#2ECEFF" stop-opacity="0"/><stop offset=".18" stop-color="#2ECEFF"/><stop offset=".36" stop-color="#b8a6ff"/>' +
+        '<stop offset=".52" stop-color="#ff9fd6"/><stop offset=".68" stop-color="#ffd6a8"/><stop offset=".84" stop-color="#09DB98"/><stop offset="1" stop-color="#09DB98" stop-opacity="0"/></linearGradient>' +
+        '<filter id="' + id + 'f" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.0035 0.012" numOctaves="3" seed="' + (k * 7 + 3) + '"/>' +
+        '<feDisplacementMap in="SourceGraphic" scale="60" xChannelSelector="R" yChannelSelector="G"/></filter></defs>' +
+        '<g filter="url(#' + id + 'f)">' + lines + '</g></svg>';
+      sec.insertBefore(wrap, sec.firstChild);
+      fields.push({ sec: sec, svg: wrap.firstChild, turb: wrap.querySelector('feTurbulence'), disp: wrap.querySelector('feDisplacementMap') });
+    });
+    if (reduce) return;
+    var tick = false;
+    function update() {
+      tick = false;
+      var vh = window.innerHeight;
+      fields.forEach(function (f) {
+        var r = f.sec.getBoundingClientRect();
+        if (r.bottom < -100 || r.top > vh + 100) return;
+        var t = (vh - r.top) / (vh + r.height);
+        f.svg.style.transform = 'translate3d(' + ((t - 0.5) * -60) + 'px,' + ((t - 0.5) * 80) + 'px,0) skewY(' + ((t - 0.5) * 4) + 'deg)';
+        f.turb.setAttribute('baseFrequency', (0.0030 + t * 0.0016).toFixed(5) + ' ' + (0.010 + t * 0.006).toFixed(5));
+        f.disp.setAttribute('scale', (40 + Math.sin(t * Math.PI) * 50).toFixed(1));
+      });
+    }
+    window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+  })();
+
+
+  // Plan demo: play once when it scrolls in; Replay restarts it
+  var pd = document.getElementById('pd');
+  if (pd) {
+    if (reduce || !('IntersectionObserver' in window)) { pd.classList.add('play'); }
+    else {
+      var pio2 = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { pd.classList.add('play'); pio2.disconnect(); } }); }, { threshold: 0.35 });
+      pio2.observe(pd);
+    }
+    document.getElementById('pd-replay').addEventListener('click', function () {
+      pd.classList.remove('play'); void pd.offsetWidth; setTimeout(function () { pd.classList.add('play'); }, 60);
+    });
+  }
+
+  // Founding card: tilts toward the pointer, glare and hologram follow
+  var fc = document.getElementById('fcard');
+  if (fc && !reduce) {
+    var stage = fc.parentNode;
+    stage.addEventListener('pointermove', function (e) {
+      var r = fc.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      fc.style.setProperty('--ry', ((x - 0.5) * 18).toFixed(2) + 'deg');
+      fc.style.setProperty('--rx', ((0.5 - y) * 14).toFixed(2) + 'deg');
+      fc.style.setProperty('--gx', (x * 100).toFixed(1) + '%');
+      fc.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
+    });
+    stage.addEventListener('pointerleave', function () { ['--rx', '--ry', '--gx', '--gy'].forEach(function (k) { fc.style.removeProperty(k); }); });
+    // idle drift so the card reads as holographic even without a mouse (phones)
+    var t0 = performance.now(), cardVisible = false, drifting = false;
+    function drift(now) {
+      if (!cardVisible) { drifting = false; return; }
+      if (!stage.matches(':hover')) {
+        var t = (now - t0) / 1000;
+        fc.style.setProperty('--gx', (50 + Math.sin(t * 0.6) * 30).toFixed(1) + '%');
+        fc.style.setProperty('--gy', (50 + Math.cos(t * 0.45) * 25).toFixed(1) + '%');
+      }
+      requestAnimationFrame(drift);
+    }
+    new IntersectionObserver(function (es) { es.forEach(function (e) { cardVisible = e.isIntersecting; if (cardVisible && !drifting) { drifting = true; requestAnimationFrame(drift); } }); }).observe(fc);
+  }
+
+  // Film strip: buttons + drag to scroll on desktop
+  var strip = document.getElementById('strip');
+  function step(dir) { var card = strip.querySelector('.scene'); var w = card ? card.getBoundingClientRect().width + 16 : 300; strip.scrollBy({ left: dir * w * 2, behavior: reduce ? 'auto' : 'smooth' }); }
+  document.getElementById('strip-prev').addEventListener('click', function () { step(-1); });
+  document.getElementById('strip-next').addEventListener('click', function () { step(1); });
+  var down = false, startX = 0, startLeft = 0, moved = false;
+  strip.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') return; down = true; moved = false; startX = e.clientX; startLeft = strip.scrollLeft; });
+  window.addEventListener('pointermove', function (e) { if (!down) return; var dx = e.clientX - startX; if (Math.abs(dx) > 4) { moved = true; strip.classList.add('dragging'); } strip.scrollLeft = startLeft - dx; });
+  window.addEventListener('pointerup', function () { if (!down) return; down = false; strip.classList.remove('dragging'); });
+  strip.addEventListener('click', function (e) { if (moved) { e.preventDefault(); moved = false; } }, true);
 })();
 </script>
 </body>

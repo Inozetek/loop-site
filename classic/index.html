@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Loop – Your Personal AI Assistant</title>
+  <meta name="description" content="The AI assistant that finds your best plans before you ask. Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time that works for everyone.">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <meta property="og:title" content="Loop – Your personal AI assistant">
+  <meta property="og:description" content="The AI assistant that finds your best plans before you ask. Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time that works for everyone.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://loopaiapp.com/">
+  <link rel="icon" type="image/svg+xml" href="/assets/loop-logo.svg?v=5">
+  <link rel="icon" type="image/png" href="/assets/favicon.png?v=5">
+    <meta property="og:site_name" content="Loop">
+  <meta property="og:image" content="https://loopaiapp.com/assets/og-loop.png?v=2">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Loop, your personal AI assistant.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Loop – Your personal AI assistant">
+  <meta name="twitter:description" content="The AI assistant that finds your best plans before you ask. Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time that works for everyone.">
+  <meta name="twitter:image" content="https://loopaiapp.com/assets/og-loop.png?v=2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="/styles.css?v=20261110f">
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="/app.js?v=20261110f" defer></script>
+</head>
+<body class="unveil">
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav" id="nav">
+    <a class="nav-brand" href="#top" aria-label="Loop home">
+      <img src="/assets/loop-logo.svg" alt="" width="34" height="24">
+      <span>Loop</span>
+    </a>
+    <div class="nav-right">
+      <nav class="nav-links" aria-label="Site">
+        <a href="/vision/">A Day in the Loop</a>
+        <a href="/case-study/">Case study</a>
+      </nav>
+      <a class="pill pill-sm nav-cta" href="https://testflight.apple.com/join/nhfZxpSc">Try the beta</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- 1. Hero -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="rings" aria-hidden="true">
+        <span class="ring ring-a"></span>
+        <span class="ring ring-b"></span>
+        <span class="halo"></span>
+      </div>
+
+      <div class="hero-inner">
+        <p class="eyebrow reveal">Now in beta on iPhone</p>
+        <h1 id="hero-title" class="display reveal" style="--d:1">Loop</h1>
+        <p class="hero-sub reveal" style="--d:2">The AI assistant that finds your best plans before you ask</p>
+        <p class="hero-promise reveal" style="--d:3">Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time that works for everyone.</p>
+        <div class="reveal" style="--d:4">
+          <a class="pill" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
+          <a class="pill pill-ghost" href="#demo">Watch the demo</a>
+        </div>
+        <a class="hero-vision reveal" style="--d:5" href="/vision/" aria-label="A Day in the Loop: see where Loop is heading">
+          <img src="/assets/vision-still.jpg?v=4" alt="Owen reads a Loop invite on his bathroom mirror" width="960" height="540" loading="lazy">
+          <span class="hero-vision-label">A Day in the Loop<svg class="breathing-arrow" viewBox="0 0 512 512" aria-hidden="true"><circle cx="256" cy="256" r="208" fill="#00A6D9"/><path d="M268 160l96 96-96 96M352 256H152" fill="none" stroke="#000" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </div>
+
+      <div class="scroll-cue" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- Proof in numbers (a16z-style stat strip; every figure measured, see README) -->
+    <section class="stats" aria-label="Loop by the numbers">
+      <div class="wrap">
+        <dl class="stat-grid">
+          <div class="stat reveal" style="--d:0"><dt>Dallas places Loop knows</dt><dd>9,000+</dd></div>
+          <div class="stat reveal" style="--d:1"><dt>With photos and hours checked</dt><dd>3,000+</dd></div>
+          <div class="stat reveal" style="--d:2"><dt>To join the iPhone beta</dt><dd>$0</dd></div>
+          <div class="stat reveal" style="--d:3"><dt>Where Loop launches first</dt><dd>DFW</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Demo: the real app -->
+    <section class="demo" id="demo" aria-labelledby="demo-title">
+      <div class="wrap">
+        <p class="eyebrow reveal">Demo</p>
+        <h2 id="demo-title" class="headline reveal" style="--d:1">Take a quick <span class="grad">tour.</span></h2>
+        <div class="demo-wrap reveal" style="--d:2"><video class="demo-video" src="/assets/loop-demo-v12.mp4" poster="/assets/loop-demo-poster-v12.jpg" controls playsinline preload="metadata" aria-label="A 97-second tour of Loop running on a phone: asking for ideas, browsing picks, seeing why Loop picked a place, finding which friends are free, planning a stop, and the day drawn as a loop on a map."></video><button type="button" class="demo-sound" aria-label="Turn on sound">&#128264; Tap for sound</button></div>
+        <p class="demo-note reveal" style="--d:3">90 seconds with Loop on iPhone. <a href="https://testflight.apple.com/join/nhfZxpSc">Try the beta on TestFlight</a></p>
+      </div>
+    </section>
+
+    <!-- What Loop does: three pillars -->
+    <section class="pillars" aria-labelledby="pillars-title">
+      <div class="wrap">
+        <h2 id="pillars-title" class="pillars-title reveal">What Loop does</h2>
+        <div class="pillar-grid">
+          <article class="pillar reveal" style="--d:1">
+            <h3>Find</h3>
+            <p>Real places and events near you, picked for your taste, with today&rsquo;s hours and a time that fits your day.</p>
+          </article>
+          <article class="pillar reveal" style="--d:2">
+            <h3>Plan</h3>
+            <p>Loop sees when your friends are free and suggests a spot that&rsquo;s fair for everyone. One invite, one plan.</p>
+          </article>
+          <article class="pillar reveal" style="--d:3">
+            <h3>Go</h3>
+            <p>A reminder before it starts, the route when it&rsquo;s time to leave, then Loop stays out of your way.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Photo band -->
+    <a class="band reveal" href="/vision/" aria-label="A Day in the Loop: Jess on her coffee run">
+      <img src="/vision/media/s5.jpg" alt="Jess walks out of a coffee shop holding her cup" width="1920" height="1080" loading="lazy">
+      <video class="band-video" data-src="/assets/bands/coffee.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
+      <span class="band-cap"><span class="band-time">Jess · Friday · 9:04 AM</span><span class="band-line">Loop spots what&rsquo;s nearby and worth the stop.</span></span>
+    </a>
+
+    <!-- 2. It learns you -->
+    <section class="learns" aria-labelledby="learns-title">
+      <div class="wrap">
+        <p class="eyebrow reveal">The magic</p>
+        <h2 id="learns-title" class="headline reveal" style="--d:1">It learns <span class="grad">you.</span></h2>
+        <p class="manifesto" data-scrub-words>Loop learns from what you actually do, not what you tell it. Every place you visit, every event you save, every plan you make sharpens its sense of your taste. Over time it stops being an app you search and becomes the guide you trust. Until one morning you wake up to a list of things you didn&rsquo;t know you needed, on a day you couldn&rsquo;t have planned better yourself.</p>
+      </div>
+    </section>
+
+    <!-- Sensing -->
+    <section class="teaser teaser-center" aria-labelledby="sense-title">
+      <div class="wrap teaser-grid">
+        <div class="teaser-copy">
+          <p class="eyebrow reveal">Always on your side</p>
+          <h2 id="sense-title" class="headline reveal" style="--d:1">It notices, so you <span class="grad">don&rsquo;t miss.</span></h2>
+          <p class="lede reveal" style="--d:2">A friend nearby and free for lunch.<br>Happy hour on your way home, right as your meeting ends.</p>
+          <p class="lede reveal" style="--d:3; margin-top: 0.75em">Loop senses the moments too good to pass up and tells you while there&rsquo;s still time to say yes.</p>
+        </div>
+        <figure class="stage" data-scrub style="--i:4">
+          <span class="stage-glow" aria-hidden="true"></span>
+          <div class="tilt"><div class="float">
+          <svg class="art art-note" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="note-t">
+            <title id="note-t">Lock screen: Loop notifies you that Maya is five minutes away and free for lunch, then that your meeting ends at five and there&#8217;s half-off happy hour on your way home until seven, then that James confirmed tonight&#8217;s group dinner.</title>
+            <defs>
+              <linearGradient id="note-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
+              <linearGradient id="note-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+              <linearGradient id="note-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
+              <clipPath id="note-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
+            </defs>
+            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#note-edge)"/>
+            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
+            <g clip-path="url(#note-scr)">
+              <circle cx="80" cy="170" r="120" fill="none" stroke="#00A6D9" stroke-opacity=".10" stroke-width="18"/>
+              <circle cx="220" cy="210" r="120" fill="none" stroke="#09DB98" stroke-opacity=".07" stroke-width="18"/>
+              <text x="150" y="104" font-size="13" font-weight="600" fill="#fff" fill-opacity=".7" text-anchor="middle">Friday</text>
+              <text x="150" y="168" font-size="60" font-weight="300" fill="#fff" fill-opacity=".92" text-anchor="middle" letter-spacing="-2">12:04</text>
+              <g class="nt-1">
+                <rect x="22" y="236" width="256" height="76" rx="20" fill="#1C1C1E" fill-opacity=".94"/>
+                <rect x="34" y="250" width="30" height="30" rx="8" fill="#000"/>
+                <circle cx="46" cy="265" r="5.6" fill="none" stroke="#00A6D9" stroke-width="1.8"/><circle cx="52.1" cy="265" r="5.6" fill="none" stroke="#09DB98" stroke-width="1.8"/>
+                <text x="74" y="259" font-size="9" font-weight="600" fill="#8E8E93" letter-spacing=".8">LOOP</text>
+                <text x="266" y="259" font-size="9" fill="#8E8E93" text-anchor="end">now</text>
+                <text x="74" y="278" font-size="13" font-weight="700" fill="#fff">Maya is 5 min away</text>
+                <text x="74" y="295" font-size="11" fill="#C7C7CC">Free until 1:30 &#8212; lunch?</text>
+              </g>
+              <g class="nt-2">
+                <rect x="22" y="322" width="256" height="76" rx="20" fill="#1C1C1E" fill-opacity=".94"/>
+                <rect x="34" y="336" width="30" height="30" rx="8" fill="#000"/>
+                <circle cx="46" cy="351" r="5.6" fill="none" stroke="#00A6D9" stroke-width="1.8"/><circle cx="52.1" cy="351" r="5.6" fill="none" stroke="#09DB98" stroke-width="1.8"/>
+                <text x="74" y="345" font-size="9" font-weight="600" fill="#8E8E93" letter-spacing=".8">LOOP</text>
+                <text x="266" y="345" font-size="9" fill="#8E8E93" text-anchor="end">now</text>
+                <text x="74" y="364" font-size="13" font-weight="700" fill="#fff">Happy hour on the way home</text>
+                <text x="74" y="381" font-size="11" fill="#C7C7CC">Meeting ends at 5 &#183; &#189;-off till 7. Go?</text>
+              </g>
+              <g class="nt-3">
+                <rect x="22" y="408" width="256" height="92" rx="20" fill="#1C1C1E" fill-opacity=".94"/>
+                <rect x="34" y="422" width="30" height="30" rx="8" fill="#000"/>
+                <circle cx="46" cy="437" r="5.6" fill="none" stroke="#00A6D9" stroke-width="1.8"/><circle cx="52.1" cy="437" r="5.6" fill="none" stroke="#09DB98" stroke-width="1.8"/>
+                <text x="74" y="431" font-size="9" font-weight="600" fill="#8E8E93" letter-spacing=".8">LOOP</text>
+                <text x="266" y="431" font-size="9" fill="#8E8E93" text-anchor="end">now</text>
+                <text x="74" y="450" font-size="13" font-weight="700" fill="#fff">Group plan confirmed</text>
+                <text x="74" y="467" font-size="11" fill="#C7C7CC">James confirmed &#8212; dinner with your</text>
+                <text x="74" y="482" font-size="11" fill="#C7C7CC">group tonight at 8 PM.</text>
+              </g>
+              <circle cx="62" cy="540" r="20" fill="#1C1C1E" fill-opacity=".8"/><circle cx="238" cy="540" r="20" fill="#1C1C1E" fill-opacity=".8"/>
+              <path d="M58 531 h8 l-1.5 5 v12 h-5 v-12 Z" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4" stroke-linejoin="round"/>
+              <rect x="229" y="534" width="18" height="13" rx="3" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4"/><circle cx="238" cy="540.5" r="3.2" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.4"/>
+              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#note-sheen)" transform="skewX(-14)"/>
+            </g>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#note-glass)"/>
+            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
+            <rect x="110" y="586" width="80" height="4" rx="2" fill="#fff" opacity=".28"/>
+          </svg>
+          </div></div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 3. Teasers -->
+    <section class="teaser" aria-labelledby="t1-title">
+      <div class="wrap teaser-grid">
+        <div class="teaser-copy">
+          <p class="eyebrow reveal">01</p>
+          <h2 id="t1-title" class="headline reveal" style="--d:1">Ask it.</h2>
+          <p class="lede reveal" style="--d:2">Say what you&rsquo;re in the mood for, in your own words. Loop answers with real places, chosen from what it has learned you love, and a time that fits your day.</p>
+        </div>
+        <figure class="stage" data-scrub style="--i:0">
+          <span class="stage-glow" aria-hidden="true"></span>
+          <div class="tilt"><div class="float">
+          <svg class="art art-ask" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="ask-t">
+            <title id="ask-t">Ask Loop: you type live music tonight, Loop answers with two picks near you and a venue card slides in.</title>
+            <defs>
+              <linearGradient id="ask-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
+              <linearGradient id="ask-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+              <linearGradient id="ask-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
+              <clipPath id="ask-img1"><path d="M26 304 V218 a18 18 0 0 1 18 -18 H218 a18 18 0 0 1 18 18 V304 Z"/></clipPath>
+              <clipPath id="ask-img2"><path d="M246 304 V218 a18 18 0 0 1 18 -18 H378 a18 18 0 0 1 18 18 V304 Z"/></clipPath>
+              <clipPath id="ask-bar"><rect x="26" y="474" width="206" height="40" rx="20"/></clipPath>
+              <clipPath id="ask-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
+            </defs>
+            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#ask-edge)"/>
+            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
+            <g clip-path="url(#ask-scr)">
+              <g opacity="1.0">
+                <circle cx="39" cy="74" r="7.5" fill="none" stroke="#00A6D9" stroke-width="2.6"/>
+                <circle cx="47.2" cy="74" r="7.5" fill="none" stroke="#09DB98" stroke-width="2.6"/>
+                <text x="62" y="78.5" font-size="13" font-weight="600" fill="#fff" fill-opacity=".85">Ask Loop</text>
+                <circle cx="146" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><circle cx="146" cy="74" r="5" fill="none" stroke="#2ECEFF" stroke-width="1.4"/><path d="M146 71.5 V74 L147.8 75.4" fill="none" stroke="#2ECEFF" stroke-width="1.3" stroke-linecap="round"/>
+                <circle cx="172" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><rect x="167" y="70" width="10" height="9" rx="2" fill="none" stroke="#2ECEFF" stroke-width="1.3"/><path d="M167 73 H177" stroke="#2ECEFF" stroke-width="1.1"/>
+                <rect x="194" y="62" width="80" height="24" rx="12" fill="#1C1C1E" stroke="#fff" stroke-opacity=".08"/>
+                <text x="234" y="77.5" font-size="10" font-weight="600" fill="#fff" text-anchor="middle">Browse feed</text>
+              </g>
+              <g class="ask-q">
+                <rect x="132" y="104" width="142" height="34" rx="17" fill="#00A6D9"/>
+                <text x="203" y="126" font-size="13" font-weight="500" fill="#fff" text-anchor="middle">Live music tonight?</text>
+              </g>
+              <g class="ask-a">
+                <rect x="26" y="150" width="206" height="36" rx="16" fill="#1C1C1E"/>
+                <text x="40" y="173" font-size="13" fill="#fff" fill-opacity=".92">Two picks near you tonight.</text>
+              </g>
+              <g class="ask-card">
+                <rect x="26" y="200" width="210" height="220" rx="18" fill="#1C1C1E" stroke="#fff" stroke-opacity=".06"/>
+                <image href="/assets/photo-meyerson-interior.webp" x="26" y="200" width="210" height="104" preserveAspectRatio="xMidYMid slice" clip-path="url(#ask-img1)"/>
+                <text x="40" y="327" font-size="13" font-weight="700" fill="#fff">Meyerson Symphony Center</text>
+                <rect x="40" y="337" width="94" height="20" rx="6" fill="#00A6D9" fill-opacity=".16"/><text x="87" y="351" font-size="11" font-weight="600" fill="#2ECEFF" text-anchor="middle">Tonight &#183; 8 PM</text>
+                <rect x="140" y="337" width="72" height="20" rx="6" fill="#09DB98" fill-opacity=".14"/><text x="176" y="351" font-size="11" font-weight="600" fill="#09DB98" text-anchor="middle">Live music</text>
+                <text x="40" y="376" font-size="12" fill="#8E8E93">Concert hall &#183; 2.1 mi</text>
+                <rect x="40" y="386" width="160" height="24" rx="12" fill="#00A6D9"/>
+                <text x="120" y="402" font-size="11" font-weight="600" fill="#fff" text-anchor="middle">Add to Tonight 8:00 PM</text>
+                <rect x="246" y="200" width="150" height="220" rx="18" fill="#1C1C1E"/>
+                <image href="/assets/photo-music-factory.webp" x="246" y="200" width="150" height="104" preserveAspectRatio="xMidYMid slice" clip-path="url(#ask-img2)"/>
+                <text x="260" y="327" font-size="13" font-weight="700" fill="#fff">Toyota Music Factory</text>
+              </g>
+              <g class="ask-chips">
+                <rect x="26" y="434" width="100" height="28" rx="14" fill="#00A6D9" fill-opacity=".08" stroke="#00A6D9" stroke-opacity=".45"/>
+                <text x="76" y="452" font-size="12" font-weight="600" fill="#2ECEFF" text-anchor="middle">Closer to me</text>
+                <rect x="132" y="434" width="96" height="28" rx="14" fill="#00A6D9" fill-opacity=".08" stroke="#00A6D9" stroke-opacity=".45"/>
+                <text x="180" y="452" font-size="12" font-weight="600" fill="#2ECEFF" text-anchor="middle">Tomorrow?</text>
+              </g>
+              <rect x="26" y="474" width="210" height="40" rx="20" fill="#1C1C1E" stroke="#fff" stroke-opacity=".06"/>
+              <text class="ask-ph" x="44" y="499" font-size="13" fill="#8E8E93">Ask Loop anything&#8230;</text>
+              <g clip-path="url(#ask-bar)">
+              <text class="ask-typed" x="44" y="499" font-size="13" fill="#fff">Live music tonight?</text>
+              <rect class="ask-cover" x="40" y="480" width="188" height="28" fill="#1C1C1E"/>
+              <rect class="ask-caret" x="43" y="486" width="1.5" height="16" fill="#2ECEFF"/>
+              </g>
+              <g class="ask-send">
+                <circle cx="252" cy="494" r="12" fill="#00A6D9"/>
+                <path d="M252 499 V489 M247.8 493 L252 488.8 L256.2 493" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <g opacity="1.0">
+                <rect x="24" y="528" width="252" height="50" rx="25" fill="#111113" stroke="#fff" stroke-opacity=".08"/>
+                <rect x="110" y="532" width="80" height="42" rx="21" fill="#2C2C2E"/>
+                <circle cx="71" cy="545" r="6" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M75.5 549.5 L79.5 553.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+                <text x="73" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">Search</text>
+                <path transform="translate(141.5 539.5) scale(0.03320)" d="M208 512a24.84 24.84 0 01-23.34-16l-39.84-103.6a16.06 16.06 0 00-9.19-9.19L32 343.34a25 25 0 010-46.68l103.6-39.84a16.06 16.06 0 009.19-9.19L184.66 144a25 25 0 0146.68 0l39.84 103.6a16.06 16.06 0 009.19 9.19l103 39.63a25.49 25.49 0 0116.63 24.1 24.82 24.82 0 01-16 22.82l-103.6 39.84a16.06 16.06 0 00-9.19 9.19L231.34 496A24.84 24.84 0 01208 512zM88 176a14.67 14.67 0 01-13.69-9.4l-16.86-43.84a7.28 7.28 0 00-4.21-4.21L9.4 101.69a14.67 14.67 0 010-27.38l43.84-16.86a7.31 7.31 0 004.21-4.21L74.16 9.79A15 15 0 0186.23.11a14.67 14.67 0 0115.46 9.29l16.86 43.84a7.31 7.31 0 004.21 4.21l43.84 16.86a14.67 14.67 0 010 27.38l-43.84 16.86a7.28 7.28 0 00-4.21 4.21l-16.86 43.84A14.67 14.67 0 0188 176zM400 256a16 16 0 01-14.93-10.26l-22.84-59.37a8 8 0 00-4.6-4.6l-59.37-22.84a16 16 0 010-29.86l59.37-22.84a8 8 0 004.6-4.6l22.67-58.95a16.45 16.45 0 0113.17-10.57 16 16 0 0116.86 10.15l22.84 59.37a8 8 0 004.6 4.6l59.37 22.84a16 16 0 010 29.86l-59.37 22.84a8 8 0 00-4.6 4.6l-22.84 59.37A16 16 0 01400 256z" fill="#2ECEFF"/>
+                <text x="150" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">For You</text>
+                <circle cx="228" cy="546" r="8" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="228" cy="544" r="2.8" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M223.2 551.6 a5.4 4.4 0 0 1 9.6 0" fill="none" stroke="#fff" stroke-width="1.4"/>
+                <text x="228" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">Alex</text>
+              </g>
+              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#ask-sheen)" transform="skewX(-14)"/>
+            </g>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#ask-glass)"/>
+            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
+            <rect x="110" y="586" width="80" height="4" rx="2" fill="#fff" opacity=".28"/>
+          </svg>
+          </div></div>
+        </figure>
+      </div>
+    </section>
+
+    <section class="teaser teaser-flip" aria-labelledby="t2-title">
+      <div class="wrap teaser-grid">
+        <div class="teaser-copy">
+          <p class="eyebrow reveal">02</p>
+          <h2 id="t2-title" class="headline reveal" style="--d:1">Plan with friends.</h2>
+          <p class="lede reveal" style="--d:2">Loop suggests who to bring, finds when everyone&rsquo;s free, and picks a spot that&rsquo;s fair to reach for everyone. The group chat can rest.</p>
+        </div>
+        <figure class="stage stage-green" data-scrub style="--i:1">
+          <span class="stage-glow" aria-hidden="true"></span>
+          <div class="tilt"><div class="float">
+          <svg class="art art-plan" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="plan-t">
+            <title id="plan-t">Plan Group Activity: Loop picks a friend, shows when you are both free and how far each of you is, then Send Invite lights up.</title>
+            <defs>
+              <linearGradient id="plan-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
+              <linearGradient id="plan-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+              <linearGradient id="plan-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
+              <clipPath id="plan-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
+            </defs>
+            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#plan-edge)"/>
+            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
+            <g clip-path="url(#plan-scr)">
+              <g opacity="0.35">
+                <circle cx="39" cy="74" r="7.5" fill="none" stroke="#00A6D9" stroke-width="2.6"/>
+                <circle cx="47.2" cy="74" r="7.5" fill="none" stroke="#09DB98" stroke-width="2.6"/>
+                <text x="62" y="78.5" font-size="13" font-weight="600" fill="#fff" fill-opacity=".85">Ask Loop</text>
+                <circle cx="146" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><circle cx="146" cy="74" r="5" fill="none" stroke="#2ECEFF" stroke-width="1.4"/><path d="M146 71.5 V74 L147.8 75.4" fill="none" stroke="#2ECEFF" stroke-width="1.3" stroke-linecap="round"/>
+                <circle cx="172" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><rect x="167" y="70" width="10" height="9" rx="2" fill="none" stroke="#2ECEFF" stroke-width="1.3"/><path d="M167 73 H177" stroke="#2ECEFF" stroke-width="1.1"/>
+                <rect x="194" y="62" width="80" height="24" rx="12" fill="#1C1C1E" stroke="#fff" stroke-opacity=".08"/>
+                <text x="234" y="77.5" font-size="10" font-weight="600" fill="#fff" text-anchor="middle">Browse feed</text>
+              </g>
+              <rect x="14" y="98" width="272" height="520" rx="28" fill="#111113"/>
+              <rect x="130" y="107" width="40" height="4" rx="2" fill="#48484A"/>
+              <text x="32" y="146" font-size="18" font-weight="700" fill="#fff">Plan Group Activity</text>
+              <rect x="30" y="164" width="240" height="292" rx="18" fill="#1C1C1E"/>
+              <text x="48" y="194" font-size="15" font-weight="700" fill="#fff">Select Friends</text>
+              <text x="48" y="212" font-size="10.5" fill="#A1A1A6">Choose 1&#8211;5 friends to invite</text>
+              <rect x="44" y="226" width="212" height="180" rx="14" fill="none" stroke="#2ECEFF" stroke-opacity=".35"/>
+              <path d="M62 240 l2.2 5.8 5.8 2.2 -5.8 2.2 -2.2 5.8 -2.2 -5.8 -5.8 -2.2 5.8 -2.2 Z" fill="#2ECEFF"/>
+              <text x="74" y="252" font-size="9.5" font-weight="700" fill="#fff" fill-opacity=".85" letter-spacing="1.2">SUGGESTED</text>
+              <g transform="translate(56 262)">
+                <rect width="156" height="100" rx="12" fill="#2C2C2E"/>
+                <rect class="plan-on" width="156" height="100" rx="12" fill="#00A6D9"/>
+                <circle cx="18" cy="20" r="11" fill="#fff"/><text x="18" y="24" font-size="10" font-weight="700" fill="#00A6D9" text-anchor="middle">M</text>
+                <text x="36" y="24.5" font-size="13" font-weight="600" fill="#fff">Maya</text>
+                <g class="plan-check"><circle cx="82" cy="20" r="7" fill="#fff"/><path d="M78.5 20 l2.4 2.4 4.4 -4.6" fill="none" stroke="#00A6D9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <g class="plan-free"><rect x="10" y="34" width="86" height="18" rx="9" fill="#fff" fill-opacity=".2"/><text x="53" y="46.5" font-size="9.5" font-weight="500" fill="#fff" text-anchor="middle">Free 7&#8211;9 PM</text></g>
+                <text class="plan-pick" x="12" y="67" font-size="10" font-weight="700" fill="#fff">&#10003; Loop&#8217;s pick</text>
+                <g class="plan-dist"><rect x="10" y="74" width="138" height="18" rx="9" fill="#fff" fill-opacity=".2"/><text x="79" y="86.5" font-size="9.5" font-weight="500" fill="#fff" text-anchor="middle">20 min from Harbor &amp; Oak</text></g>
+              </g>
+              <g transform="translate(56 370)">
+                <rect width="112" height="28" rx="10" fill="#2C2C2E"/>
+                <circle cx="15" cy="14" r="9" fill="#00A6D9"/><text x="15" y="17.5" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">J</text>
+                <text x="30" y="18.5" font-size="12" fill="#fff">Jordan</text>
+              </g>
+              <g class="plan-sum">
+                <text x="48" y="426" font-size="10" fill="#C7C7CC">Good plan with Maya &#8212; you&#8217;re both free</text>
+                <text x="48" y="441" font-size="10" fill="#C7C7CC">and it&#8217;s about 20 minutes for each of you.</text>
+              </g>
+              <g class="plan-send">
+                <rect x="30" y="532" width="240" height="44" rx="14" fill="#00A6D9"/>
+                <rect class="plan-send-off" x="30" y="532" width="240" height="44" rx="14" fill="#2C2C2E"/>
+                <text x="150" y="559" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">Send Invite</text>
+              </g>
+              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#plan-sheen)" transform="skewX(-14)"/>
+            </g>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#plan-glass)"/>
+            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
+            <rect x="110" y="586" width="80" height="4" rx="2" fill="#fff" opacity=".28"/>
+          </svg>
+          </div></div>
+        </figure>
+      </div>
+    </section>
+
+    <section class="teaser" aria-labelledby="t3-title">
+      <div class="wrap teaser-grid">
+        <div class="teaser-copy">
+          <p class="eyebrow reveal">03</p>
+          <h2 id="t3-title" class="headline reveal" style="--d:1">Your day, <span class="grad">connected.</span></h2>
+          <p class="lede reveal" style="--d:2">The places you love and the people you love them with, strung into one loop: from home, through the day, and back again.</p>
+        </div>
+        <figure class="stage" data-scrub style="--i:2">
+          <span class="stage-glow" aria-hidden="true"></span>
+          <div class="tilt"><div class="float">
+          <svg class="art art-day" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="day-t">
+            <title id="day-t">Today's Loop: a route drawn from home, through the day's stops, and back home.</title>
+            <defs>
+              <linearGradient id="day-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
+              <linearGradient id="day-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+              <linearGradient id="day-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
+              <clipPath id="day-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
+            </defs>
+            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#day-edge)"/>
+            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
+            <g clip-path="url(#day-scr)">
+              <rect x="14" y="76" width="272" height="54" fill="#0e0e0f"/>
+              <rect x="14" y="130" width="272" height="46" fill="#060606"/>
+              <rect x="25" y="47" width="80" height="23" rx="11.5" fill="#0a0a0a" stroke="#3A3A3C"/>
+              <path d="M37.5 54.5 l-3.5 4 3.5 4" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="71" y="62.2" font-size="9.5" font-weight="600" fill="#fff" text-anchor="middle">September</text>
+              <text x="161" y="63" font-size="12" font-weight="500" fill="#fff" text-anchor="middle">September 2026</text>
+              <rect x="223" y="47" width="52" height="23" rx="11.5" fill="#0a0a0a" stroke="#3A3A3C"/>
+              <circle cx="235" cy="57.5" r="3.6" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M237.7 60.2 l2.6 2.6" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+              <line x1="249" y1="52" x2="249" y2="65" stroke="#48484A"/>
+              <path d="M256 54.5 h12 M258 58.5 h8 M260 62.5 h4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+              <text x="37.6" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">S</text><text x="75" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">M</text><text x="112.4" y="96" font-size="7" font-weight="700" fill="#09DB98" text-anchor="middle">T</text><text x="149.9" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">W</text><text x="187" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">T</text><text x="224.4" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">F</text><text x="261.8" y="96" font-size="7" font-weight="700" fill="#8E8E93" text-anchor="middle">S</text><circle cx="112.4" cy="113" r="13" fill="#1C1C1E" stroke="#48484A" stroke-width="1.2"/><text x="37.6" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">27</text><text x="75" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">28</text><text x="112.4" y="117" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">29</text><text x="149.9" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">30</text><text x="187" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">1</text><text x="224.4" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">2</text><text x="261.8" y="117" font-size="10" font-weight="400" fill="#8E8E93" text-anchor="middle">3</text>
+              <rect x="138" y="139" width="24" height="3" rx="1.5" fill="#48484A"/>
+              <text x="30" y="166" font-size="14" font-weight="700" fill="#fff">Tuesday, Sep 29</text>
+              <rect x="145" y="155" width="31" height="14" rx="7" fill="#0f2a20"/><text x="160.5" y="165" font-size="8" font-weight="700" fill="#09DB98" text-anchor="middle">Today</text>
+              <path d="M198.5 160 v7.5 h9 v-7.5 M203 163 v-9 M200 157 l3 -3 3 3" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="217" y="150" width="53" height="23" rx="11.5" fill="#0a0a0a" stroke="#3A3A3C"/>
+              <circle cx="232" cy="161.5" r="4.6" fill="none" stroke="#fff" stroke-width="1.3"/>
+              <circle cx="232" cy="156.9" r="1.5" fill="#fff"/><circle cx="236.4" cy="163" r="1.5" fill="#fff"/><circle cx="227.6" cy="163" r="1.5" fill="#fff"/>
+              <line x1="244" y1="155" x2="244" y2="168" stroke="#48484A"/>
+              <path d="M257 157 v9 M252.5 161.5 h9" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+              <image class="day-anim" href="/assets/loop-connected.svg" x="14" y="176" width="272" height="294"/>
+              <image class="day-static" href="/assets/loop-connected-static.svg" x="14" y="176" width="272" height="294"/>
+              <rect x="25" y="188" width="250" height="34" rx="10" fill="#000" opacity=".25"/>
+              <rect x="25" y="186" width="250" height="34" rx="10" fill="#1C1C1E" stroke="#fff" stroke-opacity=".1"/>
+              <path d="M36 199 h9 l-2.4 -2.4 M45 207 h-9 l2.4 2.4" fill="none" stroke="#00A6D9" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="50" y="207" font-size="10" font-weight="700" fill="#fff">Commute</text>
+              <line x1="101" y1="195" x2="101" y2="211" stroke="#3A3A3C"/>
+              <circle cx="117" cy="203" r="5" fill="none" stroke="#09DB98" stroke-width="1.2"/><path d="M117 200.5 v5 M114.5 203 h5" stroke="#09DB98" stroke-width="1.2" stroke-linecap="round"/>
+              <text x="127" y="207" font-size="10" font-weight="700" fill="#fff">Add stops to your Loop</text>
+              <rect x="14" y="470" width="272" height="130" fill="#000"/>
+              <rect x="22" y="478" width="256" height="46" rx="12" fill="#1C1C1E"/><rect x="32" y="486" width="3" height="30" rx="1.5" fill="#FB923C"/><text x="44" y="492" font-size="10" fill="#8E8E93">12:30 PM</text><text x="44" y="507" font-size="12" font-weight="700" fill="#fff">Lunch &#183; Maya</text><text x="44" y="519" font-size="10" fill="#8E8E93">Harbor &amp; Oak</text>
+              <rect x="22" y="530" width="256" height="46" rx="12" fill="#1C1C1E"/><rect x="32" y="538" width="3" height="30" rx="1.5" fill="#F472B6"/><text x="44" y="544" font-size="10" fill="#8E8E93">2:00 PM</text><text x="44" y="559" font-size="12" font-weight="700" fill="#fff">Live music</text><text x="44" y="571" font-size="10" fill="#8E8E93">Meyerson Symphony Center</text>
+              <rect x="22" y="582" width="256" height="46" rx="12" fill="#1C1C1E"/><rect x="32" y="590" width="3" height="30" rx="1.5" fill="#A78BFA"/><text x="44" y="596" font-size="10" fill="#8E8E93">8:00 PM</text><text x="44" y="611" font-size="12" font-weight="700" fill="#fff">Dinner with the group</text><text x="44" y="623" font-size="10" fill="#8E8E93">Group plan</text>
+              <rect x="32" y="549" width="236" height="41" rx="20.5" fill="#0c0c0d" stroke="#fff" stroke-opacity=".07"/>
+              <rect x="180" y="551" width="85" height="37" rx="18.5" fill="#262628"/>
+              <circle cx="78" cy="563" r="5" fill="none" stroke="#fff" stroke-width="1.7"/><path d="M81.8 566.8 l3.2 3.2" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+              <text x="79" y="583" font-size="7" font-weight="700" fill="#fff" text-anchor="middle">Search</text>
+              <path transform="translate(141.5 558.0) scale(0.03320)" d="M208 512a24.84 24.84 0 01-23.34-16l-39.84-103.6a16.06 16.06 0 00-9.19-9.19L32 343.34a25 25 0 010-46.68l103.6-39.84a16.06 16.06 0 009.19-9.19L184.66 144a25 25 0 0146.68 0l39.84 103.6a16.06 16.06 0 009.19 9.19l103 39.63a25.49 25.49 0 0116.63 24.1 24.82 24.82 0 01-16 22.82l-103.6 39.84a16.06 16.06 0 00-9.19 9.19L231.34 496A24.84 24.84 0 01208 512zM88 176a14.67 14.67 0 01-13.69-9.4l-16.86-43.84a7.28 7.28 0 00-4.21-4.21L9.4 101.69a14.67 14.67 0 010-27.38l43.84-16.86a7.31 7.31 0 004.21-4.21L74.16 9.79A15 15 0 0186.23.11a14.67 14.67 0 0115.46 9.29l16.86 43.84a7.31 7.31 0 004.21 4.21l43.84 16.86a14.67 14.67 0 010 27.38l-43.84 16.86a7.28 7.28 0 00-4.21 4.21l-16.86 43.84A14.67 14.67 0 0188 176zM400 256a16 16 0 01-14.93-10.26l-22.84-59.37a8 8 0 00-4.6-4.6l-59.37-22.84a16 16 0 010-29.86l59.37-22.84a8 8 0 004.6-4.6l22.67-58.95a16.45 16.45 0 0113.17-10.57 16 16 0 0116.86 10.15l22.84 59.37a8 8 0 004.6 4.6l59.37 22.84a16 16 0 010 29.86l-59.37 22.84a8 8 0 00-4.6 4.6l-22.84 59.37A16 16 0 01400 256z" fill="#fff"/>
+              <text x="150" y="583" font-size="7" font-weight="700" fill="#fff" text-anchor="middle">For You</text>
+              <circle cx="222.5" cy="565" r="7" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="222.5" cy="563" r="2.5" fill="#fff"/><path d="M218 569.8 a5 4 0 0 1 9 0" fill="#fff"/>
+              <text x="222.5" y="583" font-size="7" font-weight="700" fill="#fff" text-anchor="middle">Alex</text>
+              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#day-sheen)" transform="skewX(-14)"/>
+            </g>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#day-glass)"/>
+            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
+            <rect x="112" y="593" width="76" height="3" rx="1.5" fill="#fff" opacity=".35"/>
+          </svg>
+          </div></div>
+        </figure>
+      </div>
+    </section>
+
+    <section class="teaser teaser-flip" aria-labelledby="t4-title">
+      <div class="wrap teaser-grid">
+        <div class="teaser-copy">
+          <p class="eyebrow reveal">04</p>
+          <h2 id="t4-title" class="headline reveal" style="--d:1">One tap. <span class="grad">Sharper picks.</span></h2>
+          <p class="lede reveal" style="--d:2">Your free time, your plans, the way you use it. Loop learns from all of it and suggests better things to do over time. One tap after a plan confirms where you actually went, so every pick lands you closer to your ultimate day.</p>
+        </div>
+        <figure class="stage stage-green" data-scrub style="--i:3">
+          <span class="stage-glow" aria-hidden="true"></span>
+          <div class="tilt"><div class="float">
+          <svg class="art art-learn" viewBox="0 0 300 612" width="300" height="612" role="img" aria-labelledby="learn-t">
+            <title id="learn-t">Did you make it? You tap I was there, and Loop confirms it is learning from the visit.</title>
+            <defs>
+              <linearGradient id="learn-edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a6a70"/><stop offset=".18" stop-color="#1c1c1e"/><stop offset=".55" stop-color="#08080a"/><stop offset=".85" stop-color="#1c1c1e"/><stop offset="1" stop-color="#4a4a50"/></linearGradient>
+              <linearGradient id="learn-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".11"/><stop offset=".32" stop-color="#fff" stop-opacity=".02"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+              <linearGradient id="learn-sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9FEAFF" stop-opacity="0"/><stop offset=".5" stop-color="#9FEAFF" stop-opacity=".10"/><stop offset="1" stop-color="#9FEAFF" stop-opacity="0"/></linearGradient>
+              <clipPath id="learn-scr"><rect x="14" y="14" width="272" height="584" rx="38"/></clipPath>
+            </defs>
+            <rect x="0.5" y="0.5" width="299" height="611" rx="50" fill="url(#learn-edge)"/>
+            <rect x="4" y="4" width="292" height="604" rx="47" fill="#050506"/>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="#000"/>
+            <g clip-path="url(#learn-scr)">
+              <g opacity="0.3">
+                <circle cx="39" cy="74" r="7.5" fill="none" stroke="#00A6D9" stroke-width="2.6"/>
+                <circle cx="47.2" cy="74" r="7.5" fill="none" stroke="#09DB98" stroke-width="2.6"/>
+                <text x="62" y="78.5" font-size="13" font-weight="600" fill="#fff" fill-opacity=".85">Ask Loop</text>
+                <circle cx="146" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><circle cx="146" cy="74" r="5" fill="none" stroke="#2ECEFF" stroke-width="1.4"/><path d="M146 71.5 V74 L147.8 75.4" fill="none" stroke="#2ECEFF" stroke-width="1.3" stroke-linecap="round"/>
+                <circle cx="172" cy="74" r="11" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".35"/><rect x="167" y="70" width="10" height="9" rx="2" fill="none" stroke="#2ECEFF" stroke-width="1.3"/><path d="M167 73 H177" stroke="#2ECEFF" stroke-width="1.1"/>
+                <rect x="194" y="62" width="80" height="24" rx="12" fill="#1C1C1E" stroke="#fff" stroke-opacity=".08"/>
+                <text x="234" y="77.5" font-size="10" font-weight="600" fill="#fff" text-anchor="middle">Browse feed</text>
+              </g>
+              <g opacity=".3">
+                <text x="150" y="124" font-size="24" font-weight="700" fill="#fff" text-anchor="middle">Evening, Alex.</text>
+                <text x="150" y="148" font-size="13" font-weight="600" fill="#fff" text-anchor="middle">Plan something tomorrow.</text>
+                <rect x="26" y="474" width="248" height="40" rx="20" fill="#1C1C1E"/>
+              </g>
+              <g opacity="0.3">
+                <rect x="24" y="528" width="252" height="50" rx="25" fill="#111113" stroke="#fff" stroke-opacity=".08"/>
+                <rect x="110" y="532" width="80" height="42" rx="21" fill="#2C2C2E"/>
+                <circle cx="71" cy="545" r="6" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M75.5 549.5 L79.5 553.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+                <text x="73" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">Search</text>
+                <path transform="translate(141.5 539.5) scale(0.03320)" d="M208 512a24.84 24.84 0 01-23.34-16l-39.84-103.6a16.06 16.06 0 00-9.19-9.19L32 343.34a25 25 0 010-46.68l103.6-39.84a16.06 16.06 0 009.19-9.19L184.66 144a25 25 0 0146.68 0l39.84 103.6a16.06 16.06 0 009.19 9.19l103 39.63a25.49 25.49 0 0116.63 24.1 24.82 24.82 0 01-16 22.82l-103.6 39.84a16.06 16.06 0 00-9.19 9.19L231.34 496A24.84 24.84 0 01208 512zM88 176a14.67 14.67 0 01-13.69-9.4l-16.86-43.84a7.28 7.28 0 00-4.21-4.21L9.4 101.69a14.67 14.67 0 010-27.38l43.84-16.86a7.31 7.31 0 004.21-4.21L74.16 9.79A15 15 0 0186.23.11a14.67 14.67 0 0115.46 9.29l16.86 43.84a7.31 7.31 0 004.21 4.21l43.84 16.86a14.67 14.67 0 010 27.38l-43.84 16.86a7.28 7.28 0 00-4.21 4.21l-16.86 43.84A14.67 14.67 0 0188 176zM400 256a16 16 0 01-14.93-10.26l-22.84-59.37a8 8 0 00-4.6-4.6l-59.37-22.84a16 16 0 010-29.86l59.37-22.84a8 8 0 004.6-4.6l22.67-58.95a16.45 16.45 0 0113.17-10.57 16 16 0 0116.86 10.15l22.84 59.37a8 8 0 004.6 4.6l59.37 22.84a16 16 0 010 29.86l-59.37 22.84a8 8 0 00-4.6 4.6l-22.84 59.37A16 16 0 01400 256z" fill="#2ECEFF"/>
+                <text x="150" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">For You</text>
+                <circle cx="228" cy="546" r="8" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="228" cy="544" r="2.8" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M223.2 551.6 a5.4 4.4 0 0 1 9.6 0" fill="none" stroke="#fff" stroke-width="1.4"/>
+                <text x="228" y="570" font-size="9" font-weight="600" fill="#fff" text-anchor="middle">Alex</text>
+              </g>
+              <g transform="translate(0 -72)">
+              <g class="learn-modal">
+                <rect x="30" y="236" width="240" height="236" rx="24" fill="#1C1C1E" stroke="#fff" stroke-opacity=".06"/>
+                <text x="52" y="276" font-size="17" font-weight="700" fill="#fff">Did you make it?</text>
+                <path d="M242 266 l10 10 M252 266 l-10 10" stroke="#8E8E93" stroke-width="1.8" stroke-linecap="round"/>
+                <line x1="30" y1="296" x2="270" y2="296" stroke="#fff" stroke-opacity=".08"/>
+                <path d="M62 336 c-6 -7 -8 -10 -8 -13 a8 8 0 0 1 16 0 c0 3 -2 6 -8 13 Z" fill="#00A6D9"/><circle cx="62" cy="323" r="2.6" fill="#1C1C1E"/>
+                <text x="78" y="331" font-size="13" font-weight="600" fill="#fff">Harbor &amp; Oak</text>
+                <text x="150" y="362" font-size="10.5" fill="#A1A1A6" text-anchor="middle">Quick check so Loop only learns</text>
+                <text x="150" y="377" font-size="10.5" fill="#A1A1A6" text-anchor="middle">from places you actually went.</text>
+                <rect x="46" y="394" width="100" height="60" rx="14" fill="#0D2A21" stroke="#09DB98" stroke-width="1.5"/>
+                <rect class="learn-yes-off" x="46" y="394" width="100" height="60" rx="14" fill="#2C2C2E"/>
+                <circle class="learn-tap" cx="96" cy="424" r="30" fill="#09DB98"/>
+                <circle cx="96" cy="414" r="8.5" fill="none" stroke="#09DB98" stroke-width="1.8"/><path d="M92.2 414 l2.6 2.6 4.6 -5" fill="none" stroke="#09DB98" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="96" y="441" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">I was there</text>
+                <rect x="154" y="394" width="100" height="60" rx="14" fill="#2C2C2E"/>
+                <circle cx="204" cy="414" r="8.5" fill="none" stroke="#8E8E93" stroke-width="1.8"/><path d="M200.8 410.8 l6.4 6.4 M207.2 410.8 l-6.4 6.4" stroke="#8E8E93" stroke-width="1.8" stroke-linecap="round"/>
+                <text x="204" y="441" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">Didn&#8217;t go</text>
+              </g>
+              <g class="learn-toast">
+                <rect x="46" y="494" width="208" height="36" rx="18" fill="#1C1C1E" stroke="#2ECEFF" stroke-opacity=".3"/>
+                <circle class="learn-pulse" cx="72" cy="512" r="9" fill="none" stroke="#2ECEFF" stroke-width="1.5"/>
+                <circle class="learn-pulse learn-pulse-2" cx="72" cy="512" r="9" fill="none" stroke="#09DB98" stroke-width="1.5"/>
+                <circle cx="69" cy="512" r="5.5" fill="none" stroke="#00A6D9" stroke-width="2"/><circle cx="75" cy="512" r="5.5" fill="none" stroke="#09DB98" stroke-width="2"/>
+                <text x="90" y="516" font-size="11.5" font-weight="600" fill="#fff">Got it &#8212; Loop is learning.</text>
+              </g>
+              </g>
+              <rect class="art-sheen" x="-150" y="0" width="110" height="612" fill="url(#learn-sheen)" transform="skewX(-14)"/>
+            </g>
+            <rect x="14" y="14" width="272" height="584" rx="38" fill="url(#learn-glass)"/>
+            <rect x="113" y="25" width="74" height="22" rx="11" fill="#000"/>
+            <rect x="110" y="586" width="80" height="4" rx="2" fill="#fff" opacity=".28"/>
+          </svg>
+          </div></div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 4. Closing -->
+    <!-- Photo band -->
+    <a class="band reveal" href="/vision/" aria-label="A Day in the Loop: three friends leaving a show">
+      <img src="/vision/media/s12.jpg" alt="Owen, Jess and a friend laugh outside a theater at night" width="1920" height="1080" loading="lazy">
+      <video class="band-video" data-src="/assets/bands/night.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
+      <span class="band-cap"><span class="band-time">Owen · Friday · 10:52 PM</span><span class="band-line">One plan, the whole night.</span></span>
+    </a>
+
+    <section class="closing" aria-labelledby="close-title">
+      <div class="rings rings-close" aria-hidden="true">
+        <span class="ring ring-a"></span>
+        <span class="ring ring-b"></span>
+      </div>
+      <div class="wrap closing-inner">
+        <h2 id="close-title" class="closer reveal">Never miss out again. <span class="grad">Get in the loop.</span></h2>
+        <p class="lede center reveal" style="--d:1">Loop keeps you close to the people and places you care about most, and the longer you use it, the sharper it gets.<br>Every plan at the best time, place and price, including the ones you didn&rsquo;t know to look for. Now in beta on iPhone.</p>
+        <div class="reveal" style="--d:2">
+          <a class="pill" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
+          <p class="android-note">On Android? <a href="mailto:support@loopaiapp.com?subject=Notify%20me%20(Android)">Get notified</a></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 5. Footer -->
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="/vision/">A Day in the Loop</a>
+      <a href="/case-study/">Case study</a>
+      <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <p class="copyright">Dallas is our launch city, so beta recommendations cover Dallas&ndash;Fort Worth.</p>
+    <p class="copyright">&copy; 2026 Loop</p>
+  </footer>
+
+<script>
+// Demo video: plays when scrolled into view (with sound if the browser allows, else muted with a "Tap for sound" button), pauses when scrolled away.
+(function () {
+  var v = document.querySelector('.demo-video'), b = document.querySelector('.demo-sound');
+  if (!v || !b || !('IntersectionObserver' in window)) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var started = false;
+  function soundOn(restart) { v.muted = false; b.classList.remove('show'); if (restart) v.currentTime = 0; v.play().catch(function () {}); }
+  function start() { started = true; v.muted = false; v.play().catch(function () { v.muted = true; b.classList.add('show'); v.play().catch(function () {}); }); }
+  b.addEventListener('click', function (e) { e.stopPropagation(); soundOn(true); });
+  v.addEventListener('volumechange', function () { if (!v.muted) b.classList.remove('show'); });
+  new IntersectionObserver(function (es) {
+    es.forEach(function (en) {
+      if (en.isIntersecting && en.intersectionRatio >= 0.5) { if (!started) start(); else if (v.paused && v.dataset.autopaused) { delete v.dataset.autopaused; v.play().catch(function () {}); } }
+      else if (!en.isIntersecting && started && !v.paused) { v.dataset.autopaused = '1'; v.pause(); }
+    });
+  }, { threshold: [0, 0.5] }).observe(v);
+})();
+</script>
+</body>
+</html>
