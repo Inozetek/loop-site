@@ -1,0 +1,45 @@
+/* Shared Loop finish for the inner pages: the home page's prism reveal and chrome/pearl buttons. */
+@property --front { syntax: '<percentage>'; inherits: true; initial-value: 110%; }
+@property --on { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --mx { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+@property --my { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+@property --angle { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
+:root { --fx: 0.75; }
+
+.prism-in { position: relative; width: fit-content; max-width: 100%; }
+.fxjs .prism-in { --front: -12%; -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--front) - 2%), transparent calc(var(--front) + 6%)); mask-image: linear-gradient(90deg, #000 calc(var(--front) - 2%), transparent calc(var(--front) + 6%)); }
+.fxjs .prism-in.go { animation: lfx-front 2.1s cubic-bezier(0.2, 0.55, 0.35, 1) forwards; }
+.fxjs .prism-in.done { -webkit-mask-image: none; mask-image: none; }
+@keyframes lfx-front { to { --front: 112%; } }
+.prism-light { position: absolute; inset: 0; pointer-events: none; display: block;
+  -webkit-mask-image: linear-gradient(90deg, transparent calc(var(--front) - 26%), #000 calc(var(--front) - 8%), #000 calc(var(--front) + 1%), transparent calc(var(--front) + 4%));
+          mask-image: linear-gradient(90deg, transparent calc(var(--front) - 26%), #000 calc(var(--front) - 8%), #000 calc(var(--front) + 1%), transparent calc(var(--front) + 4%)); }
+.prism-light, .prism-light * { color: transparent !important; -webkit-text-fill-color: transparent !important;
+  background: linear-gradient(90deg, #ffffff 0%, #8fd8ff 18%, #2ECEFF 32%, #b8a6ff 48%, #ff9fd6 62%, #ffd6a8 78%, #09DB98 100%) !important;
+  -webkit-background-clip: text !important; background-clip: text !important; filter: drop-shadow(0 0 14px rgba(46, 206, 255, 0.45)); }
+.light-page .prism-light, .light-page .prism-light * { background: linear-gradient(90deg, #0a6f93 0%, #2ECEFF 25%, #8a6cff 48%, #e0559f 66%, #e8913a 82%, #08b07b 100%) !important; -webkit-background-clip: text !important; background-clip: text !important; filter: none; }
+.prism-in.done .prism-light { display: none; }
+
+.fx { position: relative; overflow: hidden; isolation: isolate; transition: transform 0.35s cubic-bezier(.2,.8,.2,1), --on 0.5s ease, --mx 0.6s ease, --my 0.6s ease; }
+.fx:hover, .fx:focus-visible { --on: 1; }
+.fx-metal, .fx-pearl { position: absolute; inset: -30%; z-index: -1; pointer-events: none; border-radius: inherit; }
+.fx-metal { background: linear-gradient(118deg, #1b1e23 0%, #8e98a3 14%, #f7fafc 21%, #5d6670 29%, #16191e 44%, #b9c3cd 58%, #ffffff 64%, #4d555e 74%, #20242a 88%, #a7b1bb 100%);
+  background-size: 260% 260%; background-position: var(--mx) var(--my); filter: url(#lfx-liquid) brightness(1.35) contrast(1.1); opacity: calc(var(--on) * var(--fx) * 0.7); }
+.fx-pearl { background: conic-gradient(from var(--angle) at var(--mx) var(--my), #ff9fd6, #b8a6ff, #8fd8ff, #2ECEFF, #09DB98, #e9ffb0, #ffd6a8, #ff9fd6);
+  mix-blend-mode: soft-light; opacity: calc(var(--on) * var(--fx) * 0.9); animation: lfx-turn 9s linear infinite; }
+@keyframes lfx-turn { to { --angle: 360deg; } }
+
+/* Light-page cards: a chrome-to-pearl edge lights up under the pointer */
+.lift { position: relative; transition: transform 0.45s cubic-bezier(.2,.8,.2,1), box-shadow 0.45s ease, --on 0.5s ease; }
+.lift::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; opacity: var(--on);
+  background: conic-gradient(from var(--angle) at var(--mx) var(--my), #9aa6b1, #2ECEFF, #b8a6ff, #ff9fd6, #ffd6a8, #09DB98, #9aa6b1); animation: lfx-turn 9s linear infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.lift:hover { --on: 1; transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(10, 80, 110, 0.35); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-pearl, .lift::after { animation: none; }
+  .fx, .lift { transition: none; }
+  .fxjs .prism-in { -webkit-mask-image: none; mask-image: none; }
+  .prism-light { display: none; }
+}
