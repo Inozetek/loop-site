@@ -136,7 +136,7 @@ em.s { font-family: var(--serif); font-style: italic; font-weight: 400; letter-s
 
 /* Live notification card */
 .notif {
-  width: min(360px, 100%);
+  width: 100%;
   padding: 16px; border-radius: 22px;
   background: rgba(20, 26, 31, 0.55);
   backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4);
@@ -336,11 +336,13 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 @media (prefers-reduced-motion: reduce) { .prism-field svg { opacity: 0.35; } }
 
 /* ---------- Free-today chips in the hero (the app's own control, chrome on hover) ---------- */
-.hero-side { display: grid; gap: 14px; width: min(380px, 100%); }
+.hero-side { display: grid; gap: 14px; width: min(452px, 100%); min-width: 0; }
 .free-today { display: grid; gap: 10px; }
 .js .free-today { opacity: 0; transform: translateY(16px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
 .js .free-today.show { opacity: 1; transform: none; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px; margin: -2px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; }
 .chip {
   position: relative; isolation: isolate; overflow: hidden;
   font: 500 14px/1 var(--sans); color: rgba(242,245,247,0.78); cursor: pointer;
@@ -357,6 +359,87 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .chip .rim .fx-pearl { z-index: 0; mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.85); }
 .notif.swap { animation: notif-swap 0.55s var(--ease); }
 @keyframes notif-swap { 0% { opacity: 0.2; transform: translateY(10px) scale(0.985); } 100% { opacity: 1; transform: none; } }
+
+/* ---------- Plan demo: three timelines slide together, the overlap glows, a pick lands ---------- */
+.pd { border-radius: 28px; background: linear-gradient(180deg, var(--surface) 0%, #080b0e 100%); box-shadow: 0 0 0 1px var(--line); padding: clamp(20px, 3vw, 40px); display: grid; gap: 24px; }
+.pd-time { padding-left: 96px; font: 500 11px/1 var(--mono); letter-spacing: 0.08em; color: var(--dim); }
+.pd-axis { position: relative; display: block; height: 12px; }
+.pd-axis span { position: absolute; left: calc(var(--x) * 100%); transform: translateX(calc(var(--x) * -100%)); white-space: nowrap; }
+.pd-rows { position: relative; display: grid; gap: 14px; }
+.pd-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: center; }
+.pd-who { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--muted); }
+.pd-who i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--sans); color: #041016; background: var(--c); }
+.pd-track { position: relative; height: 34px; border-radius: 10px; background: rgba(220,240,255,0.03); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.pd-track b { position: absolute; top: 4px; bottom: 4px; left: calc(var(--a) / 8 * 100% + 2px); width: calc((var(--b) - var(--a)) / 8 * 100% - 4px); border-radius: 7px; transition: transform 1s var(--ease), opacity 0.8s var(--ease); }
+.pd-track .busy { background: repeating-linear-gradient(135deg, rgba(220,240,255,0.06) 0 6px, rgba(220,240,255,0.02) 6px 12px); }
+.pd-track .free { background: linear-gradient(90deg, rgba(46,206,255,0.22), rgba(9,219,152,0.22)); box-shadow: inset 0 0 0 1px rgba(46,206,255,0.35); }
+.pd-overlap { position: absolute; top: -10px; bottom: -10px; left: calc(96px + (100% - 96px) * var(--a) / 8); width: calc((100% - 96px) * (var(--b) - var(--a)) / 8); border-radius: 12px;
+  box-shadow: 0 0 0 1.5px rgba(46,206,255,0.9), 0 0 40px rgba(46,206,255,0.35); background: linear-gradient(180deg, rgba(46,206,255,0.10), rgba(9,219,152,0.08)); pointer-events: none; }
+.pd-overlap span { position: absolute; bottom: -26px; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--cyan); }
+.pd-result { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 20px; align-items: stretch; margin-top: 30px; }
+.pd-map { width: 100%; height: auto; border-radius: 18px; background: #070a0c; box-shadow: inset 0 0 0 1px var(--line); }
+.pd-card { border-radius: 18px; padding: 22px; background: rgba(20,26,31,0.6); box-shadow: inset 0 0 0 1px rgba(46,206,255,0.28); display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+.pd-card-title { margin: 0; font-weight: 600; font-size: clamp(24px, 2.4vw, 32px); letter-spacing: -0.03em; }
+.pd-card-body { margin: 0; color: var(--muted); font-size: 15px; }
+.pd-replay { align-self: flex-start; margin-top: 6px; font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: none; border: 0; border-bottom: 1px solid var(--line-2); padding: 0 0 3px; cursor: pointer; }
+.pd-replay:hover { color: var(--text); }
+/* Choreography (runs when .play is added) */
+.js .pd .pd-track .free { opacity: 0; transform: scaleX(0.4); transform-origin: left center; }
+.js .pd .pd-overlap { opacity: 0; transform: scaleY(0.6); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.js .pd .pd-legs path { stroke-dashoffset: 120; opacity: 0; transition: stroke-dashoffset 1.2s var(--ease), opacity 0.4s; }
+.js .pd .pd-dots circle, .js .pd .pd-pin, .js .pd .pd-glow { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.4); transition: opacity 0.5s var(--ease), transform 0.6s cubic-bezier(.34,1.56,.64,1); }
+.js .pd .pd-card { opacity: 0; transform: translateY(14px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.pd.play .pd-row:nth-child(1) .free { transition-delay: 0.1s; } .pd.play .pd-row:nth-child(2) .free { transition-delay: 0.35s; } .pd.play .pd-row:nth-child(3) .free { transition-delay: 0.6s; }
+.pd.play .pd-track .free { opacity: 1; transform: none; }
+.pd.play .pd-overlap { opacity: 1; transform: none; transition-delay: 1.4s; }
+.pd.play .pd-dots circle { opacity: 1; transform: none; transition-delay: 2s; }
+.pd.play .pd-legs path { opacity: 1; stroke-dashoffset: 0; transition-delay: 2.3s; }
+.pd.play .pd-glow, .pd.play .pd-pin { opacity: 1; transform: none; transition-delay: 2.9s; }
+.pd.play .pd-card { opacity: 1; transform: none; transition-delay: 3.2s; }
+@media (max-width: 760px) {
+  .pd-result { grid-template-columns: minmax(0, 1fr); }
+  .pd-time, .pd-row { grid-template-columns: 64px minmax(0, 1fr); }
+  .pd-time { padding-left: 64px; font-size: 10px; }
+  .pd-overlap { left: calc(64px + (100% - 64px) * var(--a) / 8); width: calc((100% - 64px) * (var(--b) - var(--a)) / 8); }
+  .pd-who { font-size: 13px; gap: 6px; }
+  .pd-who i { width: 22px; height: 22px; }
+}
+
+/* ---------- Founding Planners: holographic chrome card that tilts with the pointer ---------- */
+.founding-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.founding-copy { display: grid; gap: 20px; justify-items: start; min-width: 0; }
+.founding-copy h2 { margin: 0; font-weight: 600; font-size: clamp(38px, 5.4vw, 72px); line-height: 1; letter-spacing: -0.045em; text-wrap: balance; }
+.founding-copy > p { margin: 0; color: var(--muted); font-size: 18px; max-width: 30em; }
+.perks { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 0; width: 100%; border-top: 1px solid var(--line); }
+.perks li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; padding: 16px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 16px; }
+.perks b { color: var(--text); font-weight: 600; }
+.perk-n { font: 500 12px/1.6 var(--mono); color: var(--cyan); letter-spacing: 0.08em; }
+.card-stage { perspective: 1200px; display: grid; place-items: center; }
+.fcard {
+  --rx: 0deg; --ry: 0deg; --gx: 50%; --gy: 50%;
+  position: relative; width: min(420px, 100%); aspect-ratio: 1.586; border-radius: 22px; overflow: hidden;
+  transform: rotateX(var(--rx)) rotateY(var(--ry)); transform-style: preserve-3d; transition: transform 0.6s var(--ease);
+  background: linear-gradient(135deg, #0f1418 0%, #1a2228 45%, #0b0f12 100%);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 40px 90px -30px rgba(46,206,255,0.45), 0 20px 40px -20px rgba(0,0,0,0.8);
+}
+.fcard::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; z-index: 3; pointer-events: none;
+  background: linear-gradient(118deg, #5d6670, #f7fafc 20%, #8e98a3 35%, #16191e 50%, #ffffff 66%, #4d555e 80%, #a7b1bb);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.fcard-holo { position: absolute; inset: -20%; z-index: 1; opacity: 0.32; mix-blend-mode: screen;
+  background: conic-gradient(from var(--angle) at var(--gx) var(--gy), #ff9fd6, #b8a6ff, #8fd8ff, #2ECEFF, #09DB98, #e9ffb0, #ffd6a8, #ff9fd6);
+  filter: blur(28px) saturate(0.9); animation: turn 14s linear infinite; }
+.fcard-glare { position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(60% 50% at var(--gx) var(--gy), rgba(255,255,255,0.28), rgba(255,255,255,0) 60%); mix-blend-mode: overlay; }
+.fcard-in { position: absolute; inset: 0; z-index: 4; padding: 24px 26px; display: flex; flex-direction: column; justify-content: space-between; }
+.fcard-top { display: flex; align-items: center; gap: 12px; font: 500 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: rgba(242,245,247,0.85); }
+.fcard-num { font-weight: 600; font-size: clamp(40px, 5vw, 60px); letter-spacing: -0.04em; line-height: 1; color: #fff; text-shadow: 0 2px 20px rgba(46,206,255,0.35); font-variant-numeric: tabular-nums; }
+.fcard-num small { font: 400 0.42em/1 var(--mono); letter-spacing: 0.04em; color: rgba(242,245,247,0.55); margin-left: 6px; }
+.fcard-foot { display: flex; justify-content: space-between; font: 500 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,245,247,0.6); }
+.fcard::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: overlay; opacity: 0.5;
+  background: repeating-linear-gradient(115deg, rgba(255,255,255,0.07) 0 1px, rgba(255,255,255,0) 1px 5px); }
+@media (max-width: 860px) { .founding-grid { grid-template-columns: minmax(0, 1fr); } .card-stage { order: -1; } }
+@media (prefers-reduced-motion: reduce) { .fcard-holo { animation: none; } .fcard { transition: none; } }
 </style>
 </head>
 <body>
@@ -511,6 +594,48 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     </div>
   </section>
 
+
+  <section class="sec plan-demo" aria-labelledby="plan-title" style="padding-top: 0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="label prism-in">06 · How Loop picks the time</span>
+          <h2 id="plan-title" class="prism-in">Three calendars. <em class="s">One answer.</em></h2>
+        </div>
+        <p class="prism-in">Loop lines up when everyone is free, then finds the spot that&rsquo;s fair to all of you. No group chat required.</p>
+      </div>
+      <div class="pd" id="pd">
+        <div class="pd-time" aria-hidden="true"><span class="pd-axis"><span style="--x:0">3 PM</span><span style="--x:.25">5 PM</span><span style="--x:.5">7 PM</span><span style="--x:.75">9 PM</span><span style="--x:1">11 PM</span></span></div>
+        <div class="pd-rows">
+          <div class="pd-row"><span class="pd-who"><i style="--c:#2ECEFF">Y</i>You</span><span class="pd-track"><b class="busy" style="--a:0;--b:3.5"></b><b class="free" style="--a:3.5;--b:8"></b></span></div>
+          <div class="pd-row"><span class="pd-who"><i style="--c:#ff9fd6">J</i>Jess</span><span class="pd-track"><b class="busy" style="--a:0;--b:2"></b><b class="free" style="--a:2;--b:6.5"></b><b class="busy" style="--a:6.5;--b:8"></b></span></div>
+          <div class="pd-row"><span class="pd-who"><i style="--c:#09DB98">L</i>Leo</span><span class="pd-track"><b class="busy" style="--a:0;--b:4"></b><b class="free" style="--a:4;--b:8"></b></span></div>
+          <div class="pd-overlap" style="--a:4;--b:6.5" aria-hidden="true"><span>Everyone&rsquo;s free</span></div>
+        </div>
+        <div class="pd-result">
+          <svg class="pd-map" viewBox="0 0 320 200" aria-hidden="true">
+            <defs><radialGradient id="pdg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#2ECEFF" stop-opacity=".35"/><stop offset="1" stop-color="#2ECEFF" stop-opacity="0"/></radialGradient></defs>
+            <g class="pd-streets" stroke="rgba(220,240,255,.08)" stroke-width="1" fill="none">
+              <path d="M0 40 L320 70"/><path d="M0 120 L320 95"/><path d="M0 170 L320 185"/><path d="M60 0 L90 200"/><path d="M170 0 L150 200"/><path d="M260 0 L250 200"/><path d="M0 80 C 120 60, 200 150, 320 130"/>
+            </g>
+            <circle class="pd-glow" cx="168" cy="104" r="46" fill="url(#pdg)"/>
+            <g class="pd-legs" stroke-width="1.5" fill="none" stroke-dasharray="4 4">
+              <path d="M58 52 L168 104" stroke="#2ECEFF"/><path d="M276 66 L168 104" stroke="#ff9fd6"/><path d="M120 176 L168 104" stroke="#09DB98"/>
+            </g>
+            <g class="pd-dots"><circle cx="58" cy="52" r="5" fill="#2ECEFF"/><circle cx="276" cy="66" r="5" fill="#ff9fd6"/><circle cx="120" cy="176" r="5" fill="#09DB98"/></g>
+            <g class="pd-pin"><circle cx="168" cy="104" r="9" fill="#F2F5F7"/><circle cx="168" cy="104" r="4" fill="#040607"/></g>
+          </svg>
+          <div class="pd-card">
+            <span class="label">Loop&rsquo;s pick</span>
+            <p class="pd-card-title">Thursday, 7:00 PM</p>
+            <p class="pd-card-body">Food trucks at Klyde Warren Park. 11, 13 and 12 minutes away for you, Jess and Leo. About $15 each.</p>
+            <button type="button" class="pd-replay" id="pd-replay">Replay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="sec learns has-field" aria-labelledby="learns-title" style="padding-top: 0" data-field="3">
     <div class="wrap learns-grid">
       <div class="learns-copy">
@@ -533,6 +658,34 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       </div>
       <div class="demo-box rv">
         <video src="/assets/loop-demo-v12.mp4" poster="/assets/loop-demo-poster-v12.jpg" controls playsinline preload="none" aria-label="A 97-second tour of Loop running on a phone."></video>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="sec founding has-field" aria-labelledby="founding-title" data-field="4">
+    <div class="wrap founding-grid">
+      <div class="founding-copy">
+        <span class="label prism-in">Founding Planners · Dallas</span>
+        <h2 id="founding-title" class="prism-in">Be one of the first <em class="s">hundred.</em></h2>
+        <p class="prism-in">Every friend group has a planner. If that&rsquo;s you, Loop was built for you. Founding Planners get in first and shape what ships next.</p>
+        <ul class="perks">
+          <li><span class="perk-n">01</span><span><b>Early access on iPhone.</b> Plan with your group before Loop opens to everyone.</span></li>
+          <li><span class="perk-n">02</span><span><b>A direct line to the founder.</b> Your feedback goes straight into the app.</span></li>
+          <li><span class="perk-n">03</span><span><b>First look at what&rsquo;s next.</b> New features reach you before anyone else.</span></li>
+        </ul>
+        <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Claim a spot</a>
+      </div>
+      <div class="card-stage" aria-hidden="true">
+        <div class="fcard" id="fcard">
+          <div class="fcard-holo"></div>
+          <div class="fcard-glare"></div>
+          <div class="fcard-in">
+            <div class="fcard-top"><img src="/assets/loop-logo.svg" alt="" width="34" height="24"><span>Founding Planner</span></div>
+            <div class="fcard-num">N&ordm; 001<small>/100</small></div>
+            <div class="fcard-foot"><span>Dallas&ndash;Fort Worth</span><span>Est. 2026</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -831,6 +984,47 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(update); } }, { passive: true });
     update();
   })();
+
+
+  // Plan demo: play once when it scrolls in; Replay restarts it
+  var pd = document.getElementById('pd');
+  if (pd) {
+    if (reduce || !('IntersectionObserver' in window)) { pd.classList.add('play'); }
+    else {
+      var pio2 = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { pd.classList.add('play'); pio2.disconnect(); } }); }, { threshold: 0.35 });
+      pio2.observe(pd);
+    }
+    document.getElementById('pd-replay').addEventListener('click', function () {
+      pd.classList.remove('play'); void pd.offsetWidth; setTimeout(function () { pd.classList.add('play'); }, 60);
+    });
+  }
+
+  // Founding card: tilts toward the pointer, glare and hologram follow
+  var fc = document.getElementById('fcard');
+  if (fc && !reduce) {
+    var stage = fc.parentNode;
+    stage.addEventListener('pointermove', function (e) {
+      var r = fc.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      fc.style.setProperty('--ry', ((x - 0.5) * 18).toFixed(2) + 'deg');
+      fc.style.setProperty('--rx', ((0.5 - y) * 14).toFixed(2) + 'deg');
+      fc.style.setProperty('--gx', (x * 100).toFixed(1) + '%');
+      fc.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
+    });
+    stage.addEventListener('pointerleave', function () { ['--rx', '--ry', '--gx', '--gy'].forEach(function (k) { fc.style.removeProperty(k); }); });
+    // idle drift so the card reads as holographic even without a mouse (phones)
+    var t0 = performance.now(), cardVisible = false, drifting = false;
+    function drift(now) {
+      if (!cardVisible) { drifting = false; return; }
+      if (!stage.matches(':hover')) {
+        var t = (now - t0) / 1000;
+        fc.style.setProperty('--gx', (50 + Math.sin(t * 0.6) * 30).toFixed(1) + '%');
+        fc.style.setProperty('--gy', (50 + Math.cos(t * 0.45) * 25).toFixed(1) + '%');
+      }
+      requestAnimationFrame(drift);
+    }
+    new IntersectionObserver(function (es) { es.forEach(function (e) { cardVisible = e.isIntersecting; if (cardVisible && !drifting) { drifting = true; requestAnimationFrame(drift); } }); }).observe(fc);
+  }
 
   // Film strip: buttons + drag to scroll on desktop
   var strip = document.getElementById('strip');
