@@ -554,3 +554,6 @@ html:not(.js) .nav { background: rgba(0, 0, 0, 0.72); -webkit-backdrop-filter: b
 .band-line { font-size: clamp(24px, 3.6vw, 44px); font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; max-width: 18em; }
 .band:focus-visible { outline: 2px solid var(--blue-light); outline-offset: -4px; }
 @media (prefers-reduced-motion: reduce) { .band img, .band:hover img { transform: none; transition: none; } }
+.band-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.8s var(--ease); transform: scale(1.02); }
+.band-video.playing { opacity: 1; }
+.band:hover .band-video { transform: scale(1.05); transition: opacity 0.8s var(--ease), transform 1.2s var(--ease); }

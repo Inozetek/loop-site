@@ -168,3 +168,23 @@
     follow(el, frame);
   });
 })();
+
+/* Photo bands play their film clip while on screen. Desktop-size screens only; phones,
+   Save-Data and reduced-motion keep the still, so nothing heavy downloads there. */
+(function () {
+  var vids = Array.prototype.slice.call(document.querySelectorAll('.band-video'));
+  if (!vids.length || !('IntersectionObserver' in window)) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var saveData = navigator.connection && navigator.connection.saveData;
+  if (reduce || saveData || window.innerWidth < 700) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      var v = e.target;
+      if (e.isIntersecting) {
+        if (!v.src) { v.src = v.dataset.src; v.addEventListener('playing', function () { v.classList.add('playing'); }, { once: true }); }
+        var p = v.play(); if (p && p.catch) p.catch(function () {});
+      } else { v.pause(); }
+    });
+  }, { threshold: 0.25 });
+  vids.forEach(function (v) { io.observe(v); });
+})();
