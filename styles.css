@@ -442,3 +442,74 @@ html:not(.js) .nav { background: rgba(0, 0, 0, 0.72); -webkit-backdrop-filter: b
 .nav-links a { color: var(--text-2); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.25s; white-space: nowrap; }
 .nav-links a:hover, .nav-links a:focus-visible { color: var(--text); }
 @media (max-width: 560px) { .nav-cta { display: none; } .nav-links { gap: 16px; } .nav-links a { font-size: 13.5px; } }
+
+/* ---------- Liquid chrome + pearl finish (Nick 2026-11-10, from the Chrome Study) ----------
+   Only on what you hover, tap or focus: the CTA pills and the Day in the Loop still.
+   Two layers, injected by app.js under each element's content:
+   .fx-metal  mirror bands that follow the pointer, rippled by the #loop-liquid SVG filter
+   .fx-pearl  an iridescent conic sweep around Loop cyan and green
+   Both fade in with --on and scale with --fx (75%, the strength picked in the study). */
+@property --on { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --mx { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+@property --my { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+@property --angle { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
+:root { --fx: 0.75; }
+
+.fx {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease),
+    --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease);
+}
+.fx:hover, .fx:focus-visible { --on: 1; }
+.fx-metal, .fx-pearl {
+  position: absolute;
+  inset: -30%;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: inherit;
+}
+.fx-metal {
+  background: linear-gradient(118deg,
+    #1b1e23 0%, #8e98a3 14%, #f7fafc 21%, #5d6670 29%,
+    #16191e 44%, #b9c3cd 58%, #ffffff 64%, #4d555e 74%,
+    #20242a 88%, #a7b1bb 100%);
+  background-size: 260% 260%;
+  background-position: var(--mx) var(--my);
+  filter: url(#loop-liquid) contrast(1.35) brightness(1.15);
+  mix-blend-mode: overlay;
+  opacity: calc(var(--on) * var(--fx));
+}
+.fx-pearl {
+  background: conic-gradient(from var(--angle) at var(--mx) var(--my),
+    #ff9fd6, #b8a6ff, #8fd8ff, #2ECEFF, #09DB98, #e9ffb0, #ffd6a8, #ff9fd6);
+  mix-blend-mode: overlay;
+  opacity: calc(var(--on) * var(--fx) * 0.9);
+  animation: fx-pearl-turn 9s linear infinite;
+}
+@keyframes fx-pearl-turn { to { --angle: 360deg; } }
+
+/* Light pill: the ice-white CTA turns to silver chrome (an overlay barely shows on white) */
+.pill:not(.pill-ghost).fx .fx-metal { mix-blend-mode: normal; filter: url(#loop-liquid) brightness(1.35) contrast(1.1); opacity: calc(var(--on) * var(--fx) * 0.7); }
+.pill:not(.pill-ghost).fx .fx-pearl { mix-blend-mode: soft-light; }
+/* Ghost pill: dark surface, so the metal screens on instead of overlaying */
+.pill-ghost.fx .fx-metal { mix-blend-mode: screen; filter: url(#loop-liquid) contrast(1.2); opacity: calc(var(--on) * var(--fx) * 0.55); }
+
+/* Day in the Loop still: a chrome rim around the image, plus a faint pearl wash */
+.hero-vision .fx-frame { position: relative; display: block; border-radius: 14px; isolation: isolate; }
+.hero-vision .fx-rim {
+  position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; overflow: hidden; pointer-events: none; z-index: 2;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.hero-vision .fx-rim .fx-metal { z-index: 0; mix-blend-mode: normal; opacity: calc(var(--on) * var(--fx)); }
+.hero-vision .fx-rim .fx-pearl { z-index: 0; mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.8); }
+.hero-vision .fx-wash { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; z-index: 1; }
+.hero-vision .fx-wash .fx-pearl { z-index: 0; mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.16); }
+.hero-vision.fx { overflow: visible; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-pearl { animation: none; }
+}

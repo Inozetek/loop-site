@@ -100,3 +100,71 @@
   window.addEventListener('resize', onScroll);
   frame();
 })();
+
+/* Liquid chrome + pearl finish (see styles.css). Adds the two effect layers to the
+   CTA pills and the Day in the Loop still, and moves the light with the pointer. */
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('width', '0');
+  svg.setAttribute('height', '0');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+  svg.style.position = 'absolute';
+  svg.innerHTML =
+    '<filter id="loop-liquid" x="-20%" y="-20%" width="140%" height="140%">' +
+      '<feTurbulence type="fractalNoise" baseFrequency="0.010 0.032" numOctaves="2" seed="7">' +
+        '<animate attributeName="baseFrequency" dur="14s" repeatCount="indefinite" values="0.010 0.032; 0.014 0.024; 0.009 0.036; 0.010 0.032"/>' +
+      '</feTurbulence>' +
+      '<feDisplacementMap in="SourceGraphic" scale="22" xChannelSelector="R" yChannelSelector="G"/>' +
+    '</filter>';
+  document.body.appendChild(svg);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && svg.pauseAnimations) svg.pauseAnimations();
+
+  function layer(cls) {
+    var s = document.createElement('span');
+    s.className = cls;
+    s.setAttribute('aria-hidden', 'true');
+    return s;
+  }
+  function follow(el, target) {
+    function move(e) {
+      var r = target.getBoundingClientRect();
+      var x = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
+      var y = Math.max(0, Math.min(100, ((e.clientY - r.top) / r.height) * 100));
+      el.style.setProperty('--mx', x + '%');
+      el.style.setProperty('--my', y + '%');
+    }
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerdown', move);
+    el.addEventListener('pointerleave', function () {
+      el.style.removeProperty('--mx');
+      el.style.removeProperty('--my');
+    });
+  }
+
+  document.querySelectorAll('.pill').forEach(function (el) {
+    el.classList.add('fx');
+    el.insertBefore(layer('fx-pearl'), el.firstChild);
+    el.insertBefore(layer('fx-metal'), el.firstChild);
+    follow(el, el);
+  });
+
+  document.querySelectorAll('.hero-vision').forEach(function (el) {
+    var img = el.querySelector('img');
+    if (!img) return;
+    var frame = document.createElement('span');
+    frame.className = 'fx-frame';
+    img.parentNode.insertBefore(frame, img);
+    frame.appendChild(img);
+    var wash = layer('fx-wash');
+    wash.appendChild(layer('fx-pearl'));
+    var rim = layer('fx-rim');
+    rim.appendChild(layer('fx-metal'));
+    rim.appendChild(layer('fx-pearl'));
+    frame.appendChild(wash);
+    frame.appendChild(rim);
+    el.classList.add('fx');
+    follow(el, frame);
+  });
+})();
