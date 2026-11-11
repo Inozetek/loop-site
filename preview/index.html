@@ -617,6 +617,37 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   .hero-side { width: 100%; max-width: 560px; }
 }
 @media (max-width: 420px) { .reel .notif { width: 90%; } .reel-svg text { font-size: 12px; } .pick-t { font-size: 17px; } }
+
+/* ---------- Hero film (overrides the reel-era hero styles) ---------- */
+.hero { background: #040607; align-items: flex-end; }
+.hero-media video.playing { opacity: 1; }
+.hero::after { background:
+  linear-gradient(180deg, rgba(4,6,7,0.6) 0%, rgba(4,6,7,0.1) 26%, rgba(4,6,7,0.25) 58%, rgba(4,6,7,0.97) 100%),
+  linear-gradient(90deg, rgba(4,6,7,0.78) 0%, rgba(4,6,7,0.25) 45%, rgba(4,6,7,0) 70%); }
+.hero-inner { grid-template-columns: minmax(0, 1fr); padding-block: 140px clamp(56px, 10vh, 112px); }
+/* Desktop: the film sits to the right so the phone and its alert are never under the headline */
+@media (min-width: 901px) {
+  .hero-media { left: 30%; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 26%); mask-image: linear-gradient(90deg, transparent 0, #000 26%); }
+  .hero::after { background:
+    linear-gradient(180deg, rgba(4,6,7,0.55) 0%, rgba(4,6,7,0) 22%, rgba(4,6,7,0) 70%, rgba(4,6,7,0.95) 100%),
+    linear-gradient(90deg, rgba(4,6,7,0.6) 0%, rgba(4,6,7,0) 46%); }
+  .hero-copy { max-width: 46vw; }
+}
+.hero h1 { font-size: clamp(50px, 6.2vw, 100px); }
+@media (max-width: 700px) {
+  /* Phones: the film plays uncropped as a 16:9 band under the nav, the headline sits below it */
+  .hero { min-height: 0; align-items: stretch; }
+  .hero-media { inset: auto; top: 64px; left: 0; right: 0; height: 56.25vw; }
+  .hero-media img, .hero-media video { object-position: 50% 50%; }
+  .hero::after { background: linear-gradient(180deg, rgba(4,6,7,0) 0, rgba(4,6,7,0) calc(64px + 40vw), rgba(4,6,7,1) calc(64px + 56.25vw)); }
+  .hero-inner { padding-block: calc(64px + 56.25vw + 20px) 48px; }
+}
+.how-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(32px, 6vw, 96px); align-items: center; }
+.how-copy { display: grid; gap: 20px; max-width: 520px; }
+.how-copy h2 { margin: 0; font-weight: 600; font-size: clamp(36px, 4.6vw, 64px); line-height: 1.02; letter-spacing: -0.04em; }
+.how-copy p { margin: 0; color: var(--muted); font-size: 18px; line-height: 1.55; }
+.how .hero-side { width: min(540px, 44vw); }
+@media (max-width: 900px) { .how-grid { grid-template-columns: minmax(0, 1fr); } .how .hero-side { width: 100%; max-width: 560px; } }
 </style>
 </head>
 <body>
@@ -641,7 +672,11 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 </header>
 
 <main id="top">
-  <section class="hero has-field" aria-labelledby="hero-title" data-field="5">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-media" aria-hidden="true">
+      <picture><source media="(max-width: 700px)" srcset="/assets/home/hero-film-mobile.jpg"><img id="hero-still" src="/assets/home/hero-film.jpg" alt="" width="1920" height="1080"></picture>
+      <video id="hero-video" muted playsinline loop preload="none" tabindex="-1"></video>
+    </div>
     <div class="wrap hero-inner">
       <div class="hero-copy">
         <span class="label prism-in"><b>●</b>&nbsp; Now in beta on iPhone · Dallas&ndash;Fort Worth</span>
@@ -651,6 +686,23 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
           <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
           <a class="btn btn-ghost fx" href="/vision/">See a Day in the Loop</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span><i>01</i>Finds what&rsquo;s worth doing</span><span><i>02</i>Knows when friends are free</span><span><i>03</i>Picks a spot fair to everyone</span><span><i>04</i>Fits your budget</span><span><i>05</i>Learns your taste</span><span><i>06</i>Stays out of your way</span>
+      <span><i>01</i>Finds what&rsquo;s worth doing</span><span><i>02</i>Knows when friends are free</span><span><i>03</i>Picks a spot fair to everyone</span><span><i>04</i>Fits your budget</span><span><i>05</i>Learns your taste</span><span><i>06</i>Stays out of your way</span>
+    </div>
+  </div>
+
+  <section class="sec how" aria-labelledby="how-title" id="how">
+    <div class="wrap how-grid">
+      <div class="how-copy">
+        <span class="label prism-in">How Loop works</span>
+        <h2 class="prism-in" id="how-title">Four things Loop does <em class="s">so you don&rsquo;t have to.</em></h2>
+        <p class="prism-in">It finds the spot that&rsquo;s fair to everyone, lines up when you&rsquo;re all free, taps you when something&rsquo;s worth it, and gets sharper every time you go. Tap a scene, or tell it when you&rsquo;re free today.</p>
       </div>
       <div class="hero-side">
         <div class="reel fx rimmed" id="reel" aria-roledescription="carousel" aria-label="What Loop does, in four short scenes">
@@ -763,13 +815,6 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       </div>
     </div>
   </section>
-
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker-track">
-      <span><i>01</i>Finds what&rsquo;s worth doing</span><span><i>02</i>Knows when friends are free</span><span><i>03</i>Picks a spot fair to everyone</span><span><i>04</i>Fits your budget</span><span><i>05</i>Learns your taste</span><span><i>06</i>Stays out of your way</span>
-      <span><i>01</i>Finds what&rsquo;s worth doing</span><span><i>02</i>Knows when friends are free</span><span><i>03</i>Picks a spot fair to everyone</span><span><i>04</i>Fits your budget</span><span><i>05</i>Learns your taste</span><span><i>06</i>Stays out of your way</span>
-    </div>
-  </div>
 
   <section class="stats has-field" aria-labelledby="stats-title" data-field="1">
     <div class="wrap">
@@ -1079,6 +1124,16 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     }, { threshold: 0.2 });
     vio.observe(v);
   }
+  // Hero film: phone cut on small screens, skipped for reduced motion and Save-Data (poster stays)
+  (function () {
+    var v = document.getElementById('hero-video'); if (!v) return;
+    var saveData = navigator.connection && navigator.connection.saveData;
+    if (reduce || saveData) return;
+    v.src = window.matchMedia('(max-width: 700px)').matches ? '/assets/home/hero-film-mobile.mp4' : '/assets/home/hero-film.mp4';
+    v.addEventListener('playing', function () { v.classList.add('playing'); }, { once: true });
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting) { var q = v.play(); if (q && q.catch) q.catch(function () {}); } else v.pause(); }, { threshold: 0.05 }).observe(v);
+  })();
   // Hero reel: four scenes on a loop, paused when off screen. Bars jump to a scene.
   var reel = document.getElementById('reel');
   var notif = reel.querySelector('.notif');
