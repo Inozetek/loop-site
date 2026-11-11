@@ -473,6 +473,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .pd-ring.r2 { animation-delay: 1.2s; }
 @keyframes pd-ring { 0% { transform: scale(1); opacity: 0.85; } 100% { transform: scale(4.2); opacity: 0; } }
 .pd-glow.alive { animation: pd-breathe 2.4s ease-in-out infinite; }
+.pd-pin circle:first-child { filter: drop-shadow(0 0 6px rgba(46,206,255,0.85)); }
 @keyframes pd-breathe { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.9); } }
 @media (prefers-reduced-motion: reduce) { .pd-flow path, .pd-ring, .pd-glow.alive { animation: none; } .pd-ring { opacity: 0.4; } }
 .pd-place { font: 500 9.5px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; fill: rgba(242,245,247,0.62); text-transform: uppercase; }
@@ -720,7 +721,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
         </div>
         <div class="pd-result">
           <svg class="pd-map" viewBox="0 0 320 200" aria-hidden="true">
-            <defs><radialGradient id="pdg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#2ECEFF" stop-opacity=".35"/><stop offset="1" stop-color="#2ECEFF" stop-opacity="0"/></radialGradient></defs>
+            <defs><radialGradient id="pdg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#2ECEFF" stop-opacity=".35"/><stop offset="1" stop-color="#2ECEFF" stop-opacity="0"/></radialGradient><linearGradient id="pdpin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2ECEFF"/><stop offset="1" stop-color="#09DB98"/></linearGradient></defs>
             <g class="pd-streets" stroke="rgba(220,240,255,.08)" stroke-width="1" fill="none">
               <path d="M0 40 L320 70"/><path d="M0 120 L320 95"/><path d="M0 170 L320 185"/><path d="M60 0 L90 200"/><path d="M170 0 L150 200"/><path d="M260 0 L250 200"/><path d="M0 80 C 120 60, 200 150, 320 130"/>
             </g>
@@ -734,7 +735,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
               <circle class="pd-ring r2" cx="168" cy="104" r="10" fill="none" stroke="#09DB98" stroke-width="1.2"/>
             </g>
             <g class="pd-dots"><circle cx="58" cy="52" r="5" fill="#2ECEFF"/><circle cx="276" cy="66" r="5" fill="#ff9fd6"/><circle cx="120" cy="176" r="5" fill="#09DB98"/></g>
-            <g class="pd-pin"><circle cx="168" cy="104" r="9" fill="#F2F5F7"/><circle cx="168" cy="104" r="4" fill="#040607"/></g>
+            <g class="pd-pin"><circle cx="168" cy="104" r="8" fill="url(#pdpin)"/><circle cx="168" cy="104" r="8" fill="none" stroke="rgba(207,244,255,.55)" stroke-width="1"/></g>
             <g class="pd-labels"><text class="pd-place" data-i="0" x="58" y="38" text-anchor="middle">You · Uptown</text><text class="pd-place" data-i="1" x="294" y="50" text-anchor="end">Jess · Deep Ellum</text><text class="pd-place" data-i="2" x="120" y="194" text-anchor="middle">Leo · Bishop Arts</text><text class="pd-place pin-l" data-i="3" x="168" y="132" text-anchor="middle">Klyde Warren Park</text></g>
           </svg>
           <div class="pd-card fx rimmed" tabindex="0">
