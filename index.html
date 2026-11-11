@@ -169,7 +169,9 @@ em.s { font-family: var(--serif); font-style: italic; font-weight: 400; letter-s
 .notif-title { font-weight: 600; font-size: 16px; letter-spacing: -0.01em; margin: 0; }
 .notif-body { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.45; }
 .notif-actions { display: flex; gap: 8px; margin-top: 2px; }
-.notif-actions span { flex: 1; text-align: center; padding: 9px 0; border-radius: 999px; font-size: 13px; font-weight: 600; }
+.notif-actions a { flex: 1; text-align: center; padding: 9px 0; border-radius: 999px; font-size: 13px; font-weight: 600; text-decoration: none; transition: transform 0.3s var(--ease), filter 0.3s; }
+.notif-actions a:hover { transform: translateY(-1px); filter: brightness(1.12); }
+.notif.fx { cursor: pointer; }
 .notif-actions .yes { background: linear-gradient(100deg, var(--cyan-deep), var(--green)); color: #021014; }
 .notif-actions .no { background: rgba(255,255,255,0.07); color: var(--text); }
 @media (max-width: 900px) {
@@ -607,7 +609,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
         <div class="notif-top"><img src="/assets/loop-logo.svg" alt="" width="26" height="18"><span class="notif-app">Loop</span><span class="notif-time">now</span></div>
         <p class="notif-title" id="n-title">Jess and Leo are free at 7</p>
         <p class="notif-body" id="n-body">Food trucks at Klyde Warren Park, 1.2 mi from all three of you. About $15 each. Plan it?</p>
-        <div class="notif-actions"><span class="yes">Plan it</span><span class="no">Not tonight</span></div>
+        <div class="notif-actions"><a class="yes" href="https://testflight.apple.com/join/nhfZxpSc">Plan it</a><a class="no" href="/vision/">A Day in the Loop</a></div>
       </div>
     </div>
   </section>
@@ -937,6 +939,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   var still = document.getElementById('hero-still');
   var heroVideo = document.getElementById('hero-video');
   var shown = false;
+  notif.addEventListener('click', function (e) { if (!e.target.closest('a')) window.location.href = 'https://testflight.apple.com/join/nhfZxpSc'; });
   function showNotif() { if (!shown) { shown = true; notif.classList.add('show'); } }
   function useLitStill(delay) { still.src = '/assets/home/hero-lit.jpg'; setTimeout(showNotif, delay); }
   if (reduce || saveData || !big) {
