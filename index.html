@@ -393,9 +393,63 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .pd-overlap span { position: absolute; bottom: -26px; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--cyan); }
 .pd-result { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 20px; align-items: stretch; margin-top: 30px; }
 .pd-map { width: 100%; height: auto; border-radius: 18px; background: #070a0c; box-shadow: inset 0 0 0 1px var(--line); }
-.pd-card { border-radius: 18px; padding: 22px; background: rgba(20,26,31,0.6); box-shadow: inset 0 0 0 1px rgba(46,206,255,0.28); display: flex; flex-direction: column; gap: 10px; justify-content: center; }
-.pd-card-title { margin: 0; font-weight: 600; font-size: clamp(24px, 2.4vw, 32px); letter-spacing: -0.03em; }
-.pd-card-body { margin: 0; color: var(--muted); font-size: 15px; }
+
+/* ---------- Shared chrome rim: one system for every card that lights up ---------- */
+.rimmed { position: relative; isolation: isolate; }
+.rimmed > .rim { position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none; overflow: hidden; z-index: 5;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.rimmed > .rim .fx-metal { z-index: 0; mix-blend-mode: normal; filter: url(#liquid); opacity: calc(var(--on) * var(--fx)); }
+.rimmed > .rim .fx-pearl { z-index: 0; mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.85); }
+.fx.rimmed, .scene.fx, .perks.fx { transition: --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease), transform 0.5s var(--ease), box-shadow 0.5s var(--ease); }
+.scene.fx:hover .scene-img { box-shadow: 0 0 0 1px transparent, 0 24px 60px -24px rgba(46,206,255,0.45); }
+.scene-img { transition: box-shadow 0.5s var(--ease); }
+.scene .scene-img::after { content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none; mix-blend-mode: soft-light;
+  background: radial-gradient(60% 50% at var(--mx) var(--my), rgba(255,255,255,0.5), transparent 70%); opacity: calc(var(--on) * 0.8); }
+.demo-box.fx:hover { box-shadow: 0 0 0 1px transparent, 0 40px 120px -40px rgba(46,206,255,0.45); }
+.note-toggle.rimmed { overflow: hidden; }
+/* Perks: each row picks up a light sweep as the pointer crosses it */
+.perks li { position: relative; transition: color 0.3s, padding-left 0.4s var(--ease); }
+.perks li::before { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; transform: scaleX(0); transform-origin: left; transition: transform 0.6s var(--ease);
+  background: linear-gradient(90deg, #8e98a3, #fff 30%, #8fd8ff 50%, #ff9fd6 70%, #09DB98); }
+.perks li:hover { color: var(--text); padding-left: 6px; }
+.perks li:hover::before { transform: scaleX(1); }
+.perks li:hover .perk-n { background: linear-gradient(90deg, #fff, #8fd8ff, #ff9fd6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* Text links: pearl text and a liquid-chrome underline */
+.lnk { position: relative; }
+.lnk span { transition: color 0.2s; background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; }
+.lnk:hover span, .lnk:focus-visible span { color: transparent; -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(100deg, #ffffff 0%, #bfe6ff 20%, #ffc8e8 40%, #c4ffe6 60%, #e8eeff 80%, #ffffff 100%); animation: lnk-sweep 3s linear infinite; }
+@keyframes lnk-sweep { from { background-position: 0% 0; } to { background-position: 220% 0; } }
+.lnk::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1.5px; border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform 0.5s var(--ease);
+  background: linear-gradient(90deg, #5d6670, #f7fafc 25%, #8e98a3 45%, #8fd8ff 65%, #ff9fd6 85%, #09DB98); }
+.lnk:hover::after, .lnk:focus-visible::after { transform: scaleX(1); }
+
+/* ---------- Plan card (matches the in-app card) ---------- */
+.pd-card { position: relative; overflow: hidden; border-radius: 22px; padding: 24px; background: linear-gradient(180deg, rgba(24,31,37,0.85), rgba(12,16,19,0.9));
+  box-shadow: 0 0 0 1px var(--line-2), 0 30px 80px -40px rgba(46,206,255,0.35); display: flex; flex-direction: column; gap: 8px; justify-content: center; outline: none; }
+.pd-card:hover, .pd-card:focus-visible { transform: translateY(-3px); box-shadow: 0 0 0 1px transparent, 0 40px 100px -40px rgba(46,206,255,0.6); }
+.pd-card-wash { position: absolute; inset: -30%; z-index: -1; mix-blend-mode: screen; opacity: calc(0.04 + var(--on) * 0.09) !important; filter: blur(34px); }
+.pd-kicker { display: inline-flex; align-items: center; gap: 8px; font: 500 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); }
+.pd-spark { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 4px rgba(46,206,255,0.18), 0 0 14px rgba(46,206,255,0.9); }
+.pd-when { font: 500 13px/1 var(--mono); color: var(--muted); letter-spacing: 0.02em; margin-top: 6px; }
+.pd-card-title { margin: 2px 0 0; font-weight: 600; font-size: clamp(24px, 2.3vw, 31px); line-height: 1.08; letter-spacing: -0.03em; text-wrap: balance; }
+.pd-card-body { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+.pd-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+.faces { display: flex; align-items: center; }
+.face { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; overflow: hidden; margin-left: -9px; font: 600 13px/1 var(--sans); color: #041016;
+  background: var(--c, #2ECEFF); box-shadow: 0 0 0 2.5px #10151a; transition: transform 0.4s var(--ease); }
+.face:first-child { margin-left: 0; }
+.face img { width: 100%; height: 100%; object-fit: cover; }
+.face-you { background: rgba(242,245,247,0.1); color: var(--text); font-size: 10px; letter-spacing: 0.02em; }
+.pd-card:hover .face { transform: translateY(-2px); }
+.pd-card:hover .face:nth-child(2) { transition-delay: 0.05s; } .pd-card:hover .face:nth-child(3) { transition-delay: 0.1s; }
+.pd-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px;
+  color: #041016; background: linear-gradient(180deg, #FFFFFF 0%, #DCF5FF 100%); box-shadow: 0 10px 30px -10px rgba(46,206,255,0.7); transition: transform 0.3s var(--ease); }
+.pd-cta:hover { transform: translateX(2px); }
+.pd-who i.ph { overflow: hidden; padding: 0; }
+.pd-who i.ph img { width: 100%; height: 100%; object-fit: cover; }
+@media (prefers-reduced-motion: reduce) { .pd-card, .face, .lnk span, .lnk::after, .perks li::before { transition: none; } .lnk:hover span { animation: none; } }
 /* Choreography is scrubbed by scroll in JS: scrolling down winds it forward, up winds it back. */
 .pd-legs path { stroke-dasharray: 4 4; }
 .pd-place { font: 500 9.5px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; fill: rgba(242,245,247,0.62); text-transform: uppercase; }
@@ -485,8 +539,8 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Loop home"><img src="/assets/loop-logo.svg" alt="" width="30" height="21"><span>Loop</span></a>
     <nav class="nav-links" aria-label="Site">
-      <a class="hide-sm" href="/vision/">A Day in the Loop</a>
-      <a class="hide-sm" href="/case-study/">Case study</a>
+      <a class="hide-sm lnk" href="/vision/"><span>A Day in the Loop</span></a>
+      <a class="hide-sm lnk" href="/case-study/"><span>Case study</span></a>
       <a class="btn btn-sm fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the beta</a>
     </nav>
   </div>
@@ -560,17 +614,17 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     </div>
     <div class="strip-wrap">
       <div class="strip" id="strip" tabindex="0" aria-label="Scenes from A Day in the Loop">
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s1-clear.jpg" alt="Owen asleep as his phone lights up" width="560" height="700" loading="lazy"><span class="scene-num">01</span></span><span class="label prism-in">Owen · 6:45 AM</span><p class="prism-in">Loop knows when your people are free.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s3.jpg" alt="Owen reads a Loop invite on his bathroom mirror" width="560" height="700" loading="lazy"><span class="scene-num">02</span></span><span class="label prism-in">Owen · 7:04 AM</span><p class="prism-in">Loop brings everyone in with one tap.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s4.jpg" alt="Jess sketching at her desk" width="560" height="700" loading="lazy"><span class="scene-num">03</span></span><span class="label prism-in">Jess · 8:51 AM</span><p class="prism-in">Everyone gets the same plan, with what they need.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s5.jpg" alt="Jess walks out of a coffee shop" width="560" height="700" loading="lazy"><span class="scene-num">04</span></span><span class="label prism-in">Jess · 9:04 AM</span><p class="prism-in">Loop spots what&rsquo;s nearby and worth the stop.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s6.jpg" alt="Owen walking to lunch in Dallas" width="560" height="700" loading="lazy"><span class="scene-num">05</span></span><span class="label prism-in">Owen · 11:47 AM</span><p class="prism-in">Loop keeps everyone on the same page.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s7.jpg" alt="Linda at a lunch table checking her phone" width="560" height="700" loading="lazy"><span class="scene-num">06</span></span><span class="label prism-in">Linda · 11:58 AM</span><p class="prism-in">Loop fills the table.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s8.jpg" alt="Nina walking in New York" width="560" height="700" loading="lazy"><span class="scene-num">07</span></span><span class="label prism-in">Nina · 2:36 PM · New York</span><p class="prism-in">Loop checks the invite against your travel.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s9.jpg" alt="Marco working late at a Lisbon cafe" width="560" height="700" loading="lazy"><span class="scene-num">08</span></span><span class="label prism-in">Marco · 8:22 PM · Lisbon</span><p class="prism-in">Loop notices when your trips overlap.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s10.jpg" alt="Owen driving home with the route on screen" width="560" height="700" loading="lazy"><span class="scene-num">09</span></span><span class="label prism-in">Owen · 5:40 PM</span><p class="prism-in">Loop plans the pickup.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s11.jpg" alt="Three friends at a concert" width="560" height="700" loading="lazy"><span class="scene-num">10</span></span><span class="label prism-in">Owen · 8:12 PM</span><p class="prism-in">Loop goes quiet once you&rsquo;re all there.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="/assets/home/s12.jpg" alt="Friends laughing outside a theater" width="560" height="700" loading="lazy"><span class="scene-num">11</span></span><span class="label prism-in">Owen · 10:52 PM</span><p class="prism-in">Loop knows who else is out tonight.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s1-clear.jpg" alt="Owen asleep as his phone lights up" width="560" height="700" loading="lazy"><span class="scene-num">01</span></span><span class="label prism-in">Owen · 6:45 AM</span><p class="prism-in">Loop knows when your people are free.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s3.jpg" alt="Owen reads a Loop invite on his bathroom mirror" width="560" height="700" loading="lazy"><span class="scene-num">02</span></span><span class="label prism-in">Owen · 7:04 AM</span><p class="prism-in">Loop brings everyone in with one tap.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s4.jpg" alt="Jess sketching at her desk" width="560" height="700" loading="lazy"><span class="scene-num">03</span></span><span class="label prism-in">Jess · 8:51 AM</span><p class="prism-in">Everyone gets the same plan, with what they need.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s5.jpg" alt="Jess walks out of a coffee shop" width="560" height="700" loading="lazy"><span class="scene-num">04</span></span><span class="label prism-in">Jess · 9:04 AM</span><p class="prism-in">Loop spots what&rsquo;s nearby and worth the stop.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s6.jpg" alt="Owen walking to lunch in Dallas" width="560" height="700" loading="lazy"><span class="scene-num">05</span></span><span class="label prism-in">Owen · 11:47 AM</span><p class="prism-in">Loop keeps everyone on the same page.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s7.jpg" alt="Linda at a lunch table checking her phone" width="560" height="700" loading="lazy"><span class="scene-num">06</span></span><span class="label prism-in">Linda · 11:58 AM</span><p class="prism-in">Loop fills the table.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s8.jpg" alt="Nina walking in New York" width="560" height="700" loading="lazy"><span class="scene-num">07</span></span><span class="label prism-in">Nina · 2:36 PM · New York</span><p class="prism-in">Loop checks the invite against your travel.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s9.jpg" alt="Marco working late at a Lisbon cafe" width="560" height="700" loading="lazy"><span class="scene-num">08</span></span><span class="label prism-in">Marco · 8:22 PM · Lisbon</span><p class="prism-in">Loop notices when your trips overlap.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s10.jpg" alt="Owen driving home with the route on screen" width="560" height="700" loading="lazy"><span class="scene-num">09</span></span><span class="label prism-in">Owen · 5:40 PM</span><p class="prism-in">Loop plans the pickup.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s11.jpg" alt="Three friends at a concert" width="560" height="700" loading="lazy"><span class="scene-num">10</span></span><span class="label prism-in">Owen · 8:12 PM</span><p class="prism-in">Loop goes quiet once you&rsquo;re all there.</p></a>
+        <a class="scene fx" href="/vision/"><span class="scene-img rimmed"><img src="/assets/home/s12.jpg" alt="Friends laughing outside a theater" width="560" height="700" loading="lazy"><span class="scene-num">11</span></span><span class="label prism-in">Owen · 10:52 PM</span><p class="prism-in">Loop knows who else is out tonight.</p></a>
       </div>
     </div>
     <div class="wrap strip-foot">
@@ -629,7 +683,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       <div class="sec-head">
         <div>
           <span class="label prism-in">06 · How Loop picks the time</span>
-          <h2 id="plan-title" class="prism-in">Three calendars. <em class="s">One answer.</em></h2>
+          <h2 id="plan-title" class="prism-in">Three calendars. <em class="s">One plan that fits.</em></h2>
         </div>
         <p class="prism-in">Loop lines up when everyone is free, then finds the spot that&rsquo;s fair to all of you. No group chat required.</p>
       </div>
@@ -637,7 +691,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
         <div class="pd-time" aria-hidden="true"><span class="pd-axis"><span style="--x:0">3 PM</span><span style="--x:.25">5 PM</span><span style="--x:.5">7 PM</span><span style="--x:.75">9 PM</span><span style="--x:1">11 PM</span></span></div>
         <div class="pd-rows">
           <div class="pd-row"><span class="pd-who"><i style="--c:#2ECEFF">Y</i>You</span><span class="pd-track"><b class="busy" style="--a:0;--b:3.5"></b><b class="free" style="--a:3.5;--b:8"></b></span></div>
-          <div class="pd-row"><span class="pd-who"><i style="--c:#ff9fd6">J</i>Jess</span><span class="pd-track"><b class="busy" style="--a:0;--b:2"></b><b class="free" style="--a:2;--b:6.5"></b><b class="busy" style="--a:6.5;--b:8"></b></span></div>
+          <div class="pd-row"><span class="pd-who"><i style="--c:#ff9fd6" class="ph"><img src="/assets/home/face-jess.jpg" alt="" width="26" height="26"></i>Jess</span><span class="pd-track"><b class="busy" style="--a:0;--b:2"></b><b class="free" style="--a:2;--b:6.5"></b><b class="busy" style="--a:6.5;--b:8"></b></span></div>
           <div class="pd-row"><span class="pd-who"><i style="--c:#09DB98">L</i>Leo</span><span class="pd-track"><b class="busy" style="--a:0;--b:4"></b><b class="free" style="--a:4;--b:8"></b></span></div>
           <div class="pd-overlap" style="--a:4;--b:6.5" aria-hidden="true"><span>Everyone&rsquo;s free</span></div>
         </div>
@@ -655,10 +709,20 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
             <g class="pd-pin"><circle cx="168" cy="104" r="9" fill="#F2F5F7"/><circle cx="168" cy="104" r="4" fill="#040607"/></g>
             <g class="pd-labels"><text class="pd-place" data-i="0" x="58" y="38" text-anchor="middle">You · Uptown</text><text class="pd-place" data-i="1" x="294" y="50" text-anchor="end">Jess · Deep Ellum</text><text class="pd-place" data-i="2" x="120" y="194" text-anchor="middle">Leo · Bishop Arts</text><text class="pd-place pin-l" data-i="3" x="168" y="132" text-anchor="middle">Klyde Warren Park</text></g>
           </svg>
-          <div class="pd-card">
-            <span class="label">Loop&rsquo;s pick</span>
-            <p class="pd-card-title">Thursday, 7:00 PM</p>
-            <p class="pd-card-body">Food trucks at Klyde Warren Park. 11, 13 and 12 minutes away for you, Jess and Leo. About $15 each.</p>
+          <div class="pd-card fx rimmed" tabindex="0">
+            <span class="pd-card-wash fx-pearl" aria-hidden="true"></span>
+            <span class="pd-kicker"><span class="pd-spark" aria-hidden="true"></span>Picked for Thursday</span>
+            <span class="pd-when">7:00 PM · 1.2 mi</span>
+            <p class="pd-card-title">Klyde Warren Park food trucks</p>
+            <p class="pd-card-body">You, Jess and Leo are all free after 7. Everyone is 11 to 13 minutes away. About $15 each.</p>
+            <div class="pd-card-foot">
+              <span class="faces" aria-label="Going: Jess and Leo">
+                <span class="face"><img src="/assets/home/face-jess.jpg" alt="" width="34" height="34"></span>
+                <span class="face" style="--c:#FFD166">L</span>
+                <span class="face face-you">You</span>
+              </span>
+              <a class="pd-cta" href="https://testflight.apple.com/join/nhfZxpSc">Plan it<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
           </div>
         </div>
       </div>
@@ -685,7 +749,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
         </div>
         <p class="prism-in">Asking for ideas, seeing why Loop picked a place, finding who&rsquo;s free, and the day drawn as a loop.</p>
       </div>
-      <div class="demo-box rv">
+      <div class="demo-box rv fx rimmed">
         <video src="/assets/loop-demo-v12.mp4" poster="/assets/loop-demo-poster-v12.jpg" controls playsinline preload="none" aria-label="A 97-second tour of Loop running on a phone."></video>
       </div>
     </div>
@@ -709,7 +773,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
         <p>I&rsquo;d love for you to grow with it.</p>
         <p class="sig"><span class="sig-name">Nick</span><span class="label">Founder, Loop</span></p>
         </div></div>
-        <button type="button" class="note-toggle" id="note-toggle" aria-expanded="false" aria-controls="note-more" hidden><span>Read the full note</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <button type="button" class="note-toggle fx rimmed" id="note-toggle" aria-expanded="false" aria-controls="note-more" hidden><span>Read the full note</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
       </article>
     </div>
   </section>
@@ -720,7 +784,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
         <span class="label prism-in">Founding Planners · Dallas</span>
         <h2 id="founding-title" class="prism-in">Be one of the first <em class="s">hundred.</em></h2>
         <p class="prism-in">Every friend group has a planner. If that&rsquo;s you, Loop was built for you. Founding Planners get in first and shape what ships next.</p>
-        <ul class="perks">
+        <ul class="perks fx">
           <li><span class="perk-n">01</span><span><b>Early access on iPhone.</b> Plan with your group before Loop opens to everyone.</span></li>
           <li><span class="perk-n">02</span><span><b>A direct line to the founder.</b> Your feedback goes straight into the app.</span></li>
           <li><span class="perk-n">03</span><span><b>First look at what&rsquo;s next.</b> New features reach you before anyone else.</span></li>
@@ -755,11 +819,11 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   <div class="wrap foot">
     <span class="label prism-in">Loop · Dallas, TX · Patent pending</span>
     <nav class="foot-links" aria-label="Footer">
-      <a href="/vision/">A Day in the Loop</a>
-      <a href="/case-study/">Case study</a>
-      <a href="/support.html">Support</a>
-      <a href="/privacy.html">Privacy</a>
-      <a href="/terms.html">Terms</a>
+      <a class="lnk" href="/vision/"><span>A Day in the Loop</span></a>
+      <a class="lnk" href="/case-study/"><span>Case study</span></a>
+      <a class="lnk" href="/support.html"><span>Support</span></a>
+      <a class="lnk" href="/privacy.html"><span>Privacy</span></a>
+      <a class="lnk" href="/terms.html"><span>Terms</span></a>
     </nav>
   </div>
 </footer>
@@ -850,6 +914,12 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       var m = document.createElement('span'); m.className = 'fx-metal'; m.setAttribute('aria-hidden', 'true');
       var p = document.createElement('span'); p.className = 'fx-pearl'; p.setAttribute('aria-hidden', 'true');
       el.insertBefore(p, el.firstChild); el.insertBefore(m, el.firstChild);
+    }
+    var host = el.classList.contains('rimmed') ? el : el.querySelector('.rimmed');
+    if (host && !host.querySelector(':scope > .rim')) {
+      var rim = document.createElement('span'); rim.className = 'rim'; rim.setAttribute('aria-hidden', 'true');
+      rim.innerHTML = '<span class="fx-metal"></span><span class="fx-pearl"></span>';
+      host.appendChild(rim);
     }
     function move(e) {
       var r = el.getBoundingClientRect();
@@ -1060,10 +1130,10 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       frees.forEach(function (f, i) { var k = seg(p, 0.04 + i * 0.07, 0.24 + i * 0.07); f.style.opacity = k; f.style.transformOrigin = 'left center'; f.style.transform = 'scaleX(' + (0.35 + 0.65 * k) + ')'; });
       var o = seg(p, 0.34, 0.48); ov.style.opacity = o; ov.style.transform = 'scaleY(' + (0.6 + 0.4 * o) + ')';
       dots.forEach(function (d, i) { pop(d, seg(p, 0.46 + i * 0.03, 0.56 + i * 0.03)); });
-      places.forEach(function (t) { var i = +t.dataset.i; t.style.opacity = i < 3 ? seg(p, 0.5 + i * 0.03, 0.6 + i * 0.03) : seg(p, 0.76, 0.86); });
+      var lo = 1 - seg(p, 0.98, 1.1); places.forEach(function (t) { var i = +t.dataset.i; t.style.opacity = (i < 3 ? seg(p, 0.5 + i * 0.03, 0.6 + i * 0.03) : seg(p, 0.76, 0.86)) * lo; });
       legs.forEach(function (l, i) { var k = seg(p, 0.56 + i * 0.03, 0.74 + i * 0.03); l.style.opacity = k > 0 ? 1 : 0; l.style.strokeDashoffset = (120 * (1 - k)).toFixed(1); });
       var g = seg(p, 0.72, 0.84); pop(pin, g); pop(glow, g);
-      var c = seg(p, 0.8, 0.94); card.style.opacity = c; card.style.transform = 'translateY(' + (14 * (1 - c)).toFixed(1) + 'px)';
+      var c = seg(p, 0.8, 0.94); card.style.opacity = c; card.style.transform = c >= 1 ? '' : 'translateY(' + (14 * (1 - c)).toFixed(1) + 'px)';
     }
     if (reduce) { renderPd(1); }
     else {
