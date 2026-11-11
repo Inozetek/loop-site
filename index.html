@@ -396,21 +396,10 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .pd-card { border-radius: 18px; padding: 22px; background: rgba(20,26,31,0.6); box-shadow: inset 0 0 0 1px rgba(46,206,255,0.28); display: flex; flex-direction: column; gap: 10px; justify-content: center; }
 .pd-card-title { margin: 0; font-weight: 600; font-size: clamp(24px, 2.4vw, 32px); letter-spacing: -0.03em; }
 .pd-card-body { margin: 0; color: var(--muted); font-size: 15px; }
-.pd-replay { align-self: flex-start; margin-top: 6px; font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: none; border: 0; border-bottom: 1px solid var(--line-2); padding: 0 0 3px; cursor: pointer; }
-.pd-replay:hover { color: var(--text); }
-/* Choreography (runs when .play is added) */
-.js .pd .pd-track .free { opacity: 0; transform: scaleX(0.4); transform-origin: left center; }
-.js .pd .pd-overlap { opacity: 0; transform: scaleY(0.6); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
-.js .pd .pd-legs path { stroke-dashoffset: 120; opacity: 0; transition: stroke-dashoffset 1.2s var(--ease), opacity 0.4s; }
-.js .pd .pd-dots circle, .js .pd .pd-pin, .js .pd .pd-glow { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.4); transition: opacity 0.5s var(--ease), transform 0.6s cubic-bezier(.34,1.56,.64,1); }
-.js .pd .pd-card { opacity: 0; transform: translateY(14px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
-.pd.play .pd-row:nth-child(1) .free { transition-delay: 0.1s; } .pd.play .pd-row:nth-child(2) .free { transition-delay: 0.35s; } .pd.play .pd-row:nth-child(3) .free { transition-delay: 0.6s; }
-.pd.play .pd-track .free { opacity: 1; transform: none; }
-.pd.play .pd-overlap { opacity: 1; transform: none; transition-delay: 1.4s; }
-.pd.play .pd-dots circle { opacity: 1; transform: none; transition-delay: 2s; }
-.pd.play .pd-legs path { opacity: 1; stroke-dashoffset: 0; transition-delay: 2.3s; }
-.pd.play .pd-glow, .pd.play .pd-pin { opacity: 1; transform: none; transition-delay: 2.9s; }
-.pd.play .pd-card { opacity: 1; transform: none; transition-delay: 3.2s; }
+/* Choreography is scrubbed by scroll in JS: scrolling down winds it forward, up winds it back. */
+.pd-legs path { stroke-dasharray: 4 4; }
+.pd-place { font: 500 9.5px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; fill: rgba(242,245,247,0.62); text-transform: uppercase; }
+.pd-place.pin-l { fill: #F2F5F7; font-size: 10.5px; }
 @media (max-width: 760px) {
   .pd-result { grid-template-columns: minmax(0, 1fr); }
   .pd-time, .pd-row { grid-template-columns: 64px minmax(0, 1fr); }
@@ -653,12 +642,12 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
             </g>
             <g class="pd-dots"><circle cx="58" cy="52" r="5" fill="#2ECEFF"/><circle cx="276" cy="66" r="5" fill="#ff9fd6"/><circle cx="120" cy="176" r="5" fill="#09DB98"/></g>
             <g class="pd-pin"><circle cx="168" cy="104" r="9" fill="#F2F5F7"/><circle cx="168" cy="104" r="4" fill="#040607"/></g>
+            <g class="pd-labels"><text class="pd-place" data-i="0" x="58" y="38" text-anchor="middle">You · Uptown</text><text class="pd-place" data-i="1" x="294" y="50" text-anchor="end">Jess · Deep Ellum</text><text class="pd-place" data-i="2" x="120" y="194" text-anchor="middle">Leo · Bishop Arts</text><text class="pd-place pin-l" data-i="3" x="168" y="132" text-anchor="middle">Klyde Warren Park</text></g>
           </svg>
           <div class="pd-card">
             <span class="label">Loop&rsquo;s pick</span>
             <p class="pd-card-title">Thursday, 7:00 PM</p>
             <p class="pd-card-body">Food trucks at Klyde Warren Park. 11, 13 and 12 minutes away for you, Jess and Leo. About $15 each.</p>
-            <button type="button" class="pd-replay" id="pd-replay">Replay</button>
           </div>
         </div>
       </div>
@@ -1042,17 +1031,39 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   })();
 
 
-  // Plan demo: play once when it scrolls in; Replay restarts it
+  // Plan demo: scrubbed by scroll. Down winds it forward, up winds it back.
   var pd = document.getElementById('pd');
   if (pd) {
-    if (reduce || !('IntersectionObserver' in window)) { pd.classList.add('play'); }
-    else {
-      var pio2 = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { pd.classList.add('play'); pio2.disconnect(); } }); }, { threshold: 0.35 });
-      pio2.observe(pd);
+    var frees = pd.querySelectorAll('.pd-track .free');
+    var ov = pd.querySelector('.pd-overlap');
+    var dots = pd.querySelectorAll('.pd-dots circle');
+    var legs = pd.querySelectorAll('.pd-legs path');
+    var pin = pd.querySelector('.pd-pin'), glow = pd.querySelector('.pd-glow');
+    var places = pd.querySelectorAll('.pd-place');
+    var card = pd.querySelector('.pd-card');
+    function seg(p, a, b) { var x = Math.max(0, Math.min(1, (p - a) / (b - a))); return 1 - Math.pow(1 - x, 3); }
+    function pop(el, k) { el.style.opacity = k; el.style.transformBox = 'fill-box'; el.style.transformOrigin = 'center'; el.style.transform = 'scale(' + (0.4 + 0.6 * k) + ')'; }
+    function renderPd(p) {
+      frees.forEach(function (f, i) { var k = seg(p, 0.04 + i * 0.07, 0.24 + i * 0.07); f.style.opacity = k; f.style.transformOrigin = 'left center'; f.style.transform = 'scaleX(' + (0.35 + 0.65 * k) + ')'; });
+      var o = seg(p, 0.34, 0.48); ov.style.opacity = o; ov.style.transform = 'scaleY(' + (0.6 + 0.4 * o) + ')';
+      dots.forEach(function (d, i) { pop(d, seg(p, 0.46 + i * 0.03, 0.56 + i * 0.03)); });
+      places.forEach(function (t) { var i = +t.dataset.i; t.style.opacity = i < 3 ? seg(p, 0.5 + i * 0.03, 0.6 + i * 0.03) : seg(p, 0.76, 0.86); });
+      legs.forEach(function (l, i) { var k = seg(p, 0.56 + i * 0.03, 0.74 + i * 0.03); l.style.opacity = k > 0 ? 1 : 0; l.style.strokeDashoffset = (120 * (1 - k)).toFixed(1); });
+      var g = seg(p, 0.72, 0.84); pop(pin, g); pop(glow, g);
+      var c = seg(p, 0.8, 0.94); card.style.opacity = c; card.style.transform = 'translateY(' + (14 * (1 - c)).toFixed(1) + 'px)';
     }
-    document.getElementById('pd-replay').addEventListener('click', function () {
-      pd.classList.remove('play'); void pd.offsetWidth; setTimeout(function () { pd.classList.add('play'); }, 60);
-    });
+    if (reduce) { renderPd(1); }
+    else {
+      var pdTick = false;
+      function onPd() {
+        pdTick = false;
+        var r = pd.getBoundingClientRect(), vh = window.innerHeight;
+        renderPd((vh * 0.9 - r.top) / (r.height * 0.95));
+      }
+      window.addEventListener('scroll', function () { if (!pdTick) { pdTick = true; requestAnimationFrame(onPd); } }, { passive: true });
+      window.addEventListener('resize', onPd);
+      onPd();
+    }
   }
 
   // Founding card: tilts toward the pointer, glare and hologram follow
