@@ -168,11 +168,3 @@
     follow(el, frame);
   });
 })();
-
-/* Prism sweep (see styles.css): give each headline a copy of its own text to light up. */
-(function () {
-  document.querySelectorAll('.display, .headline, .closer').forEach(function (el) {
-    el.setAttribute('data-text', el.textContent.replace(/\s+/g, ' ').trim());
-    el.classList.add('prism');
-  });
-})();
