@@ -418,7 +418,6 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
           mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
 .rimmed > .rim .fx-metal { z-index: 0; mix-blend-mode: normal; filter: url(#liquid); opacity: calc(0.18 + var(--on) * var(--fx)); }
-.note-toggle.rimmed > .rim .fx-metal { opacity: calc(var(--on) * var(--fx)); }
 .rimmed > .rim .fx-pearl { z-index: 0; mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.85); }
 .fx.rimmed, .scene.fx, .perks.fx { transition: --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease), transform 0.5s var(--ease), box-shadow 0.5s var(--ease); }
 .scene.fx:hover .scene-img { box-shadow: 0 0 0 1px transparent, 0 24px 60px -24px rgba(46,206,255,0.45); }
@@ -426,7 +425,6 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .scene .scene-img::after { content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none; mix-blend-mode: soft-light;
   background: radial-gradient(60% 50% at var(--mx) var(--my), rgba(255,255,255,0.5), transparent 70%); opacity: calc(var(--on) * 0.8); }
 .demo-box.fx:hover { box-shadow: 0 0 0 1px transparent, 0 40px 120px -40px rgba(46,206,255,0.45); }
-.note-toggle.rimmed { overflow: hidden; }
 /* Perks: each row picks up a light sweep as the pointer crosses it */
 .perks li { position: relative; transition: color 0.3s, padding-left 0.4s var(--ease); }
 .perks li::before { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; transform: scaleX(0); transform-origin: left; transition: transform 0.6s var(--ease);
@@ -539,30 +537,17 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 @media (max-width: 860px) { .founding-grid { grid-template-columns: minmax(0, 1fr); } .card-stage { order: -1; } }
 @media (prefers-reduced-motion: reduce) { .fcard-holo { animation: none; } .fcard { transition: none; } }
 
-/* ---------- Founder note: editorial column, serif pull quote ---------- */
-.note { border-top: 1px solid var(--line); }
-.note-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
-.note-side { position: sticky; top: 110px; display: grid; gap: 22px; min-width: 0; }
-.note-pull { margin: 0; font-weight: 600; font-size: clamp(40px, 5.6vw, 80px); line-height: 0.98; letter-spacing: -0.045em; text-wrap: balance; }
-.note-pull em.s { display: block; background: linear-gradient(100deg, #CFF4FF 0%, var(--cyan) 50%, var(--green) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-bottom: 0.06em; }
-.note-letter { max-width: 36em; min-width: 0; }
-.note-title { margin: 0 0 22px; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(28px, 2.6vw, 36px); letter-spacing: -0.01em; }
-.note-letter p { margin: 0 0 1.1em; font-size: 18px; line-height: 1.7; color: rgba(242,245,247,0.82); }
-.note-letter > p:first-of-type::first-letter { font-family: var(--serif); font-size: 3.4em; float: left; line-height: 0.82; padding: 0.06em 0.1em 0 0; color: var(--cyan); }
-.sig { display: grid; gap: 8px; margin-top: 30px !important; }
-.sig-name { font-family: var(--serif); font-style: italic; font-size: 40px; line-height: 1; color: var(--text); }
-@media (max-width: 860px) { .note-grid { grid-template-columns: minmax(0, 1fr); } .note-side { position: static; } }
-
-.note-more { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.7s var(--ease), opacity 0.6s var(--ease); }
-.note-more > * { min-height: 0; }
-.note-more-in { overflow: hidden; }
-.js .note.is-collapsed .note-more { grid-template-rows: 0fr; opacity: 0; }
-.js .note.is-collapsed .note-letter > p:last-of-type { -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent); mask-image: linear-gradient(180deg, #000 40%, transparent); }
-.note-toggle { display: inline-flex; align-items: center; gap: 10px; margin-top: 8px; padding: 12px 18px; border-radius: 999px; border: 0; cursor: pointer;
-  font: 500 13px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text); background: rgba(255,255,255,0.05); box-shadow: 0 0 0 1px var(--line-2); transition: background 0.2s; }
-.note-toggle:hover { background: rgba(255,255,255,0.09); }
-.note-toggle svg { transition: transform 0.4s var(--ease); }
-.note-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+/* ---------- Beliefs: four lines that light up one at a time as they cross the middle of the screen ---------- */
+.beliefs { border-top: 1px solid var(--line); }
+.belief-list { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: clamp(14px, 2.4vw, 28px); }
+.belief { --lit: 0; font-weight: 600; font-size: clamp(34px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.045em; text-wrap: balance; max-width: 15em;
+  color: rgba(242, 245, 247, calc(0.16 + var(--lit) * 0.8)); transform: translateX(calc((1 - var(--lit)) * -14px)); }
+.belief em.s { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; padding-right: 0.05em; color: inherit; }
+.belief.on em.s { background: linear-gradient(100deg, #CFF4FF 0%, var(--cyan) 45%, var(--green) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; opacity: calc(0.25 + var(--lit) * 0.75); }
+.belief-last { margin-top: clamp(8px, 2vw, 24px); }
+.beliefs-link { display: inline-block; margin-top: clamp(32px, 5vw, 56px); font: 500 13px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
+.beliefs-link span::after { content: " \2192"; }
+@media (prefers-reduced-motion: reduce) { .belief { --lit: 1; transform: none; } }
 </style>
 </head>
 <body>
@@ -806,24 +791,16 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 
 
 
-  <section class="sec note" aria-labelledby="note-title" id="note">
-    <div class="wrap note-grid">
-      <div class="note-side">
-        <span class="label prism-in">A note from the founder</span>
-        <p class="note-pull prism-in" aria-hidden="true">From your phone <em class="s">into the plan.</em></p>
-      </div>
-      <article class="note-letter">
-        <h2 id="note-title" class="note-title">Why I&rsquo;m building Loop</h2>
-        <p>Our phones already know where we are, when we&rsquo;re free and what we love. Yet making plans with friends still means a group chat that goes nowhere, calendars nobody checks, and a &ldquo;we should hang out soon&rdquo; that never happens. Busy lives get in the way of the moments that matter most.</p>
-        <div class="note-more" id="note-more"><div class="note-more-in">
-        <p>Loop is built to change that. It learns the people and places you love, notices when everyone is free and suggests a plan that works for all of you. Then it gets out of the way so you can actually be there.</p>
-        <p>Social networks were supposed to bring us closer, but most of them keep us on our phones. Loop does the opposite. It brings you from your phone into the plan, the way social networks should.</p>
-        <p>We&rsquo;re starting in Dallas, doing one thing really well. As Loop grows, it will take on more of the planning and remembering that busy lives crowd out, until it becomes the smart assistant that keeps you in the loop with everything you care about.</p>
-        <p>I&rsquo;d love for you to grow with it.</p>
-        <p class="sig"><span class="sig-name">Nick</span><span class="label">Founder, Loop</span></p>
-        </div></div>
-        <button type="button" class="note-toggle fx rimmed" id="note-toggle" aria-expanded="false" aria-controls="note-more" hidden><span>Read the full note</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      </article>
+  <section class="sec beliefs" aria-labelledby="beliefs-title" id="beliefs">
+    <div class="wrap">
+      <span class="label prism-in" id="beliefs-title">What we believe</span>
+      <ol class="belief-list">
+        <li class="belief">Your phone should get you <em class="s">off your phone.</em></li>
+        <li class="belief">Free time is too short to spend <em class="s">planning it.</em></li>
+        <li class="belief">The best nights start with someone saying <em class="s">&ldquo;let&rsquo;s go.&rdquo;</em></li>
+        <li class="belief belief-last">Loop is <em class="s">that someone.</em></li>
+      </ol>
+      <a class="lnk beliefs-link" href="/note/"><span>Read the founder&rsquo;s note</span></a>
     </div>
   </section>
 
@@ -876,6 +853,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <nav class="foot-links" aria-label="Footer">
       <a class="lnk" href="/vision/"><span>A Day in the Loop</span></a>
       <a class="lnk" href="/case-study/"><span>Case study</span></a>
+      <a class="lnk" href="/note/"><span>Founder&rsquo;s note</span></a>
       <a class="lnk" href="/support.html"><span>Support</span></a>
       <a class="lnk" href="/privacy.html"><span>Privacy</span></a>
       <a class="lnk" href="/terms.html"><span>Terms</span></a>
@@ -1243,17 +1221,24 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   }
 
 
-  // Founder note: the opening shows, the rest opens on request (fully visible without JS)
-  var noteSec = document.getElementById('note'), noteBtn = document.getElementById('note-toggle');
-  if (noteSec && noteBtn) {
-    noteSec.classList.add('is-collapsed'); noteBtn.hidden = false;
-    noteBtn.addEventListener('click', function () {
-      var open = noteBtn.getAttribute('aria-expanded') !== 'true';
-      noteBtn.setAttribute('aria-expanded', String(open));
-      noteSec.classList.toggle('is-collapsed', !open);
-      noteBtn.querySelector('span').textContent = open ? 'Close the note' : 'Read the full note';
-    });
-  }
+  // Beliefs: each line brightens as it nears the middle of the screen
+  var beliefs = document.querySelectorAll('.belief');
+  if (beliefs.length && !reduce) {
+    var bTick = false;
+    function onBeliefs() {
+      bTick = false;
+      var vh = window.innerHeight;
+      beliefs.forEach(function (el) {
+        var r = el.getBoundingClientRect(), mid = r.top + r.height / 2;
+        var k = Math.max(0, Math.min(1, (vh * 0.92 - mid) / (vh * 0.32)));
+        el.style.setProperty('--lit', k.toFixed(3));
+        el.classList.toggle('on', k > 0.02);
+      });
+    }
+    window.addEventListener('scroll', function () { if (!bTick) { bTick = true; requestAnimationFrame(onBeliefs); } }, { passive: true });
+    window.addEventListener('resize', onBeliefs);
+    onBeliefs();
+  } else { beliefs.forEach(function (el) { el.classList.add('on'); }); }
 
   // Film strip: buttons + drag to scroll on desktop
   var strip = document.getElementById('strip');

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Note from the Founder · Loop</title>
+<meta name="description" content="Why Loop exists: bringing you from your phone into the plan, with the people and places you love.">
+<link rel="canonical" href="https://loopaiapp.com/note/">
+<link rel="icon" type="image/svg+xml" href="/assets/loop-logo.svg?v=5">
+<link rel="icon" type="image/png" href="/assets/favicon.png?v=5">
+<meta property="og:title" content="A note from the founder · Loop">
+<meta property="og:description" content="Why Loop exists: bringing you from your phone into the plan, with the people and places you love.">
+<meta property="og:image" content="https://loopaiapp.com/assets/og-loop.png?v=2">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#040607">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="/assets/loop-fx.css?v=2">
+<style>
+:root {
+  --bg: #040607; --text: #F2F5F7; --muted: rgba(242,245,247,0.62); --line: rgba(220,240,255,0.08); --line-2: rgba(220,240,255,0.16);
+  --cyan: #2ECEFF; --green: #09DB98;
+  --sans: "Geist", "Avenir Next", "Segoe UI", system-ui, sans-serif; --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--text); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  background-image: radial-gradient(70% 50% at 85% -10%, rgba(46,206,255,0.12), transparent 60%), radial-gradient(60% 40% at 0% 100%, rgba(9,219,152,0.07), transparent 60%); background-attachment: fixed; }
+a { color: inherit; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; max-width: 1120px; margin: 0 auto; padding: 22px 20px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+.top nav { display: flex; gap: 22px; font-size: 14px; color: var(--muted); }
+.top nav a { text-decoration: none; }
+main { max-width: 720px; margin: 0 auto; padding: clamp(40px, 9vw, 110px) 20px 80px; }
+.label { font: 500 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--cyan); }
+h1 { margin: 22px 0 clamp(28px, 5vw, 48px); font-weight: 600; font-size: clamp(44px, 8vw, 88px); line-height: 0.98; letter-spacing: -0.045em; }
+h1 em { display: block; font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; padding-right: 0.05em;
+  background: linear-gradient(100deg, #CFF4FF 0%, var(--cyan) 45%, var(--green) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.letter p { margin: 0 0 1.15em; font-size: clamp(18px, 1.6vw, 20px); line-height: 1.72; color: rgba(242,245,247,0.84); }
+.letter > p:first-of-type::first-letter { font-family: var(--serif); font-size: 3.6em; float: left; line-height: 0.8; padding: 0.06em 0.1em 0 0; color: var(--cyan); }
+.sig { display: grid; gap: 10px; margin-top: 36px !important; }
+.sig-name { font-family: var(--serif); font-style: italic; font-size: 44px; line-height: 1; color: var(--text); }
+.sig .label { color: var(--muted); }
+.cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); }
+.btn { display: inline-flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 24px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 16px;
+  color: #041016; background: linear-gradient(180deg, #FFFFFF 0%, #DCF5FF 100%); box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 12px 44px -10px rgba(46,206,255,0.6); }
+.btn:hover { transform: translateY(-2px); }
+.cta .lnk { color: var(--muted); text-decoration: none; font-size: 15px; }
+footer { max-width: 720px; margin: 0 auto; padding: 0 20px 48px; color: rgba(242,245,247,0.4); font-size: 13px; }
+/* Links: pearl text and a liquid-chrome underline, same as the home page */
+.lnk { position: relative; }
+.lnk span { transition: color 0.2s; background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; }
+.lnk:hover span, .lnk:focus-visible span { color: transparent; -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(100deg, #ffffff 0%, #bfe6ff 20%, #ffc8e8 40%, #c4ffe6 60%, #e8eeff 80%, #ffffff 100%); animation: lnk-sweep 3s linear infinite; }
+@keyframes lnk-sweep { from { background-position: 0% 0; } to { background-position: 220% 0; } }
+.lnk::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1.5px; border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(.2,.8,.2,1);
+  background: linear-gradient(90deg, #5d6670, #f7fafc 25%, #8e98a3 45%, #8fd8ff 65%, #ff9fd6 85%, #09DB98); }
+.lnk:hover::after, .lnk:focus-visible::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) { .lnk:hover span { animation: none; } }
+@media (max-width: 560px) { .top nav .hide-sm { display: none; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/"><img src="/assets/loop-logo.svg?v=5" alt="" width="28" height="28">Loop</a>
+  <nav aria-label="Site"><a class="lnk hide-sm" href="/vision/"><span>A Day in the Loop</span></a><a class="lnk hide-sm" href="/case-study/"><span>Case study</span></a><a class="lnk" href="/"><span>Home</span></a></nav>
+</header>
+<main>
+  <span class="label">A note from the founder</span>
+  <h1 class="prism-in">From your phone <em>into the plan.</em></h1>
+  <article class="letter">
+    <p>Our phones already know where we are, when we&rsquo;re free and what we love. Yet making plans with friends still means a group chat that goes nowhere, calendars nobody checks, and a &ldquo;we should hang out soon&rdquo; that never happens. Busy lives get in the way of the moments that matter most.</p>
+    <p>Loop is built to change that. It learns the people and places you love, notices when everyone is free and suggests a plan that works for all of you. Then it keeps looking out for the next thing worth your time, so you can actually be there for it.</p>
+    <p>Social networks were supposed to bring us closer, but most of them keep us on our phones. Loop does the opposite. It brings you from your phone into the plan, the way social networks should.</p>
+    <p>We&rsquo;re starting in Dallas, doing one thing really well. As Loop grows, it will take on more of the planning and remembering that busy lives crowd out, until it becomes the smart assistant that keeps you in the loop with everything you care about.</p>
+    <p>I&rsquo;d love for you to grow with it.</p>
+    <p class="sig"><span class="sig-name">Nick</span><span class="label">Founder, Loop</span></p>
+  </article>
+  <div class="cta">
+    <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
+    <a class="lnk" href="/#beliefs"><span>Back to Loop</span></a>
+  </div>
+</main>
+<footer>© 2026 Loop · Dallas, Texas</footer>
+<script src="/assets/loop-fx.js?v=1" defer></script>
+</body>
+</html>
