@@ -143,8 +143,8 @@ em.s { font-family: var(--serif); font-style: italic; font-weight: 400; letter-s
   box-shadow: 0 0 0 1px rgba(46, 206, 255, 0.28), 0 30px 80px -30px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.08);
   display: grid; gap: 10px;
 }
-.js .notif { opacity: 0; transform: translateY(24px) scale(0.98); transition: opacity 0.9s var(--ease) 1.1s, transform 0.9s var(--ease) 1.1s; }
-.js .loaded .notif { opacity: 1; transform: none; }
+.js .notif { opacity: 0; transform: translateY(24px) scale(0.98); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+.js .notif.show { opacity: 1; transform: none; }
 .notif-top { display: flex; align-items: center; gap: 10px; }
 .notif-top img { width: 26px; height: auto; }
 .notif-app { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; flex: 1; }
@@ -277,13 +277,21 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   .scene-img img, .cell, .btn { transition: none; }
 }
 
-/* ---------- It learns you: words light up as you scroll ---------- */
-.learns { padding-block: clamp(80px, 14vh, 160px); }
-.learns-title { margin: 14px 0 32px; font-weight: 600; font-size: clamp(52px, 9vw, 128px); line-height: 0.95; letter-spacing: -0.05em; }
-.manifesto { margin: 0; max-width: 24em; font-size: clamp(26px, 3.4vw, 46px); line-height: 1.22; letter-spacing: -0.025em; font-weight: 500; }
-.manifesto .w { color: rgba(242, 245, 247, 0.16); transition: color 0.25s linear; }
-.manifesto .w.lit { color: var(--text); }
+/* ---------- It learns you: copy left, 3D chrome Loop mark right ---------- */
+.learns-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 48px; align-items: center; }
+.learns-copy { display: grid; gap: 22px; min-width: 0; }
+.learns-copy h2 { margin: 0; font-weight: 600; font-size: clamp(36px, 5.2vw, 68px); line-height: 1; letter-spacing: -0.04em; text-wrap: balance; }
+.manifesto { margin: 6px 0 0; max-width: 30em; font-size: clamp(19px, 1.7vw, 23px); line-height: 1.55; letter-spacing: -0.01em; font-weight: 400; }
+.manifesto .w { color: rgba(242, 245, 247, 0.2); transition: color 0.3s linear; }
+.manifesto .w.lit { color: rgba(242, 245, 247, 0.92); }
 .manifesto .w.hi { background: linear-gradient(100deg, #CFF4FF, var(--cyan) 50%, var(--green)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.chrome-stage { position: relative; aspect-ratio: 1; width: 100%; max-width: 560px; justify-self: center; }
+.chrome-stage::before { content: ""; position: absolute; inset: 12%; border-radius: 50%; background: radial-gradient(closest-side, rgba(46,206,255,0.16), rgba(9,219,152,0.06) 55%, rgba(4,6,7,0) 75%); filter: blur(10px); }
+.chrome-stage canvas { position: relative; width: 100%; height: 100%; display: block; }
+@media (max-width: 860px) {
+  .learns-grid { grid-template-columns: minmax(0, 1fr); }
+  .chrome-stage { order: -1; max-width: 340px; }
+}
 
 /* ---------- Prism reveal (after a16z speedrun) ----------
    The text wipes in left to right, and a band of chrome-pearl light rides the leading
@@ -318,6 +326,37 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   .prism-light { display: none; }
   .manifesto .w { color: var(--text); }
 }
+
+/* ---------- Prism field: spectral lines bent by fractal noise, moving with scroll ---------- */
+.has-field { position: relative; isolation: isolate; }
+.prism-field { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 50%, #000 30%, transparent 80%);
+          mask-image: radial-gradient(70% 60% at 50% 50%, #000 30%, transparent 80%); }
+.prism-field svg { position: absolute; left: -10%; top: -20%; width: 120%; height: 140%; mix-blend-mode: screen; opacity: 0.55; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .prism-field svg { opacity: 0.35; } }
+
+/* ---------- Free-today chips in the hero (the app's own control, chrome on hover) ---------- */
+.hero-side { display: grid; gap: 14px; width: min(380px, 100%); }
+.free-today { display: grid; gap: 10px; }
+.js .free-today { opacity: 0; transform: translateY(16px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+.js .free-today.show { opacity: 1; transform: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  position: relative; isolation: isolate; overflow: hidden;
+  font: 500 14px/1 var(--sans); color: rgba(242,245,247,0.78); cursor: pointer;
+  padding: 10px 14px; border-radius: 999px; border: 1px solid var(--line-2);
+  background: rgba(10, 14, 17, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  transition: color 0.2s, --on 0.5s var(--ease), --mx 0.6s var(--ease), --my 0.6s var(--ease), transform 0.3s var(--ease);
+}
+.chip:hover { transform: translateY(-1px); }
+.chip[aria-pressed="true"] { color: var(--text); border-color: transparent; background: rgba(20, 28, 33, 0.75); --on: 1; }
+.chip .rim { position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; overflow: hidden;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.chip .rim .fx-metal { z-index: 0; mix-blend-mode: normal; filter: url(#liquid); opacity: calc(var(--on) * var(--fx)); }
+.chip .rim .fx-pearl { z-index: 0; mix-blend-mode: screen; opacity: calc(var(--on) * var(--fx) * 0.85); }
+.notif.swap { animation: notif-swap 0.55s var(--ease); }
+@keyframes notif-swap { 0% { opacity: 0.2; transform: translateY(10px) scale(0.985); } 100% { opacity: 1; transform: none; } }
 </style>
 </head>
 <body>
@@ -344,23 +383,34 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 <main id="top">
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-media" aria-hidden="true">
-      <img src="media/hero.jpg" alt="" width="1600" height="900">
-      <video id="hero-video" data-src="media/hero.mp4" muted playsinline loop preload="none" tabindex="-1"></video>
+      <img id="hero-still" src="media/hero.jpg" alt="" width="1600" height="900">
+      <video id="hero-video" data-src="media/hero.mp4" muted playsinline preload="none" tabindex="-1"></video>
     </div>
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <span class="label"><b>●</b>&nbsp; Now in beta on iPhone · Dallas&ndash;Fort Worth</span>
-        <h1 id="hero-title">Your best plans, <em class="s">found before you ask.</em></h1>
+        <span class="label prism-in"><b>●</b>&nbsp; Now in beta on iPhone · Dallas&ndash;Fort Worth</span>
+        <h1 id="hero-title" class="prism-in">Your best plans, <em class="s">found before you ask.</em></h1>
         <p class="hero-sub">Loop learns where you go and when your friends are free, then suggests what to do and who with, at a time and place that works for everyone.</p>
         <div class="hero-ctas">
           <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
           <a class="btn btn-ghost fx" href="/vision/">See a Day in the Loop</a>
         </div>
       </div>
-      <div class="notif" role="img" aria-label="Example Loop notification: Jess and Leo are free at 7. Food trucks at Klyde Warren Park, 1.2 miles away. Plan it?">
+      <div class="hero-side">
+        <div class="free-today" role="group" aria-label="When are you free today? Pick one to see what Loop would suggest">
+          <span class="label">Free today?</span>
+          <div class="chips">
+            <button type="button" class="chip fx" data-k="now" aria-pressed="false"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>Now</button>
+            <button type="button" class="chip fx" data-k="lunch" aria-pressed="false"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>Lunch</button>
+            <button type="button" class="chip fx" data-k="after5" aria-pressed="true"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>After 5</button>
+            <button type="button" class="chip fx" data-k="tonight" aria-pressed="false"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>Tonight</button>
+            <button type="button" class="chip fx" data-k="busy" aria-pressed="false"><span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>Busy today</button>
+          </div>
+        </div>
+      <div class="notif" role="status" aria-live="polite">
         <div class="notif-top"><img src="/assets/loop-logo.svg" alt="" width="26" height="18"><span class="notif-app">Loop</span><span class="notif-time">now</span></div>
-        <p class="notif-title">Jess and Leo are free at 7</p>
-        <p class="notif-body">Food trucks at Klyde Warren Park, 1.2 mi from all three of you. About $15 each. Plan it?</p>
+        <p class="notif-title" id="n-title">Jess and Leo are free at 7</p>
+        <p class="notif-body" id="n-body">Food trucks at Klyde Warren Park, 1.2 mi from all three of you. About $15 each. Plan it?</p>
         <div class="notif-actions"><span class="yes">Plan it</span><span class="no">Not tonight</span></div>
       </div>
     </div>
@@ -373,17 +423,17 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     </div>
   </div>
 
-  <section class="stats" aria-labelledby="stats-title">
+  <section class="stats has-field" aria-labelledby="stats-title" data-field="1">
     <div class="wrap">
       <div class="stats-head">
-        <span class="label" id="stats-title">Loop / by the numbers</span>
-        <span class="label">Measured Nov 2026</span>
+        <span class="label prism-in" id="stats-title">Loop / by the numbers</span>
+        <span class="label prism-in">Measured Nov 2026</span>
       </div>
       <dl class="stat-grid">
-        <div class="stat rv"><dt>Dallas places Loop knows</dt><dd class="prism-in">9,000<small>+</small></dd></div>
-        <div class="stat rv" style="--d:1"><dt>With photos and hours checked</dt><dd class="prism-in">3,000<small>+</small></dd></div>
-        <div class="stat rv" style="--d:2"><dt>To join the iPhone beta</dt><dd class="prism-in">$0</dd></div>
-        <div class="stat rv" style="--d:3"><dt>Patent pending on finding the time and place that works for everyone</dt><dd class="prism-in">1<small>patent</small></dd></div>
+        <div class="stat rv"><dt class="prism-in">Dallas places Loop knows</dt><dd class="prism-in">9,000<small>+</small></dd></div>
+        <div class="stat rv" style="--d:1"><dt class="prism-in">With photos and hours checked</dt><dd class="prism-in">3,000<small>+</small></dd></div>
+        <div class="stat rv" style="--d:2"><dt class="prism-in">To join the iPhone beta</dt><dd class="prism-in">$0</dd></div>
+        <div class="stat rv" style="--d:3"><dt class="prism-in">Patent pending on finding the time and place that works for everyone</dt><dd class="prism-in">1<small>patent</small></dd></div>
       </dl>
     </div>
   </section>
@@ -391,24 +441,24 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   <section class="sec" aria-labelledby="strip-title" style="padding-top: 0">
     <div class="wrap sec-head">
       <div>
-        <span class="label">A Friday in the Loop</span>
+        <span class="label prism-in">A Friday in the Loop</span>
         <h2 id="strip-title" class="prism-in">One Friday. <em class="s">Eleven moments</em> Loop handled.</h2>
       </div>
-      <p>From the 6:45 AM nudge to the ride home after the show. Drag through the day, or open the full story.</p>
+      <p class="prism-in">From the 6:45 AM nudge to the ride home after the show. Drag through the day, or open the full story.</p>
     </div>
     <div class="strip-wrap">
       <div class="strip" id="strip" tabindex="0" aria-label="Scenes from A Day in the Loop">
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s1-clear.jpg" alt="Owen asleep as his phone lights up" width="560" height="700" loading="lazy"><span class="scene-num">01</span></span><span class="label">Owen · 6:45 AM</span><p>Loop knows when your people are free.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s3.jpg" alt="Owen reads a Loop invite on his bathroom mirror" width="560" height="700" loading="lazy"><span class="scene-num">02</span></span><span class="label">Owen · 7:04 AM</span><p>Loop brings everyone in with one tap.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s4.jpg" alt="Jess sketching at her desk" width="560" height="700" loading="lazy"><span class="scene-num">03</span></span><span class="label">Jess · 8:51 AM</span><p>Everyone gets the same plan, with what they need.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s5.jpg" alt="Jess walks out of a coffee shop" width="560" height="700" loading="lazy"><span class="scene-num">04</span></span><span class="label">Jess · 9:04 AM</span><p>Loop spots what&rsquo;s nearby and worth the stop.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s6.jpg" alt="Owen walking to lunch in Dallas" width="560" height="700" loading="lazy"><span class="scene-num">05</span></span><span class="label">Owen · 11:47 AM</span><p>Loop keeps everyone on the same page.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s7.jpg" alt="Linda at a lunch table checking her phone" width="560" height="700" loading="lazy"><span class="scene-num">06</span></span><span class="label">Linda · 11:58 AM</span><p>Loop fills the table.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s8.jpg" alt="Nina walking in New York" width="560" height="700" loading="lazy"><span class="scene-num">07</span></span><span class="label">Nina · 2:36 PM · New York</span><p>Loop checks the invite against your travel.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s9.jpg" alt="Marco working late at a Lisbon cafe" width="560" height="700" loading="lazy"><span class="scene-num">08</span></span><span class="label">Marco · 8:22 PM · Lisbon</span><p>Loop notices when your trips overlap.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s10.jpg" alt="Owen driving home with the route on screen" width="560" height="700" loading="lazy"><span class="scene-num">09</span></span><span class="label">Owen · 5:40 PM</span><p>Loop plans the pickup.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s11.jpg" alt="Three friends at a concert" width="560" height="700" loading="lazy"><span class="scene-num">10</span></span><span class="label">Owen · 8:12 PM</span><p>Loop goes quiet once you&rsquo;re all there.</p></a>
-        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s12.jpg" alt="Friends laughing outside a theater" width="560" height="700" loading="lazy"><span class="scene-num">11</span></span><span class="label">Owen · 10:52 PM</span><p>Loop knows who else is out tonight.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s1-clear.jpg" alt="Owen asleep as his phone lights up" width="560" height="700" loading="lazy"><span class="scene-num">01</span></span><span class="label prism-in">Owen · 6:45 AM</span><p class="prism-in">Loop knows when your people are free.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s3.jpg" alt="Owen reads a Loop invite on his bathroom mirror" width="560" height="700" loading="lazy"><span class="scene-num">02</span></span><span class="label prism-in">Owen · 7:04 AM</span><p class="prism-in">Loop brings everyone in with one tap.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s4.jpg" alt="Jess sketching at her desk" width="560" height="700" loading="lazy"><span class="scene-num">03</span></span><span class="label prism-in">Jess · 8:51 AM</span><p class="prism-in">Everyone gets the same plan, with what they need.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s5.jpg" alt="Jess walks out of a coffee shop" width="560" height="700" loading="lazy"><span class="scene-num">04</span></span><span class="label prism-in">Jess · 9:04 AM</span><p class="prism-in">Loop spots what&rsquo;s nearby and worth the stop.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s6.jpg" alt="Owen walking to lunch in Dallas" width="560" height="700" loading="lazy"><span class="scene-num">05</span></span><span class="label prism-in">Owen · 11:47 AM</span><p class="prism-in">Loop keeps everyone on the same page.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s7.jpg" alt="Linda at a lunch table checking her phone" width="560" height="700" loading="lazy"><span class="scene-num">06</span></span><span class="label prism-in">Linda · 11:58 AM</span><p class="prism-in">Loop fills the table.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s8.jpg" alt="Nina walking in New York" width="560" height="700" loading="lazy"><span class="scene-num">07</span></span><span class="label prism-in">Nina · 2:36 PM · New York</span><p class="prism-in">Loop checks the invite against your travel.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s9.jpg" alt="Marco working late at a Lisbon cafe" width="560" height="700" loading="lazy"><span class="scene-num">08</span></span><span class="label prism-in">Marco · 8:22 PM · Lisbon</span><p class="prism-in">Loop notices when your trips overlap.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s10.jpg" alt="Owen driving home with the route on screen" width="560" height="700" loading="lazy"><span class="scene-num">09</span></span><span class="label prism-in">Owen · 5:40 PM</span><p class="prism-in">Loop plans the pickup.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s11.jpg" alt="Three friends at a concert" width="560" height="700" loading="lazy"><span class="scene-num">10</span></span><span class="label prism-in">Owen · 8:12 PM</span><p class="prism-in">Loop goes quiet once you&rsquo;re all there.</p></a>
+        <a class="scene" href="/vision/"><span class="scene-img"><img src="media/s12.jpg" alt="Friends laughing outside a theater" width="560" height="700" loading="lazy"><span class="scene-num">11</span></span><span class="label prism-in">Owen · 10:52 PM</span><p class="prism-in">Loop knows who else is out tonight.</p></a>
       </div>
     </div>
     <div class="wrap strip-foot">
@@ -424,48 +474,51 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <div class="wrap">
       <div class="sec-head">
         <div>
-          <span class="label">What Loop does</span>
+          <span class="label prism-in">What Loop does</span>
           <h2 id="does-title" class="prism-in">Less planning. <em class="s">More showing up.</em></h2>
         </div>
-        <p>Three things, done well, in one app.</p>
+        <p class="prism-in">Three things, done well, in one app.</p>
       </div>
       <div class="bento">
         <article class="cell c-find fx rv">
           <span class="cell-media" aria-hidden="true"><img src="media/s5.jpg" alt="" loading="lazy"><video class="cell-video" data-src="media/coffee.mp4" muted playsinline loop preload="none" tabindex="-1"></video></span>
           <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
-          <span class="label">01 · Find</span>
+          <span class="label prism-in">01 · Find</span>
           <h3 class="prism-in">What&rsquo;s worth doing, <em class="s">right now.</em></h3>
-          <p>Real places and events near you, picked for your taste, with today&rsquo;s hours and a time that fits your day.</p>
+          <p class="prism-in">Real places and events near you, picked for your taste, with today&rsquo;s hours and a time that fits your day.</p>
         </article>
         <article class="cell c-plan fx rv" style="--d:1">
           <span class="cell-media" aria-hidden="true"><img src="media/s3-wide.jpg" alt="" loading="lazy" style="object-position: 62% 50%"></span>
           <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
-          <span class="label">02 · Plan</span>
+          <span class="label prism-in">02 · Plan</span>
           <h3 class="prism-in">Fair to <em class="s">everyone.</em></h3>
-          <p>Loop sees who&rsquo;s free and suggests a spot that works for the whole group. One invite, one plan.</p>
+          <p class="prism-in">Loop sees who&rsquo;s free and suggests a spot that works for the whole group. One invite, one plan.</p>
         </article>
         <article class="cell c-go fx rv" style="--d:2">
           <span class="cell-media" aria-hidden="true"><img src="media/nav-map-wide.jpg" alt="" loading="lazy"></span>
           <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
-          <span class="label">03 · Go</span>
+          <span class="label prism-in">03 · Go</span>
           <h3 class="prism-in">Then it gets <em class="s">out of the way.</em></h3>
-          <p>A reminder before it starts and the route when it&rsquo;s time to leave.</p>
+          <p class="prism-in">A reminder before it starts and the route when it&rsquo;s time to leave.</p>
         </article>
         <article class="cell c-learn fx rv" style="--d:3">
           <span class="rim"><span class="fx-metal"></span><span class="fx-pearl"></span></span>
-          <span class="label">04 · Fits your budget</span>
-          <blockquote>Never farther, never pricier than it needs to be.</blockquote>
-          <p>Picks weigh price and distance for everyone in the plan, so the best option is also the easy yes.</p>
+          <span class="label prism-in">04 · Fits your budget</span>
+          <blockquote class="prism-in">Never farther, never pricier than it needs to be.</blockquote>
+          <p class="prism-in">Picks weigh price and distance for everyone in the plan, so the best option is also the easy yes.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="sec learns" aria-labelledby="learns-title" style="padding-top: 0">
-    <div class="wrap">
-      <span class="label">The part that compounds</span>
-      <h2 id="learns-title" class="learns-title prism-in">It learns <em class="s">you.</em></h2>
-      <p class="manifesto" id="manifesto">Loop learns from what you actually do, not what you tell it. Every place you visit, every event you save, every plan you make sharpens its sense of your taste. Over time it stops being an app you search and becomes the guide you trust. Until one morning you wake up to a list of things you didn&rsquo;t know you needed, on a day you couldn&rsquo;t have planned better yourself.</p>
+  <section class="sec learns has-field" aria-labelledby="learns-title" style="padding-top: 0" data-field="3">
+    <div class="wrap learns-grid">
+      <div class="learns-copy">
+        <span class="label prism-in">05 · It learns you</span>
+        <h2 id="learns-title" class="prism-in">The longer you use it, <em class="s">the more it gets you.</em></h2>
+        <p class="manifesto" id="manifesto">Loop learns from what you actually do, not what you tell it. Every place you visit, every event you save, every plan you make sharpens its sense of your taste. Over time it stops being an app you search and becomes the guide you trust. Until one morning you wake up to a list of things you didn&rsquo;t know you needed, on a day you couldn&rsquo;t have planned better yourself.</p>
+      </div>
+      <div class="chrome-stage" aria-hidden="true"><canvas id="chrome-loop"></canvas></div>
     </div>
   </section>
 
@@ -473,10 +526,10 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     <div class="wrap">
       <div class="sec-head">
         <div>
-          <span class="label">90-second tour</span>
+          <span class="label prism-in">90-second tour</span>
           <h2 id="demo-title" class="prism-in">The real app, <em class="s">on a real phone.</em></h2>
         </div>
-        <p>Asking for ideas, seeing why Loop picked a place, finding who&rsquo;s free, and the day drawn as a loop.</p>
+        <p class="prism-in">Asking for ideas, seeing why Loop picked a place, finding who&rsquo;s free, and the day drawn as a loop.</p>
       </div>
       <div class="demo-box rv">
         <video src="/assets/loop-demo-v12.mp4" poster="/assets/loop-demo-poster-v12.jpg" controls playsinline preload="none" aria-label="A 97-second tour of Loop running on a phone."></video>
@@ -484,11 +537,11 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     </div>
   </section>
 
-  <section class="close" aria-labelledby="close-title">
+  <section class="close has-field" aria-labelledby="close-title" data-field="2">
     <div class="wrap">
-      <span class="label">Launching in Dallas&ndash;Fort Worth</span>
+      <span class="label prism-in">Launching in Dallas&ndash;Fort Worth</span>
       <h2 id="close-title" class="prism-in">Never miss out. <em class="s">Get in the loop.</em></h2>
-      <p>Free on iPhone while it&rsquo;s in beta. Android is on the way.</p>
+      <p class="prism-in">Free on iPhone while it&rsquo;s in beta. Android is on the way.</p>
       <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
     </div>
   </section>
@@ -496,7 +549,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 
 <footer>
   <div class="wrap foot">
-    <span class="label">Loop · Dallas, TX · Patent pending</span>
+    <span class="label prism-in">Loop · Dallas, TX · Patent pending</span>
     <nav class="foot-links" aria-label="Footer">
       <a href="/vision/">A Day in the Loop</a>
       <a href="/case-study/">Case study</a>
@@ -516,7 +569,6 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
   var big = window.innerWidth >= 700;
   if (reduce) { var svg = document.querySelector('svg'); if (svg && svg.pauseAnimations) svg.pauseAnimations(); }
 
-  requestAnimationFrame(function () { document.body.classList.add('loaded'); });
 
   // Nav background after scroll
   var nav = document.getElementById('nav');
@@ -534,6 +586,29 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     rv.forEach(function (el) { io.observe(el); });
   }
 
+
+  // Free-today chips drive the alert, the same control people tap in the app
+  var ft = document.querySelector('.free-today');
+  var nT = document.getElementById('n-title'), nB = document.getElementById('n-body');
+  var copy = {
+    now: ['Katy Trail is 10 minutes away', 'Jess is out walking near the trail too. Want to meet at the Knox entrance in 20?'],
+    lunch: ['Leo is free for lunch at 12:15', 'Tacos four blocks from both of your offices. Under $15. Save him a seat?'],
+    after5: ['Jess and Leo are free at 7', 'Food trucks at Klyde Warren Park, 1.2 mi from all three of you. About $15 each. Plan it?'],
+    tonight: ['Live music in Deep Ellum at 9', 'Three of your friends are already going. Doors at 8:30, $12 at the door. Join them?'],
+    busy: ['Got it, today is full', 'Saturday afternoon is open for you, Jess and Leo. Want Loop to hold it?']
+  };
+  var _show = showNotif;
+  showNotif = function () { _show(); if (ft) ft.classList.add('show'); };
+  document.querySelectorAll('.chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      document.querySelectorAll('.chip').forEach(function (o) { o.setAttribute('aria-pressed', String(o === c)); });
+      var t = copy[c.dataset.k]; if (!t) return;
+      nT.textContent = t[0]; nB.textContent = t[1];
+      showNotif();
+      notif.classList.remove('swap'); void notif.offsetWidth; notif.classList.add('swap');
+    });
+  });
+
   // Videos: play only while visible, never on phones, Save-Data or reduced motion
   function lazyVideo(v) {
     if (reduce || saveData || !big || !('IntersectionObserver' in window)) return;
@@ -548,6 +623,21 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     vio.observe(v);
   }
   var hv = document.getElementById('hero-video'); if (hv) lazyVideo(hv);
+  // Hero: the phone lights up in the clip (~2s), then the Loop alert arrives.
+  var notif = document.querySelector('.notif');
+  var still = document.getElementById('hero-still');
+  var heroVideo = document.getElementById('hero-video');
+  var shown = false;
+  function showNotif() { if (!shown) { shown = true; notif.classList.add('show'); } }
+  function useLitStill(delay) { still.src = 'media/hero-lit.jpg'; setTimeout(showNotif, delay); }
+  if (reduce || saveData || !big) {
+    useLitStill(reduce ? 0 : 900);
+  } else {
+    heroVideo.addEventListener('timeupdate', function () { if (heroVideo.currentTime >= 2.6) showNotif(); });
+    heroVideo.addEventListener('ended', showNotif);
+    setTimeout(function () { if (!heroVideo.classList.contains('playing')) useLitStill(0); }, 5000);
+  }
+
   document.querySelectorAll('.cell-video').forEach(function (v) { v.style.position = 'absolute'; v.style.inset = '0'; v.style.opacity = 0; v.style.transition = 'opacity 1s'; lazyVideo(v); });
 
   // Chrome finish: light follows the pointer
@@ -626,6 +716,121 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       });
     }, { passive: true });
   }
+
+
+  // 3D chrome Loop mark: two linked rings, raymarched in a fragment shader
+  (function () {
+    var cv = document.getElementById('chrome-loop');
+    if (!cv) return;
+    var gl = cv.getContext('webgl', { premultipliedAlpha: true, alpha: true, antialias: false });
+    if (!gl) { cv.parentNode.style.display = 'none'; return; }
+    var vs = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+    var fs = [
+      'precision highp float;',
+      'uniform vec2 uRes;uniform float uTime;uniform vec2 uRot;',
+      'mat3 rx(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,-s,0.,s,c);}',
+      'mat3 ry(float a){float c=cos(a),s=sin(a);return mat3(c,0.,s,0.,1.,0.,-s,0.,c);}',
+      'float tor(vec2 q,float r){return length(q)-r;}',
+      'float map(vec3 p){p=ry(uRot.y)*rx(uRot.x)*p;',
+      ' vec3 a=p-vec3(-0.62,0.,0.);vec3 b=p-vec3(0.62,0.,0.);',
+      ' float d1=tor(vec2(length(a.xy)-1.0,a.z),0.27);',
+      ' float d2=tor(vec2(length(b.xz)-1.0,b.y),0.27);',
+      ' return min(d1,d2);}',
+      'vec3 nrm(vec3 p){vec2 e=vec2(0.0015,0.);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}',
+      'vec3 env(vec3 d){float y=d.y;float a=atan(d.x,d.z);',
+      ' vec3 c=mix(vec3(0.015,0.02,0.025),vec3(0.09,0.11,0.13),smoothstep(-0.3,0.7,y));',
+      ' c+=vec3(1.)*smoothstep(0.55,0.8,y)*1.7;',
+      ' c+=vec3(0.75,0.88,1.)*exp(-pow((y-0.04)*12.,2.))*0.9;',
+      ' c+=vec3(0.18,0.81,1.)*smoothstep(0.93,1.,cos(a-1.1))*1.4*smoothstep(-0.4,0.3,y);',
+      ' c+=vec3(1.,0.55,0.84)*smoothstep(0.95,1.,cos(a+2.1))*1.1*smoothstep(-0.4,0.4,y);',
+      ' c+=vec3(0.04,0.86,0.6)*smoothstep(0.95,1.,cos(a+0.3))*0.9;',
+      ' c+=vec3(1.,0.84,0.66)*smoothstep(0.97,1.,cos(a-2.7))*0.7;',
+      ' return c;}',
+      'void main(){vec2 uv=(gl_FragCoord.xy-0.5*uRes)/uRes.y;',
+      ' vec3 ro=vec3(0.,0.,6.6);vec3 rd=normalize(vec3(uv,-1.55));',
+      ' float t=0.;float d;bool hit=false;',
+      ' for(int i=0;i<110;i++){d=map(ro+rd*t);if(d<0.0008){hit=true;break;}t+=d;if(t>12.)break;}',
+      ' if(!hit){gl_FragColor=vec4(0.);return;}',
+      ' vec3 p=ro+rd*t;vec3 n=nrm(p);vec3 v=-rd;vec3 r=reflect(rd,n);',
+      ' float fac=clamp(dot(n,v),0.,1.);float fres=pow(1.-fac,3.);',
+      ' vec3 irid=0.5+0.5*cos(6.2831*(vec3(0.,0.33,0.67)+fac*1.5+uTime*0.025));',
+      ' vec3 col=env(r)*mix(vec3(0.93,0.96,1.),irid,0.32);',
+      ' col+=fres*0.35*irid;',
+      ' col=col/(1.+col*0.85);col=pow(col,vec3(0.9));',
+      ' gl_FragColor=vec4(col,1.);}'
+    ].join('\n');
+    function sh(type, src) { var o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; }
+    var v = sh(gl.VERTEX_SHADER, vs), f = sh(gl.FRAGMENT_SHADER, fs);
+    if (!v || !f) { cv.parentNode.style.display = 'none'; return; }
+    var prog = gl.createProgram(); gl.attachShader(prog, v); gl.attachShader(prog, f); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { cv.parentNode.style.display = 'none'; return; }
+    gl.useProgram(prog);
+    var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    var uRes = gl.getUniformLocation(prog, 'uRes'), uTime = gl.getUniformLocation(prog, 'uTime'), uRot = gl.getUniformLocation(prog, 'uRot');
+    var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    function size() { var r = cv.getBoundingClientRect(); cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr)); gl.viewport(0, 0, cv.width, cv.height); }
+    size(); window.addEventListener('resize', size);
+    var px = 0, py = 0, tx = 0, ty = 0, visible = false, start = performance.now();
+    cv.parentNode.parentNode.addEventListener('pointermove', function (e) { var r = cv.getBoundingClientRect(); tx = ((e.clientX - r.left) / r.width - 0.5) * 0.9; ty = ((e.clientY - r.top) / r.height - 0.5) * 0.6; });
+    function frame(now) {
+      var t = (now - start) / 1000;
+      var r = cv.getBoundingClientRect();
+      var scroll = (window.innerHeight - r.top) / (window.innerHeight + r.height);
+      px += (tx - px) * 0.06; py += (ty - py) * 0.06;
+      gl.uniform2f(uRes, cv.width, cv.height);
+      gl.uniform1f(uTime, t);
+      gl.uniform2f(uRot, 0.45 + scroll * 0.7 + py, (reduce ? 0.6 : t * 0.35) + px + scroll * 1.2);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      if (visible && !reduce) requestAnimationFrame(frame);
+    }
+    if (reduce) { requestAnimationFrame(frame); return; }
+    new IntersectionObserver(function (es) { es.forEach(function (e) { var was = visible; visible = e.isIntersecting; if (visible && !was) requestAnimationFrame(frame); }); }, { threshold: 0.05 }).observe(cv);
+  })();
+
+
+  // Prism fields: thin spectral lines, bent by a fractal-noise displacement that drifts with scroll
+  (function () {
+    var NS = 'http://www.w3.org/2000/svg';
+    var fields = [];
+    document.querySelectorAll('[data-field]').forEach(function (sec, k) {
+      var id = 'pf' + k;
+      var lines = '';
+      for (var i = 0; i < 46; i++) {
+        var y = 20 + i * 13 + (i % 3) * 2;
+        lines += '<path d="M -50 ' + y + ' C 300 ' + (y - 24) + ', 700 ' + (y + 30) + ', 1250 ' + (y - 6) + '" stroke="url(#' + id + 'g)" stroke-width="' + (i % 5 === 0 ? 1.6 : 0.8) + '" fill="none" opacity="' + (0.35 + (i % 4) * 0.15) + '"/>';
+      }
+      var wrap = document.createElement('div');
+      wrap.className = 'prism-field';
+      wrap.setAttribute('aria-hidden', 'true');
+      wrap.innerHTML = '<svg viewBox="0 0 1200 640" preserveAspectRatio="none">' +
+        '<defs><linearGradient id="' + id + 'g" x1="0" x2="1" y1="0" y2="0">' +
+        '<stop offset="0" stop-color="#2ECEFF" stop-opacity="0"/><stop offset=".18" stop-color="#2ECEFF"/><stop offset=".36" stop-color="#b8a6ff"/>' +
+        '<stop offset=".52" stop-color="#ff9fd6"/><stop offset=".68" stop-color="#ffd6a8"/><stop offset=".84" stop-color="#09DB98"/><stop offset="1" stop-color="#09DB98" stop-opacity="0"/></linearGradient>' +
+        '<filter id="' + id + 'f" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.0035 0.012" numOctaves="3" seed="' + (k * 7 + 3) + '"/>' +
+        '<feDisplacementMap in="SourceGraphic" scale="60" xChannelSelector="R" yChannelSelector="G"/></filter></defs>' +
+        '<g filter="url(#' + id + 'f)">' + lines + '</g></svg>';
+      sec.insertBefore(wrap, sec.firstChild);
+      fields.push({ sec: sec, svg: wrap.firstChild, turb: wrap.querySelector('feTurbulence'), disp: wrap.querySelector('feDisplacementMap') });
+    });
+    if (reduce) return;
+    var tick = false;
+    function update() {
+      tick = false;
+      var vh = window.innerHeight;
+      fields.forEach(function (f) {
+        var r = f.sec.getBoundingClientRect();
+        if (r.bottom < -100 || r.top > vh + 100) return;
+        var t = (vh - r.top) / (vh + r.height);
+        f.svg.style.transform = 'translate3d(' + ((t - 0.5) * -60) + 'px,' + ((t - 0.5) * 80) + 'px,0) skewY(' + ((t - 0.5) * 4) + 'deg)';
+        f.turb.setAttribute('baseFrequency', (0.0030 + t * 0.0016).toFixed(5) + ' ' + (0.010 + t * 0.006).toFixed(5));
+        f.disp.setAttribute('scale', (40 + Math.sin(t * Math.PI) * 50).toFixed(1));
+      });
+    }
+    window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+  })();
 
   // Film strip: buttons + drag to scroll on desktop
   var strip = document.getElementById('strip');
