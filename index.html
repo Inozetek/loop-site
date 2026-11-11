@@ -454,10 +454,21 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .note-letter { max-width: 36em; min-width: 0; }
 .note-title { margin: 0 0 22px; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(28px, 2.6vw, 36px); letter-spacing: -0.01em; }
 .note-letter p { margin: 0 0 1.1em; font-size: 18px; line-height: 1.7; color: rgba(242,245,247,0.82); }
-.note-letter p:first-of-type::first-letter { font-family: var(--serif); font-size: 3.4em; float: left; line-height: 0.82; padding: 0.06em 0.1em 0 0; color: var(--cyan); }
+.note-letter > p:first-of-type::first-letter { font-family: var(--serif); font-size: 3.4em; float: left; line-height: 0.82; padding: 0.06em 0.1em 0 0; color: var(--cyan); }
 .sig { display: grid; gap: 8px; margin-top: 30px !important; }
 .sig-name { font-family: var(--serif); font-style: italic; font-size: 40px; line-height: 1; color: var(--text); }
 @media (max-width: 860px) { .note-grid { grid-template-columns: minmax(0, 1fr); } .note-side { position: static; } }
+
+.note-more { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.7s var(--ease), opacity 0.6s var(--ease); }
+.note-more > * { min-height: 0; }
+.note-more-in { overflow: hidden; }
+.js .note.is-collapsed .note-more { grid-template-rows: 0fr; opacity: 0; }
+.js .note.is-collapsed .note-letter > p:last-of-type { -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent); mask-image: linear-gradient(180deg, #000 40%, transparent); }
+.note-toggle { display: inline-flex; align-items: center; gap: 10px; margin-top: 8px; padding: 12px 18px; border-radius: 999px; border: 0; cursor: pointer;
+  font: 500 13px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text); background: rgba(255,255,255,0.05); box-shadow: 0 0 0 1px var(--line-2); transition: background 0.2s; }
+.note-toggle:hover { background: rgba(255,255,255,0.09); }
+.note-toggle svg { transition: transform 0.4s var(--ease); }
+.note-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
 </style>
 </head>
 <body>
@@ -682,7 +693,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 
 
 
-  <section class="sec note" aria-labelledby="note-title">
+  <section class="sec note" aria-labelledby="note-title" id="note">
     <div class="wrap note-grid">
       <div class="note-side">
         <span class="label prism-in">A note from the founder</span>
@@ -690,13 +701,15 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       </div>
       <article class="note-letter">
         <h2 id="note-title" class="note-title">Why I&rsquo;m building Loop</h2>
-        <p>In college I wanted a better map of my day: where my next class was and the fastest way to get there. Somewhere along the way I realized the same idea could do something much bigger. It could connect me with my friends and the things I didn&rsquo;t want to miss.</p>
-        <p>That idea never left me. Our phones already know where we are, when we&rsquo;re free and what we love. Yet making plans with friends still means a group chat that goes nowhere, calendars nobody checks, and a &ldquo;we should hang out soon&rdquo; that never happens. Busy lives get in the way of the moments that matter most.</p>
+        <p>Our phones already know where we are, when we&rsquo;re free and what we love. Yet making plans with friends still means a group chat that goes nowhere, calendars nobody checks, and a &ldquo;we should hang out soon&rdquo; that never happens. Busy lives get in the way of the moments that matter most.</p>
+        <div class="note-more" id="note-more"><div class="note-more-in">
         <p>Loop is built to change that. It learns the people and places you love, notices when everyone is free and suggests a plan that works for all of you. Then it gets out of the way so you can actually be there.</p>
         <p>Social networks were supposed to bring us closer, but most of them keep us on our phones. Loop does the opposite. It brings you from your phone into the plan, the way social networks should.</p>
         <p>We&rsquo;re starting in Dallas, doing one thing really well. As Loop grows, it will take on more of the planning and remembering that busy lives crowd out, until it becomes the smart assistant that keeps you in the loop with everything you care about.</p>
         <p>I&rsquo;d love for you to grow with it.</p>
         <p class="sig"><span class="sig-name">Nick</span><span class="label">Founder, Loop</span></p>
+        </div></div>
+        <button type="button" class="note-toggle" id="note-toggle" aria-expanded="false" aria-controls="note-more" hidden><span>Read the full note</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
       </article>
     </div>
   </section>
@@ -1091,6 +1104,19 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
       requestAnimationFrame(drift);
     }
     new IntersectionObserver(function (es) { es.forEach(function (e) { cardVisible = e.isIntersecting; if (cardVisible && !drifting) { drifting = true; requestAnimationFrame(drift); } }); }).observe(fc);
+  }
+
+
+  // Founder note: the opening shows, the rest opens on request (fully visible without JS)
+  var noteSec = document.getElementById('note'), noteBtn = document.getElementById('note-toggle');
+  if (noteSec && noteBtn) {
+    noteSec.classList.add('is-collapsed'); noteBtn.hidden = false;
+    noteBtn.addEventListener('click', function () {
+      var open = noteBtn.getAttribute('aria-expanded') !== 'true';
+      noteBtn.setAttribute('aria-expanded', String(open));
+      noteSec.classList.toggle('is-collapsed', !open);
+      noteBtn.querySelector('span').textContent = open ? 'Close the note' : 'Read the full note';
+    });
   }
 
   // Film strip: buttons + drag to scroll on desktop
