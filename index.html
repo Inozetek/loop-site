@@ -472,6 +472,11 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 @media (prefers-reduced-motion: reduce) { .pd-card, .face, .lnk span, .lnk::after, .perks li::before { transition: none; } .lnk:hover span { animation: none; } }
 /* Choreography is scrubbed by scroll in JS: scrolling down winds it forward, up winds it back. */
 .pd-legs path { stroke-dasharray: 4 4; }
+/* The demo pins in place while it plays, so each step gets its own stretch of scroll */
+@media (min-height: 760px) and (prefers-reduced-motion: no-preference) {
+  .pd-stage.pinning { height: calc(var(--pdh, 700px) + 150vh); }
+  .pd-stage.pinning > .pd { position: sticky; top: max(76px, calc(50vh - var(--pdh, 700px) / 2 + 24px)); }
+}
 /* Once everyone is connected: light flows along each route into the meetup, and the meetup pulses */
 .pd-live { opacity: 0; }
 .pd-flow path { stroke-dasharray: 1 11; animation: pd-flow 1.1s linear infinite; filter: drop-shadow(0 0 2px rgba(191,240,255,0.9)); }
@@ -717,8 +722,9 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
           <span class="label prism-in">06 · How Loop picks the time</span>
           <h2 id="plan-title" class="prism-in">Three calendars. <em class="s">One plan that fits.</em></h2>
         </div>
-        <p class="prism-in">Loop lines up when everyone is free, then finds the spot that&rsquo;s fair to all of you. No group chat required.</p>
+        <p class="prism-in">Loop lines up when everyone is free, then picks a time and place that&rsquo;s convenient for everyone. No group chat required.</p>
       </div>
+      <div class="pd-stage" id="pd-stage">
       <div class="pd" id="pd">
         <div class="pd-time" aria-hidden="true"><span class="pd-axis"><span style="--x:0">3 PM</span><span style="--x:.25">5 PM</span><span style="--x:.5">7 PM</span><span style="--x:.75">9 PM</span><span style="--x:1">11 PM</span></span></div>
         <div class="pd-rows">
@@ -762,6 +768,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </section>
@@ -1171,26 +1178,35 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
     function seg(p, a, b) { var x = Math.max(0, Math.min(1, (p - a) / (b - a))); return 1 - Math.pow(1 - x, 3); }
     function pop(el, k) { el.style.opacity = k; el.style.transformBox = 'fill-box'; el.style.transformOrigin = 'center'; el.style.transform = 'scale(' + (0.4 + 0.6 * k) + ')'; }
     function renderPd(p) {
-      frees.forEach(function (f, i) { var k = seg(p, 0.04 + i * 0.07, 0.24 + i * 0.07); f.style.opacity = k; f.style.transformOrigin = 'left center'; f.style.transform = 'scaleX(' + (0.35 + 0.65 * k) + ')'; });
-      var o = seg(p, 0.34, 0.48); ov.style.opacity = o; ov.style.transform = 'scaleY(' + (0.6 + 0.4 * o) + ')';
-      dots.forEach(function (d, i) { pop(d, seg(p, 0.46 + i * 0.03, 0.56 + i * 0.03)); });
-      var lo = 1 - seg(p, 0.98, 1.1); places.forEach(function (t) { var i = +t.dataset.i; t.style.opacity = (i < 3 ? seg(p, 0.5 + i * 0.03, 0.6 + i * 0.03) : seg(p, 0.76, 0.86)) * lo; });
-      legs.forEach(function (l, i) { var k = seg(p, 0.56 + i * 0.03, 0.74 + i * 0.03); l.style.opacity = k > 0 ? 1 : 0; l.style.strokeDashoffset = (120 * (1 - k)).toFixed(1); });
-      var g = seg(p, 0.72, 0.84); pop(pin, g); pop(glow, g);
-      var lv = seg(p, 0.82, 0.92); live.style.opacity = lv; glow.classList.toggle('alive', lv > 0.5);
-      var c = seg(p, 0.8, 0.94); card.style.opacity = c; card.style.transform = c >= 1 ? '' : 'translateY(' + (14 * (1 - c)).toFixed(1) + 'px)';
+      frees.forEach(function (f, i) { var k = seg(p, 0.02 + i * 0.05, 0.14 + i * 0.05); f.style.opacity = k; f.style.transformOrigin = 'left center'; f.style.transform = 'scaleX(' + (0.35 + 0.65 * k) + ')'; });
+      var o = seg(p, 0.22, 0.32); ov.style.opacity = o; ov.style.transform = 'scaleY(' + (0.6 + 0.4 * o) + ')';
+      dots.forEach(function (d, i) { pop(d, seg(p, 0.32 + i * 0.05, 0.4 + i * 0.05)); });
+      var lo = 1 - seg(p, 0.9, 0.98); places.forEach(function (t) { var i = +t.dataset.i; t.style.opacity = (i < 3 ? seg(p, 0.36 + i * 0.05, 0.46 + i * 0.05) : seg(p, 0.66, 0.74)) * lo; });
+      legs.forEach(function (l, i) { var k = seg(p, 0.5 + i * 0.04, 0.62 + i * 0.04); l.style.opacity = k > 0 ? 1 : 0; l.style.strokeDashoffset = (120 * (1 - k)).toFixed(1); });
+      var g = seg(p, 0.6, 0.68); pop(pin, g); pop(glow, g);
+      var lv = seg(p, 0.66, 0.74); live.style.opacity = lv; glow.classList.toggle('alive', lv > 0.5);
+      var c = seg(p, 0.76, 0.88); card.style.opacity = c; card.style.transform = c >= 1 ? '' : 'translateY(' + (14 * (1 - c)).toFixed(1) + 'px)';
     }
     if (reduce) { renderPd(1); }
     else {
       var pdTick = false;
       function onPd() {
         pdTick = false;
-        var r = pd.getBoundingClientRect(), vh = window.innerHeight;
-        renderPd((vh * 0.9 - r.top) / (r.height * 0.95));
+        var vh = window.innerHeight;
+        if (getComputedStyle(pd).position === 'sticky') {
+          // Pinned: progress runs from just before the pin to the moment it lets go
+          var t = track.getBoundingClientRect(), top = parseFloat(getComputedStyle(pd).top) || 0, lead = vh * 0.3;
+          renderPd((top + lead - t.top) / (t.height - pd.offsetHeight + lead));
+        } else {
+          var r = pd.getBoundingClientRect();
+          renderPd((vh * 0.9 - r.top) / (r.height * 0.95));
+        }
       }
       window.addEventListener('scroll', function () { if (!pdTick) { pdTick = true; requestAnimationFrame(onPd); } }, { passive: true });
-      window.addEventListener('resize', onPd);
-      onPd();
+      var track = document.getElementById('pd-stage');
+      function sizeTrack() { track.style.setProperty('--pdh', pd.offsetHeight + 'px'); track.classList.add('pinning'); onPd(); }
+      window.addEventListener('resize', sizeTrack);
+      sizeTrack();
     }
   }
 
