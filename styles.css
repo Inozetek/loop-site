@@ -513,3 +513,38 @@ html:not(.js) .nav { background: rgba(0, 0, 0, 0.72); -webkit-backdrop-filter: b
 @media (prefers-reduced-motion: reduce) {
   .fx-pearl { animation: none; }
 }
+
+/* ---------- Prism sweep on headlines (Nick 2026-11-10, after a16z speedrun's reveal) ----------
+   When a headline scrolls in, a band of pearl light (Loop cyan, violet, pink, amber, green)
+   travels once across the letters, then fades. app.js copies each headline's text into
+   data-text; ::after redraws that text with the band clipped to the letter shapes. */
+.prism { position: relative; }
+.prism::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(110deg,
+    rgba(255,255,255,0) 30%, rgba(46,206,255,0.15) 35%, #2ECEFF 39%, #b8a6ff 43%,
+    #ff9fd6 47%, #ffffff 50%, #ffd6a8 53%, #09DB98 57%, rgba(9,219,152,0) 64%);
+  background-size: 200% 100%;
+  background-position: 115% 0;
+  -webkit-background-clip: text;
+          background-clip: text;
+  opacity: 0;
+}
+.js .prism.in::after {
+  animation: prism-sweep 2.6s cubic-bezier(0.12, 0.6, 0.45, 1) both;
+  animation-delay: calc(var(--d, 0) * 110ms + 0.35s);
+}
+@keyframes prism-sweep {
+  0%   { background-position: 115% 0; opacity: 0; }
+  12%  { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { background-position: -15% 0; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prism::after { display: none; }
+}
