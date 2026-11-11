@@ -26,7 +26,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
 <style>
 /* Layout: a single reading column that follows a route; section markers are waypoints on one continuous line down the left edge. */
 :root {
@@ -38,7 +38,8 @@
   --route: #007DA3;
   --waypoint: #04A372;
   --tint: #E2F2F7;
-  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --display: "Geist", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
   --body: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
@@ -61,9 +62,9 @@ body {
 }
 .page { max-width: 880px; margin: 0 auto; padding-block: 48px 72px; }
 h1, h2, h3 { font-family: var(--display); line-height: 1.1; text-wrap: balance; margin: 0; }
-h1 { font-size: clamp(44px, 8vw, 76px); font-weight: 800; letter-spacing: -0.02em; }
-h2 { font-size: clamp(26px, 4vw, 34px); font-weight: 700; letter-spacing: -0.01em; }
-h3 { font-size: 19px; font-weight: 700; }
+h1 { font-size: clamp(44px, 8vw, 76px); font-weight: 600; letter-spacing: -0.045em; }
+h2 { font-size: clamp(26px, 4vw, 34px); font-weight: 600; letter-spacing: -0.03em; }
+h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
 p { margin: 0; max-width: 65ch; }
 .eyebrow { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 a { color: var(--route); }
@@ -240,7 +241,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; font-family: va
 
 /* Cross-page nav */
 .site-nav { position: sticky; top: 0; z-index: 1000; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 12px max(16px, env(safe-area-inset-left, 0px)); display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--bg); border-bottom: 1px solid var(--rule); }
-.site-nav .home { display: inline-flex; align-items: center; gap: 8px; color: var(--fg); text-decoration: none; font-weight: 700; font-family: var(--display); font-size: 17px; }
+.site-nav .home { display: inline-flex; align-items: center; gap: 8px; color: var(--fg); text-decoration: none; font-weight: 600; font-family: var(--display); font-size: 17px; letter-spacing: -0.01em; }
 .site-nav .home img { width: 30px; height: 21px; }
 .site-nav nav { display: flex; gap: 18px; }
 .site-nav nav a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 500; white-space: nowrap; }
@@ -270,12 +271,19 @@ table.compare { width: 100%; min-width: 720px; border-collapse: collapse; font-s
 .unlock b { color: var(--fg); }
 .unlock span { color: var(--muted); }
 @media (max-width: 640px) { .scroll-hint { display: block; } table.compare { min-width: 660px; font-size: 14px; } .compare th, .compare td { padding: 10px; } .compare tbody th { white-space: normal; width: 112px; } .compare thead th { font-size: 11px; } }
+
+/* Links: the home page's chrome underline, tuned for the light page */
+.lnk { position: relative; }
+.lnk::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1.5px; border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(.2,.8,.2,1);
+  background: linear-gradient(90deg, #39424b, #9aa6b1 25%, #2ECEFF 55%, #d86fb0 80%, #09DB98); }
+.lnk:hover::after, .lnk:focus-visible::after, .lnk[aria-current]::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) { .lnk::after { transition: none; } }
 </style>
 </head>
 <body>
 <header class="site-nav">
   <a class="home" href="/" aria-label="Loop home"><img src="/assets/loop-logo.svg" alt="" width="30" height="21">Loop</a>
-  <nav aria-label="Site"><a href="/">Home</a><a href="/vision/">A Day in the Loop</a><a href="/case-study/" aria-current="page">Case study</a></nav>
+  <nav aria-label="Site"><a class="lnk" href="/">Home</a><a class="lnk" href="/vision/">A Day in the Loop</a><a class="lnk" href="/case-study/" aria-current="page">Case study</a></nav>
 </header>
 
 
@@ -743,7 +751,7 @@ table.compare { width: 100%; min-width: 720px; border-collapse: collapse; font-s
     </section>
   </div>
 
-  <footer><div class="cs-footer-links"><a href="/">Home</a><a href="/vision/">A Day in the Loop</a><a href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a></div>Nick Casey · Dallas, TX · Loop is patent pending (U.S. provisional application No. 64/101,733)</footer>
+  <footer><div class="cs-footer-links"><a class="lnk" href="/">Home</a><a class="lnk" href="/vision/">A Day in the Loop</a><a class="lnk" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a></div>Nick Casey · Dallas, TX · Loop is patent pending (U.S. provisional application No. 64/101,733)</footer>
 </main>
 
 <script>

@@ -22,7 +22,7 @@
 <title>A Day in the Loop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
 <style>
 /* Layout: one cinematic column of pinned scenes. Each scene plays a short loop, then the device it happens on rises into the center and holds, so the Loop message can be read. A thin route line on the left fills as the day goes on, with one waypoint per person, in that person's color. Deliberately dark-only: it is a night-to-night film. */
 :root {
@@ -35,7 +35,8 @@
   --leaf: #09DB98;
   --glass: rgba(14, 22, 28, 0.72);
   --glass-edge: rgba(46, 206, 255, 0.42);
-  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --display: "Geist", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
   --body: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -49,7 +50,7 @@ a { color: var(--route); }
 
 /* Top bar */
 .bar { position: absolute; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 30; display: flex; justify-content: space-between; align-items: center; padding-block: 18px; }
-.brand { display: flex; align-items: center; gap: 10px; color: var(--fg); text-decoration: none; font: 700 18px var(--display); letter-spacing: 0.2px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--fg); text-decoration: none; font: 600 18px var(--display); letter-spacing: -0.01em; }
 .brand img { width: 30px; height: auto; }
 .bar nav { display: flex; gap: 18px; font-size: 14px; }
 .bar nav a { color: var(--muted); text-decoration: none; }
@@ -58,8 +59,8 @@ a { color: var(--route); }
 /* Hero */
 .hero { min-height: 88svh; display: grid; align-content: center; gap: 22px; padding-block: 120px 60px; max-width: 900px; margin: 0 auto; }
 .eyebrow { font: 500 12px var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--leaf); }
-.hero h1 { font: 800 clamp(44px, 9vw, 104px)/0.95 var(--display); letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
-.hero h1 span { background: linear-gradient(90deg, var(--route), var(--leaf)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero h1 { font: 600 clamp(44px, 9vw, 104px)/0.95 var(--display); letter-spacing: -0.045em; margin: 0; text-wrap: balance; }
+.hero h1 span { font: italic 400 1.06em/0.95 var(--serif); letter-spacing: -0.01em; padding-right: 0.06em; background: linear-gradient(100deg, #CFF4FF 0%, var(--route) 45%, var(--leaf) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero p { font-size: clamp(17px, 2.2vw, 21px); color: var(--muted); max-width: 34em; margin: 0; }
 .cue { font: 500 13px var(--mono); color: var(--muted); display: flex; align-items: center; gap: 10px; margin-top: 18px; }
 .cue i { width: 1px; height: 38px; background: linear-gradient(var(--route), transparent); display: block; animation: drip 2.2s var(--ease) infinite; transform-origin: top; }
@@ -86,7 +87,7 @@ a { color: var(--route); }
 .stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.55), transparent 28%, transparent 70%, rgba(0,0,0,0.65)); pointer-events: none; }
 .cap { position: absolute; z-index: 5; left: max(48px, calc(env(safe-area-inset-left, 0px) + 40px)); right: max(16px, env(safe-area-inset-right, 0px)); top: calc(env(safe-area-inset-top, 0px) + 9vh); display: grid; gap: 6px; max-width: 30em; transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
 .cap .time { font: 500 13px var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--c, var(--route)); }
-.cap h2 { font: 700 clamp(26px, 4.4vw, 46px)/1.05 var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; text-shadow: 0 2px 30px rgba(0,0,0,0.6); }
+.cap h2 { font: 600 clamp(26px, 4.4vw, 46px)/1.05 var(--display); letter-spacing: -0.035em; margin: 0; text-wrap: balance; text-shadow: 0 2px 30px rgba(0,0,0,0.6); }
 .cap p { margin: 0; color: #C9D2D8; font-size: clamp(15px, 1.8vw, 18px); text-shadow: 0 1px 16px rgba(0,0,0,0.7); }
 
 .device { position: relative; z-index: 6; margin-top: 8vh; transition: transform 1s var(--ease), opacity 0.9s var(--ease); }
@@ -155,15 +156,29 @@ html:not(.js) .states > .s2 { display: none; }
 
 /* Ending */
 .end { min-height: 100svh; display: grid; align-content: center; justify-items: start; gap: 20px; max-width: 900px; margin: 0 auto; padding-block: 120px; }
-.end h2 { font: 800 clamp(40px, 7vw, 84px)/0.98 var(--display); letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
-.end h2 span { background: linear-gradient(90deg, var(--route), var(--leaf)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.end h2 { font: 600 clamp(40px, 7vw, 84px)/0.98 var(--display); letter-spacing: -0.045em; margin: 0; text-wrap: balance; }
+.end h2 br + span { font: italic 400 1.06em/1 var(--serif); letter-spacing: -0.01em; padding-right: 0.06em; }
+.end h2 span { background: linear-gradient(100deg, #CFF4FF 0%, var(--route) 45%, var(--leaf) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .end p { color: var(--muted); max-width: 32em; margin: 0; font-size: 18px; }
-.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 20px; border-radius: 14px; background: linear-gradient(90deg, #00A6D9, #09DB98); color: #001b14; font: 600 16px var(--body); text-decoration: none; }
+.btn { display: inline-flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 24px; border-radius: 999px; background: linear-gradient(180deg, #FFFFFF 0%, #DCF5FF 100%); color: #041016; font: 600 16px var(--body); text-decoration: none;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 12px 44px -10px rgba(46,206,255,0.6); transition: transform 0.35s cubic-bezier(.2,.8,.2,1); }
+.btn:hover { transform: translateY(-2px); }
 .links { display: flex; flex-wrap: wrap; gap: 18px; font-size: 15px; }
-.links a { color: var(--muted); }
+.links a { color: var(--muted); text-decoration: none; }
 footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); text-align: center; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* Links: pearl text and a liquid-chrome underline, same as the home page */
+.lnk { position: relative; }
+.lnk span { transition: color 0.2s; background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; }
+.lnk:hover span, .lnk:focus-visible span { color: transparent; -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(100deg, #ffffff 0%, #bfe6ff 20%, #ffc8e8 40%, #c4ffe6 60%, #e8eeff 80%, #ffffff 100%); animation: lnk-sweep 3s linear infinite; }
+@keyframes lnk-sweep { from { background-position: 0% 0; } to { background-position: 220% 0; } }
+.lnk::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1.5px; border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(.2,.8,.2,1);
+  background: linear-gradient(90deg, #5d6670, #f7fafc 25%, #8e98a3 45%, #8fd8ff 65%, #ff9fd6 85%, #09DB98); }
+.lnk:hover::after, .lnk:focus-visible::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) { .lnk:hover span { animation: none; } .lnk::after, .btn { transition: none; } }
 </style>
 </head>
 <body>
@@ -244,7 +259,7 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
 
 <header class="bar wrap">
   <a class="brand" href="/"><img src="media/loop-logo.svg" alt="">Loop</a>
-  <nav><a href="/">Home</a><a href="/vision/" aria-current="page">A Day in the Loop</a><a href="/case-study/">Case study</a></nav>
+  <nav><a class="lnk" href="/"><span>Home</span></a><a class="lnk" href="/vision/" aria-current="page"><span>A Day in the Loop</span></a><a class="lnk" href="/case-study/"><span>Case study</span></a></nav>
 </header>
 <div class="route" aria-hidden="true"><div class="fill"></div></div>
 <main>
@@ -340,7 +355,7 @@ footer { padding-block: 30px 40px; color: #6E7B83; font: 400 12px var(--mono); t
     <p>No endless group chats. No "so what works for everyone?" Just Loop keeping you in touch with the people and places you care about.</p>
     <p>Bring your friends into Loop and it brings them into your next plan.</p>
     <a class="btn" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
-    <div class="links"><a href="/">Home</a><a href="/case-study/">Case study: how Loop was built</a></div>
+    <div class="links"><a class="lnk" href="/"><span>Home</span></a><a class="lnk" href="/case-study/"><span>Case study: how Loop was built</span></a></div>
   </section>
 </main>
 <script>
