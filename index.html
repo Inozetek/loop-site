@@ -683,15 +683,6 @@ em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0
   .hero-media { left: 34%; }
   .hero-copy { max-width: 44vw; }
 }
-/* while the plan demo is pinned, its heading pins with it (compact) so the animation keeps its context;
-   heading + demo move as one unit, so they arrive and leave together */
-@media (min-height: 820px) and (prefers-reduced-motion: no-preference) {
-  .plan-demo.has-pin .pd-stage.pinning > .pd-pinbox { position: sticky; top: max(64px, calc(50vh - var(--pdh, 800px) / 2 + 24px)); }
-  .plan-demo.has-pin .pd-stage.pinning > .pd-pinbox > .pd { position: static; }
-  .plan-demo.has-pin .pd-pinbox .sec-head { padding-top: 8px; margin-bottom: 18px; }
-  .plan-demo.has-pin .pd-pinbox .sec-head h2 { font-size: clamp(26px, 2.5vw, 38px); }
-  .plan-demo.has-pin .pd-pinbox .sec-head p { font-size: 14px; }
-}
 </style>
 </head>
 <body>
@@ -1496,18 +1487,7 @@ em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0
       }
       window.addEventListener('scroll', function () { if (!pdTick) { pdTick = true; requestAnimationFrame(onPd); } }, { passive: true });
       var track = document.getElementById('pd-stage');
-      var sec = track.closest('.plan-demo'), head = sec && sec.querySelector('.sec-head'), headHome = head && head.parentNode, box = null;
-      var tall = window.matchMedia('(min-height: 820px) and (prefers-reduced-motion: no-preference)');
-      function sizeTrack() {
-        if (sec && head && tall.matches) {
-          if (!box) { box = document.createElement('div'); box.className = 'pd-pinbox'; track.insertBefore(box, pd); box.appendChild(head); box.appendChild(pd); }
-          sec.classList.add('has-pin');
-        } else if (box) {
-          headHome.insertBefore(head, track); track.insertBefore(pd, box); box.remove(); box = null; sec.classList.remove('has-pin');
-        }
-        track.style.setProperty('--pdh', (box || pd).offsetHeight + 'px'); track.classList.add('pinning');
-        onPd();
-      }
+      function sizeTrack() { track.style.setProperty('--pdh', pd.offsetHeight + 'px'); track.classList.add('pinning'); onPd(); }
       window.addEventListener('resize', sizeTrack);
       sizeTrack();
     }
