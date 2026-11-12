@@ -676,6 +676,13 @@ em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0
   -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 0 14px rgba(46, 206, 255, 0.45));
   animation: prism-front 1.5s cubic-bezier(0.2, 0.55, 0.35, 1) forwards; }
 @media (prefers-reduced-motion: reduce) { .hero h1 em.s .tw-light { display: none; } }
+/* big screens: the hero copy anchors to a left gutter instead of the centred 1240px column,
+   so the headline sits left and the film owns the right side (nav follows so the logo lines up) */
+@media (min-width: 1500px) {
+  .hero .wrap.hero-inner, .nav .wrap { max-width: none; padding-left: max(56px, 7vw); padding-right: max(56px, 5vw); }
+  .hero-media { left: 34%; }
+  .hero-copy { max-width: 44vw; }
+}
 </style>
 </head>
 <body>
