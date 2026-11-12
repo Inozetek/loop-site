@@ -626,7 +626,13 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 .hero-inner { grid-template-columns: minmax(0, 1fr); padding-block: 140px clamp(56px, 10vh, 112px); }
 /* Desktop: the film sits to the right so the phone and its alert are never under the headline */
 @media (min-width: 901px) {
-  .hero-media { left: 30%; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 26%); mask-image: linear-gradient(90deg, transparent 0, #000 26%); }
+  /* laptops: the whole 16:9 frame fits the width (nothing cropped), top/bottom fade into the dark */
+  .hero-media { left: 30%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 26%), linear-gradient(180deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(90deg, transparent 0, #000 26%), linear-gradient(180deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+    mask-composite: intersect; }
+  .hero-media img, .hero-media video { object-fit: contain; object-position: 50% 50%; }
   .hero::after { background:
     linear-gradient(180deg, rgba(4,6,7,0.55) 0%, rgba(4,6,7,0) 22%, rgba(4,6,7,0) 70%, rgba(4,6,7,0.95) 100%),
     linear-gradient(90deg, rgba(4,6,7,0.6) 0%, rgba(4,6,7,0) 46%); }
@@ -680,8 +686,15 @@ em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0
    so the headline sits left and the film owns the right side (nav follows so the logo lines up) */
 @media (min-width: 1500px) {
   .hero .wrap.hero-inner, .nav .wrap { max-width: none; padding-left: max(56px, 7vw); padding-right: max(56px, 5vw); }
-  .hero-media { left: 34%; }
   .hero-copy { max-width: 44vw; }
+}
+/* desktops: wide enough to fill the height again; centred crop keeps both edges of the frame */
+@media (min-width: 1700px) {
+  .hero-media { left: 22%; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34%); mask-image: linear-gradient(90deg, transparent 0, #000 34%); }
+  .hero-media img, .hero-media video { object-fit: cover; }
+}
+@media (min-width: 2200px) {
+  .hero-media { left: 34%; }
 }
 </style>
 </head>
