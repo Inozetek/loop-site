@@ -1487,29 +1487,30 @@ em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0
       }
       window.addEventListener('scroll', function () { if (!pdTick) { pdTick = true; requestAnimationFrame(onPd); } }, { passive: true });
       var track = document.getElementById('pd-stage');
-      // The section heading rides along above the pinned demo at its resting distance, full size,
-      // so the animation keeps its context. Only where heading + demo fit on screen.
-      var pdHead = track.closest('section') && track.closest('section').querySelector('.sec-head'), pdGap = 0, pdFollow = false;
-      function followHead() {
-        if (!pdHead) return;
-        if (!pdFollow) { pdHead.style.transform = ''; return; }
-        pdHead.style.transform = '';
-        var natural = pdHead.getBoundingClientRect(), want = pd.getBoundingClientRect().top - pdGap - natural.height;
-        var dy = Math.max(0, want - natural.top);
-        pdHead.style.transform = dy ? 'translateY(' + dy + 'px)' : '';
-      }
+      // The section heading stays put above the pinned demo (full size) so the animation keeps its context.
+      // Native sticky, no scroll handler: the heading sits in a rail exactly as long as the demo's pinned
+      // stretch, so both pin and release on the same scroll pixel. Only where heading + demo fit on screen.
+      var pdHead = track.closest('section') && track.closest('section').querySelector('.sec-head'), pdRail = null;
       function sizeTrack() {
         track.style.setProperty('--pdh', pd.offsetHeight + 'px'); track.classList.add('pinning');
         if (pdHead) {
-          pdHead.style.transform = ''; track.style.removeProperty('--pdmin');
-          pdGap = pd.getBoundingClientRect().top - pdHead.getBoundingClientRect().bottom;
-          var need = 64 + 16 + pdHead.offsetHeight + pdGap;
-          pdFollow = window.matchMedia('(min-height: 760px) and (prefers-reduced-motion: no-preference)').matches && need + pd.offsetHeight <= window.innerHeight - 8;
-          if (pdFollow) { track.style.setProperty('--pdmin', need + 'px'); pdHead.style.position = 'relative'; pdHead.style.zIndex = '2'; }
+          if (pdRail) { pdRail.parentNode.insertBefore(pdHead, pdRail); pdRail.remove(); pdRail = null; }
+          pdHead.style.position = ''; pdHead.style.top = ''; track.style.removeProperty('--pdmin');
+          var gap = pd.getBoundingClientRect().top - pdHead.getBoundingClientRect().bottom, top = 80;
+          var need = top + pdHead.offsetHeight + gap;
+          var fits = window.matchMedia('(min-height: 760px) and (prefers-reduced-motion: no-preference)').matches && need + pd.offsetHeight <= window.innerHeight - 8;
+          if (fits) {
+            track.style.setProperty('--pdmin', need + 'px');
+            var extra = track.offsetHeight - pd.offsetHeight;
+            pdRail = document.createElement('div');
+            var mb = parseFloat(getComputedStyle(pdHead).marginBottom) || 0;
+            pdRail.style.cssText = 'position:relative;z-index:2;pointer-events:none;height:' + (pdHead.offsetHeight + mb + extra) + 'px;margin-bottom:' + (-extra) + 'px';
+            pdHead.parentNode.insertBefore(pdRail, pdHead); pdRail.appendChild(pdHead);
+            pdHead.style.position = 'sticky'; pdHead.style.top = top + 'px'; pdHead.style.pointerEvents = 'auto';
+          }
         }
-        onPd(); followHead();
+        onPd();
       }
-      window.addEventListener('scroll', followHead, { passive: true });
       window.addEventListener('resize', sizeTrack);
       sizeTrack();
     }
