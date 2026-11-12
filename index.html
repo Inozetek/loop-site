@@ -667,6 +667,15 @@ em.s.tw .ch.off { visibility: hidden; }
 em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0 -0.055em 0 0.01em; vertical-align: -0.06em; border-radius: 2px; background: #5CF2FF; box-shadow: 0 0 12px rgba(92,242,255,.8); visibility: visible; animation: caret 0.9s steps(1) infinite; }
 @keyframes caret { 50% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .hero h1 .pearl-word { animation: none; } }
+/* chrome-pearl sweep over each freshly typed headline phrase (same light as the load reveal) */
+.hero h1 em.s .tw-light { position: absolute; inset: 0; pointer-events: none; padding-bottom: inherit; --front: -12%;
+  -webkit-mask-image: linear-gradient(90deg, transparent calc(var(--front) - 26%), #000 calc(var(--front) - 8%), #000 calc(var(--front) + 1%), transparent calc(var(--front) + 4%));
+          mask-image: linear-gradient(90deg, transparent calc(var(--front) - 26%), #000 calc(var(--front) - 8%), #000 calc(var(--front) + 1%), transparent calc(var(--front) + 4%));
+  color: transparent; -webkit-text-fill-color: transparent;
+  background: linear-gradient(90deg, #ffffff 0%, #8fd8ff 18%, #2ECEFF 32%, #b8a6ff 48%, #ff9fd6 62%, #ffd6a8 78%, #09DB98 100%);
+  -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 0 14px rgba(46, 206, 255, 0.45));
+  animation: prism-front 1.5s cubic-bezier(0.2, 0.55, 0.35, 1) forwards; }
+@media (prefers-reduced-motion: reduce) { .hero h1 em.s .tw-light { display: none; } }
 </style>
 </head>
 <body>
@@ -1563,7 +1572,8 @@ em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0
       em.classList.remove('static'); void em.offsetWidth; em.classList.add('static');
       setTimeout(burst, 4200+Math.random()*3600);
     }
-    function after(){ if(mode==='cycle') setTimeout(staticBeat, 2800); else setTimeout(burst, 3000+Math.random()*2000); }
+    function pearlSweep(){ var l=document.createElement('span'); l.className='tw-light'; l.setAttribute('aria-hidden','true'); l.textContent=full; em.appendChild(l); setTimeout(function(){ l.remove(); }, 1700); }
+    function after(){ if(phrases.length>1) pearlSweep(); if(mode==='cycle') setTimeout(staticBeat, 2800); else setTimeout(burst, 3000+Math.random()*2000); }
     function staticBeat(){ if(!vis || document.hidden){ started=false; return; } em.classList.remove('static'); void em.offsetWidth; em.classList.add('static'); setTimeout(retype, 2800); }
     function retype(){ if(!vis || document.hidden){ started=false; return; }
       if(phrases.length>1){ pi=(pi+1)%phrases.length; full=phrases[pi]; em.setAttribute('data-text', full); split(); }
