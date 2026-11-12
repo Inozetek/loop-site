@@ -477,7 +477,7 @@ footer { border-top: 1px solid var(--line); padding-block: 40px calc(40px + env(
 /* The demo pins in place while it plays, so each step gets its own stretch of scroll */
 @media (min-height: 760px) and (prefers-reduced-motion: no-preference) {
   .pd-stage.pinning { height: calc(var(--pdh, 700px) + 150vh); }
-  .pd-stage.pinning > .pd { position: sticky; top: max(76px, calc(50vh - var(--pdh, 700px) / 2 + 24px)); }
+  .pd-stage.pinning > .pd { position: sticky; top: max(76px, calc(50vh - var(--pdh, 700px) / 2 + 24px), var(--pdmin, 0px)); }
 }
 /* Once everyone is connected: light flows along each route into the meetup, and the meetup pulses */
 .pd-live { opacity: 0; }
@@ -1487,7 +1487,29 @@ em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0
       }
       window.addEventListener('scroll', function () { if (!pdTick) { pdTick = true; requestAnimationFrame(onPd); } }, { passive: true });
       var track = document.getElementById('pd-stage');
-      function sizeTrack() { track.style.setProperty('--pdh', pd.offsetHeight + 'px'); track.classList.add('pinning'); onPd(); }
+      // The section heading rides along above the pinned demo at its resting distance, full size,
+      // so the animation keeps its context. Only where heading + demo fit on screen.
+      var pdHead = track.closest('section') && track.closest('section').querySelector('.sec-head'), pdGap = 0, pdFollow = false;
+      function followHead() {
+        if (!pdHead) return;
+        if (!pdFollow) { pdHead.style.transform = ''; return; }
+        pdHead.style.transform = '';
+        var natural = pdHead.getBoundingClientRect(), want = pd.getBoundingClientRect().top - pdGap - natural.height;
+        var dy = Math.max(0, want - natural.top);
+        pdHead.style.transform = dy ? 'translateY(' + dy + 'px)' : '';
+      }
+      function sizeTrack() {
+        track.style.setProperty('--pdh', pd.offsetHeight + 'px'); track.classList.add('pinning');
+        if (pdHead) {
+          pdHead.style.transform = ''; track.style.removeProperty('--pdmin');
+          pdGap = pd.getBoundingClientRect().top - pdHead.getBoundingClientRect().bottom;
+          var need = 64 + 16 + pdHead.offsetHeight + pdGap;
+          pdFollow = window.matchMedia('(min-height: 760px) and (prefers-reduced-motion: no-preference)').matches && need + pd.offsetHeight <= window.innerHeight - 8;
+          if (pdFollow) { track.style.setProperty('--pdmin', need + 'px'); pdHead.style.position = 'relative'; pdHead.style.zIndex = '2'; }
+        }
+        onPd(); followHead();
+      }
+      window.addEventListener('scroll', followHead, { passive: true });
       window.addEventListener('resize', sizeTrack);
       sizeTrack();
     }
