@@ -715,7 +715,7 @@ em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0
     <div class="wrap hero-inner">
       <div class="hero-copy">
         <span class="label prism-in"><b>●</b>&nbsp; Now in beta on iPhone · Dallas&ndash;Fort Worth</span>
-        <h1 id="hero-title" class="prism-in" aria-label="Your next plan, found before you ask.">Your next <span class="pearl-word">plan</span>, <em class="s tw" data-tw="cycle" data-phrases="found before you ask.|unlocked by your last one.|no longer alone.|tuned to your interests.|chosen just for you.|right on time.|found by your own city guide.|that reminds you of home.|just got a lot better.|that works for everyone.|made for mom.|in the time you actually have.|your best memory yet.|open to friends nearby.|found by AI that knows you.|just what you needed.|something new to try.|that gets you outside.|that changed the whole night.|better than you imagined.|at your new favorite spot.|just a walk away.|on the way home.|tuned to the whole group.|you didn&rsquo;t know about.|following up on last week.|you didn&rsquo;t know you needed.|a new memory with a friend.|found before you thought of it.|just around the corner.|while on your work trip.|bringing you both together.|even better than the last.|with your BFF.">found before you ask.</em></h1>
+        <h1 id="hero-title" class="prism-in" aria-label="Your next plan, found before you ask.">Your next <span class="pearl-word">plan</span>, <em class="s tw" data-tw="cycle" data-phrases="found before you ask.|chosen just for you.|that works for everyone.|in the time you actually have.|you didn&rsquo;t know you needed.|just a walk away.|found by AI that knows you.|that changed the whole night.|on the way home.|your best memory yet.|tuned to your interests.|at your new favorite spot.|right on time.|with your BFF.|unlocked by your last one.|better than you imagined.|found before you thought of it.|bringing you both together.|just what you needed.|something new to try.|while on your work trip.|that reminds you of home.|tuned to the whole group.|just got a lot better.|open to friends nearby.|that gets you outside.|found by your own city guide.|a new memory with a friend.|made for mom.|you didn&rsquo;t know about.|following up on last week.|just around the corner.|no longer alone.|even better than the last.">found before you ask.</em></h1>
         <p class="hero-sub">When you&rsquo;re free, Loop finds what to do and who to do it with.</p>
         <div class="hero-ctas">
           <a class="btn fx" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a>
@@ -1164,7 +1164,7 @@ em.s.tw .caret { display: inline-block; width: 0.055em; height: 0.8em; margin: 0
     var v = document.getElementById('hero-video'); if (!v) return;
     var saveData = navigator.connection && navigator.connection.saveData;
     if (reduce || saveData) return;
-    v.src = window.matchMedia('(max-width: 700px)').matches ? '/assets/home/hero-film-mobile.mp4' : '/assets/home/hero-film.mp4';
+    v.src = window.matchMedia('(max-width: 700px)').matches ? '/assets/home/hero-film-mobile.mp4?v=nopulse' : '/assets/home/hero-film.mp4?v=nopulse';
     v.addEventListener('playing', function () { v.classList.add('playing'); }, { once: true });
     var p = v.play(); if (p && p.catch) p.catch(function () {});
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting) { var q = v.play(); if (q && q.catch) q.catch(function () {}); } else v.pause(); }, { threshold: 0.05 }).observe(v);
