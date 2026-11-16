@@ -698,11 +698,11 @@ table.compare { width: 100%; min-width: 720px; border-collapse: collapse; font-s
     <section class="stop" id="problems">
       <span class="eyebrow">Hard problems</span>
       <h2 class="prism-in">The decisions behind the product</h2>
-      <div class="problem"><h3>Keeping AI and API costs flat as usage grows</h3><p>A nightly job caches places and events from several providers (Yelp, Foursquare, SeatGeek, Ticketmaster) into Postgres with PostGIS, so the app reads its own data instead of paying per tap. On top of that: per-API daily budgets, per-user AI quotas, a billing-safe mode, and a refresh job designed to stay inside free tiers.</p></div>
+      <div class="problem"><h3>Keeping AI and API costs flat as usage grows</h3><p>Loop builds and maintains its own index of places and events, so the app reads its own data instead of paying per tap. Per-user AI quotas and spending guards keep costs flat as usage grows.</p></div>
       <div class="problem"><h3>Recommendations that explain themselves honestly</h3><p>A review caught "why this fits" reasons that claimed personalization without evidence, and a small friend signal outranking a much stronger match. Now a reason only appears when real evidence backs it, reasons sort by actual weight, and a test pins that behavior.</p></div>
       <div class="problem"><h3>Measuring AI quality instead of eyeballing it</h3><p>Evaluation scripts score the feed: a quality gauntlet across categories, an LLM judge that rates the relevance of the top five picks, and a readiness check per city. Engine changes have to hold those scores.</p></div>
-      <div class="problem"><h3>Fixing what users see first</h3><p>In August, 75% of feed cards showed a placeholder instead of a photo. A reproducible probe traced most failures to one image host rejecting stored URLs, and placeholders fell to 55% within two weeks.</p></div>
-      <div class="problem"><h3>Keeping keys off the phone</h3><p>AI and maps calls are moving behind server-side proxies on Supabase Edge Functions, with per-user and global caps, so paid API keys stay off the device.</p></div>
+      <div class="problem"><h3>Fixing what users see first</h3><p>Photo coverage was the first thing users noticed, so a reproducible probe traced the failures and the fixes were measured, not guessed.</p></div>
+      <div class="problem"><h3>Keeping keys off the phone</h3><p>Paid services run behind server-side guards with per-user and global caps.</p></div>
     </section>
 
     <section class="stop" id="numbers">
@@ -716,7 +716,7 @@ table.compare { width: 100%; min-width: 720px; border-collapse: collapse; font-s
         <div class="stat"><b>30+</b><span>design and process docs</span></div>
         <div class="stat"><b>1</b><span>provisional patent application</span></div>
       </div>
-      <p class="stack">Expo SDK 54 · React Native 0.81 · React 19 · TypeScript (strict) · Supabase (Postgres, PostGIS, Auth, Storage) · Google Maps · Gemini · Stripe · RevenueCat · Sentry · PostHog · Jest</p>
+      <p class="stack">Expo · React Native · TypeScript · Postgres + PostGIS · Jest</p>
     </section>
 
     <section class="stop" id="process">
