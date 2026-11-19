@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 320" role="img" aria-label="Loop">
-  <!-- Loop mark, H · bluer (Nick 2026-11-18, round 40/41): one diagonal blue-to-green
+  <!-- Loop mark, H (Nick 2026-11-18, round 38; site uses H, not H · bluer): one diagonal blue-to-green
        gradient across both rings, interlaced like a link (left ring over at the top,
        under at the bottom). Geometry = the app icon's (r 230, gap 134, stroke 56,
        knockout stroke+40) scaled to the previous logo's width. Generator recipe:
        scripts/generate-app-icon.py. -->
   <defs>
     <linearGradient id="loopStroke" gradientUnits="userSpaceOnUse" x1="42.46" y1="45.29" x2="405.54" y2="274.71">
-      <stop offset="0" stop-color="#0A9CEB"/>
-      <stop offset=".5" stop-color="#30CBD0"/>
+      <stop offset="0" stop-color="#14B4EE"/>
+      <stop offset=".5" stop-color="#36D2C6"/>
       <stop offset="1" stop-color="#0BCB8C"/>
     </linearGradient>
     <clipPath id="loopTop"><rect x="0" y="0" width="448" height="160"/></clipPath>
