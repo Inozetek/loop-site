@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Loop</title>
-  <meta name="description" content="You're invited to a plan on Loop.">
+  <meta name="description" content="Open to see who invited you.">
   <meta name="theme-color" content="#000000">
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="noindex">
@@ -34,9 +34,13 @@
     .inv-btn:disabled { opacity: 0.5; }
     .inv-error { color: var(--amber); font-size: 14px; margin: 12px 0 0; }
     .inv-store { display: inline-flex; margin-top: 16px; }
+    .add-banner { height: 72px; border-radius: 12px; background: linear-gradient(120deg, #3b2a6b, #7a4fd0 45%, #d9a64a); }
+    .add-head { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: -36px; gap: 8px; }
+    .add-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px var(--card); background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 28px; font-weight: 700; }
   </style>
   <script src="/plan-config.js" defer></script>
   <script src="/plan-invite.js" defer></script>
+  <script src="/add-invite.js" defer></script>
 </head>
 <body>
   <main class="inv-main">
@@ -74,6 +78,25 @@
           <h2 class="inv-title" id="inv-done-title"></h2>
           <p class="inv-meta">Get Loop to see who else is going and plan the next one together.</p>
           <a class="pill inv-store" id="inv-store" href="https://apps.apple.com/app/loop/id6820438290">Get Loop on the App Store</a>
+        </div>
+      </div>
+    </section>
+    <!-- /add/<token> friend invite (LoopApp migration 227): first name, avatar
+         and a generic banner only. -->
+    <section class="inv-card" id="add" hidden>
+      <a class="inv-brand" href="/"><img src="/assets/loop-logo.svg" alt="" width="34" height="24"><span>Loop</span></a>
+      <p class="inv-meta" id="add-loading">Loading invite&hellip;</p>
+      <p class="inv-error" id="add-error" hidden></p>
+      <div id="add-card" hidden>
+        <div class="add-banner"></div>
+        <div class="add-head">
+          <img class="add-avatar" id="add-avatar" alt="" hidden>
+          <div class="add-avatar" id="add-initial"></div>
+          <h1 class="inv-title" id="add-title"></h1>
+          <p class="inv-meta">Loop finds things to do near you and helps friends make plans.</p>
+          <a class="pill inv-store" id="add-store" href="https://apps.apple.com/app/loop/id6820438290">Get Loop and accept</a>
+          <p class="inv-meta"><a id="add-open" href="/" style="color: var(--blue-light)">I have Loop &middot; open it</a></p>
+          <p class="inv-meta" style="font-size: 13px">After you sign up, tap the link again to accept.</p>
         </div>
       </div>
     </section>
