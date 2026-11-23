@@ -644,7 +644,7 @@ table.compare { width: 100%; min-width: 720px; border-collapse: collapse; font-s
     <section class="stop" id="arrival">
       <span class="eyebrow">Patent pending</span>
       <h2 class="prism-in">Not just what's good, but when you can realistically go</h2>
-      <p>For every pick, Loop works out the soonest time you could actually arrive. It combines your free time, the venue's real hours (including places open past midnight) and how long it takes to get there, and it keeps that time current as the day goes on. Early builds suggested a venue 32 miles away for 22 minutes from now. Fixing cases like that became the basis of Loop's patent-pending method.</p>
+      <p>For every pick, Loop works out the soonest time you could realistically arrive, not just what's good nearby. Early builds suggested a venue 32 miles away for 22 minutes from now. Fixing cases like that became the basis of Loop's patent-pending method.</p>
       <div class="arrival" role="img" aria-label="Example: the soonest realistic arrival is where your free time, the venue's hours and travel time overlap">
         <svg viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg">
           <g font-family="Geist, system-ui, sans-serif" font-size="13" fill="currentColor">
@@ -700,7 +700,7 @@ table.compare { width: 100%; min-width: 720px; border-collapse: collapse; font-s
       <span class="eyebrow">Hard problems</span>
       <h2 class="prism-in">The decisions behind the product</h2>
       <div class="problem"><h3>Keeping AI and API costs flat as usage grows</h3><p>Loop builds and maintains its own index of places and events, so the app reads its own data instead of paying per tap. Per-user AI quotas and spending guards keep costs flat as usage grows.</p></div>
-      <div class="problem"><h3>Recommendations that explain themselves honestly</h3><p>A review caught "why this fits" reasons that claimed personalization without evidence, and a small friend signal outranking a much stronger match. Now a reason only appears when real evidence backs it, reasons sort by actual weight, and a test pins that behavior.</p></div>
+      <div class="problem"><h3>Recommendations that explain themselves honestly</h3><p>A "why this fits" reason only appears when real evidence backs it, reasons sort by actual weight, and a test pins that behavior.</p></div>
       <div class="problem"><h3>Measuring AI quality instead of eyeballing it</h3><p>Evaluation scripts score the feed: a quality gauntlet across categories, an LLM judge that rates the relevance of the top five picks, and a readiness check per city. Engine changes have to hold those scores.</p></div>
       <div class="problem"><h3>Fixing what users see first</h3><p>Photo coverage was the first thing users noticed, so a reproducible probe traced the failures and the fixes were measured, not guessed.</p></div>
       <div class="problem"><h3>Keeping keys off the phone</h3><p>Paid services run behind server-side guards with per-user and global caps.</p></div>
@@ -713,9 +713,9 @@ table.compare { width: 100%; min-width: 720px; border-collapse: collapse; font-s
         <div class="stat"><b>6,700+</b><span>GitHub contributions in the past year</span></div>
         <div class="stat"><b>5,588</b><span>commits on the main branch</span></div>
         <div class="stat"><b>2,000+</b><span>test files</span></div>
-        <div class="stat"><b>9</b><span>server functions: payments, AI and maps proxies, push, routing</span></div>
+        <div class="stat"><b>9</b><span>server functions</span></div>
         <div class="stat"><b>30+</b><span>design and process docs</span></div>
-        <div class="stat"><b>1</b><span>provisional patent application</span></div>
+        <div class="stat"><b>1</b><span>patent application filed</span></div>
       </div>
       <p class="stack">Expo · React Native · TypeScript · Postgres + PostGIS · Jest</p>
     </section>
@@ -754,7 +754,7 @@ table.compare { width: 100%; min-width: 720px; border-collapse: collapse; font-s
     </section>
   </div>
 
-  <footer><div class="cs-footer-links"><a class="lnk" href="/">Home</a><a class="lnk" href="/vision/">A Day in the Loop</a><a class="lnk" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a></div>Nick Casey · Dallas, TX · Loop is patent pending (U.S. provisional application No. 64/101,733)</footer>
+  <footer><div class="cs-footer-links"><a class="lnk" href="/">Home</a><a class="lnk" href="/vision/">A Day in the Loop</a><a class="lnk" href="https://testflight.apple.com/join/nhfZxpSc">Try the iPhone beta</a></div>Nick Casey · Dallas, TX · Loop is patent pending.</footer>
 </main>
 
 <script>
