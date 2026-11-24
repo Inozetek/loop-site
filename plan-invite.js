@@ -18,6 +18,17 @@
  * inject anything. The guest key is kept in localStorage (try/catch) only so a
  * revisit can still add a name; losing it costs nothing but that.
  *
+ * Planner funnel lane 3: when the host attached 2-3 Loop-picked options, the
+ * guest votes with one tap per option (tap again to undo), no account. Data
+ * from migration 236's anon RPCs, keyed by the same token:
+ *   rpc/get_plan_invite_options -> kind, ordinal, slot_start, venue_name,
+ *                                  venue_address, basis, votes, locked
+ *   rpc/vote_plan_option_web    -> accepted, reason, voter_key
+ * The page never says "you're all free": a web guest's availability is never
+ * known. A time option claims only its basis ("Everyone on Loop is free" /
+ * "Host is free"). The voter key (or the RSVP guest key) is kept in
+ * localStorage (try/catch).
+ *
  * Pure helpers are exported for jest (__tests__/unit/site/plan-invite-page.test.ts)
  * and for the per-plan link preview (infra/plan-preview-worker).
  */
@@ -105,7 +116,56 @@
     };
   }
 
+  /** RPC option rows -> { time: [...], place: [...] }; a kind with < 2 options is not a vote and is dropped unless locked. */
+  function groupOptions(rows) {
+    var out = { time: [], place: [] };
+    if (!Array.isArray(rows)) return out;
+    rows.forEach(function (o) {
+      if (!o || (o.kind !== 'time' && o.kind !== 'place')) return;
+      var ord = typeof o.ordinal === 'number' ? o.ordinal : 0;
+      if (ord < 1 || ord > 3) return;
+      if (o.kind === 'time' && (typeof o.slot_start !== 'string' || isNaN(new Date(o.slot_start).getTime()))) return;
+      if (o.kind === 'place' && (typeof o.venue_name !== 'string' || !o.venue_name.trim())) return;
+      out[o.kind].push(o);
+    });
+    ['time', 'place'].forEach(function (k) {
+      out[k].sort(function (a, b) { return a.ordinal - b.ordinal; });
+      var anyLocked = out[k].some(function (o) { return o.locked === true; });
+      if (out[k].length < 2 && !anyLocked) out[k] = [];
+    });
+    return out;
+  }
+
+  function voteHeading(kind, locked) {
+    if (locked) return kind === 'time' ? 'Time locked in' : 'Place locked in';
+    return kind === 'time' ? 'Vote on a time' : 'Vote on a place';
+  }
+
+  function optionTitle(o, locale) {
+    if (!o) return '';
+    return o.kind === 'time' ? formatStart(o.slot_start, locale) : (o.venue_name || '').trim();
+  }
+
+  /** The small line under an option. Claims exactly its basis, nothing more. */
+  function optionTag(o) {
+    if (!o) return '';
+    if (o.kind === 'time') {
+      if (o.basis === 'all_free') return 'Everyone on Loop is free';
+      if (o.basis === 'host_free') return 'Host is free';
+      return '';
+    }
+    return typeof o.venue_address === 'string' ? o.venue_address.trim() : '';
+  }
+
+  function votesLabel(n) {
+    var c = typeof n === 'number' && n > 0 ? n : 0;
+    if (c === 0) return 'No votes yet';
+    return c === 1 ? '1 vote' : c + ' votes';
+  }
+
   var REASON_COPY = {
+    closed: 'Voting on this has closed.',
+    invalid_option: 'That option is no longer available.',
     invalid_name: 'Please add your name.',
     invalid_response: 'Pick yes or no.',
     rate_limited: 'Lots of replies just came in. Try again in a few minutes.',
@@ -133,6 +193,17 @@
   }
   function saveRsvp(token, value) {
     try { window.localStorage.setItem(storeKey(token), JSON.stringify(value)); } catch (e) { /* private mode */ }
+  }
+
+  function voteStoreKey(token) { return 'loop:plan-vote:' + token; }
+  function loadVotes(token) {
+    try {
+      var v = JSON.parse(window.localStorage.getItem(voteStoreKey(token)) || 'null');
+      return v && typeof v === 'object' && v.on && typeof v.on === 'object' ? v : { on: {} };
+    } catch (e) { return { on: {} }; }
+  }
+  function saveVotes(token, value) {
+    try { window.localStorage.setItem(voteStoreKey(token), JSON.stringify(value)); } catch (e) { /* private mode */ }
   }
 
   function el(id) { return document.getElementById(id); }
@@ -179,6 +250,42 @@
     show('inv-card');
   }
 
+  function renderOptions(groups, votes, onTap) {
+    var box = el('inv-options');
+    while (box.firstChild) box.removeChild(box.firstChild);
+    var any = false;
+    ['time', 'place'].forEach(function (kind) {
+      var list = groups[kind];
+      if (!list || list.length === 0) return;
+      any = true;
+      var locked = list.some(function (o) { return o.locked === true; });
+      var h = document.createElement('p');
+      h.className = 'inv-vote-h';
+      h.textContent = voteHeading(kind, locked);
+      box.appendChild(h);
+      list.forEach(function (o) {
+        var mine = votes.on[kind + '-' + o.ordinal] === true;
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'inv-opt' + (mine || o.locked === true ? ' on' : '');
+        b.disabled = locked;
+        b.setAttribute('aria-pressed', mine ? 'true' : 'false');
+        var t = document.createElement('span');
+        t.className = 'inv-opt-t';
+        t.textContent = optionTitle(o) + (o.locked === true ? ' \u2713' : '');
+        var sub = document.createElement('span');
+        sub.className = 'inv-opt-s';
+        var tag = optionTag(o);
+        sub.textContent = (tag ? tag + ' \u00b7 ' : '') + votesLabel(o.votes);
+        b.appendChild(t);
+        b.appendChild(sub);
+        if (!locked) b.addEventListener('click', function () { onTap(o, !mine); });
+        box.appendChild(b);
+      });
+    });
+    box.hidden = !any;
+  }
+
   function fail(message) {
     hide('inv-loading');
     text('inv-error', message);
@@ -210,6 +317,35 @@
       });
     }
     load().catch(function () { fail('This invite can’t be loaded right now.'); });
+
+    var voting = false;
+    function loadOptions() {
+      return rpc(cfg, 'get_plan_invite_options', { p_token: token }).then(function (rows) {
+        renderOptions(groupOptions(rows), loadVotes(token), tapOption);
+      });
+    }
+    function tapOption(o, on) {
+      if (voting) return;
+      voting = true;
+      hide('inv-vote-error');
+      var votes = loadVotes(token);
+      var rsvp = loadRsvp(token) || {};
+      var key = votes.key || rsvp.key || null;
+      rpc(cfg, 'vote_plan_option_web', { p_token: token, p_voter_key: key, p_kind: o.kind, p_ordinal: o.ordinal, p_on: on }).then(function (rows) {
+        var r = Array.isArray(rows) ? rows[0] : null;
+        if (!r || !r.accepted) throw new Error((r && r.reason) || 'unknown');
+        votes.key = r.voter_key || key;
+        votes.on[o.kind + '-' + o.ordinal] = on;
+        saveVotes(token, votes);
+      }).catch(function (err) {
+        text('inv-vote-error', reasonCopy(err && err.message));
+        show('inv-vote-error');
+      }).then(function () {
+        voting = false;
+        return loadOptions();
+      }).catch(function () { /* a stale tally is fine */ });
+    }
+    loadOptions().catch(function () { /* no options shown; the invite still works */ });
 
     var prior = loadRsvp(token);
     if (prior && (prior.choice === 'yes' || prior.choice === 'no')) showDone(prior.choice, prior.named);
@@ -258,7 +394,8 @@
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
       parsePlanToken: parsePlanToken, formatStart: formatStart, goingLabel: goingLabel,
-      reasonCopy: reasonCopy, hostLine: hostLine, pitchLine: pitchLine, facesFor: facesFor, goingNames: goingNames,
+      reasonCopy: reasonCopy, hostLine: hostLine, groupOptions: groupOptions, voteHeading: voteHeading,
+      optionTitle: optionTitle, optionTag: optionTag, votesLabel: votesLabel, pitchLine: pitchLine, facesFor: facesFor, goingNames: goingNames,
       previewMeta: previewMeta, TOKEN_RE: TOKEN_RE,
     };
   } else if (document.readyState === 'loading') {

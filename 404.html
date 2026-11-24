@@ -40,6 +40,12 @@
     .inv-row .inv-field { margin: 0; }
     .inv-error { color: var(--amber); font-size: 14px; margin: 12px 0 0; }
     .inv-store { display: inline-flex; margin-top: 16px; }
+    .inv-vote-h { color: var(--text-2); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin: 16px 0 8px; }
+    .inv-opt { display: flex; flex-direction: column; align-items: flex-start; width: 100%; min-height: 44px; margin: 0 0 8px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--hairline); background: var(--card-2); color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+    .inv-opt.on { border-color: var(--blue); }
+    .inv-opt:disabled { cursor: default; }
+    .inv-opt-t { font-weight: 600; font-size: 16px; }
+    .inv-opt-s { color: var(--text-2); font-size: 13px; margin-top: 2px; }
     .add-banner { height: 72px; border-radius: 12px; background: linear-gradient(120deg, #3b2a6b, #7a4fd0 45%, #d9a64a); }
     .add-head { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: -36px; gap: 8px; }
     .add-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px var(--card); background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 28px; font-weight: 700; }
@@ -70,6 +76,8 @@
         <p class="inv-meta" id="inv-time"></p>
         <div class="inv-faces" id="inv-faces" hidden></div>
         <p class="inv-going" id="inv-going"></p>
+        <div id="inv-options" hidden></div>
+        <p class="inv-error" id="inv-vote-error" hidden></p>
 
         <!-- One tap first (funnel lane 2); the name is asked only AFTER it. -->
         <div id="inv-choice">
