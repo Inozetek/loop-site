@@ -163,7 +163,42 @@
     return c === 1 ? '1 vote' : c + ' votes';
   }
 
+  /**
+   * Per-token JSON store: memory first (this page session), then localStorage.
+   * Gate 2026-11-24: with storage blocked, every tap used to mint a new voter,
+   * so tap-again could never undo. Memory keeps the voter key + votes anyway.
+   */
+  function makeStore(getStorage, prefix) {
+    var mem = {};
+    function copy(v) { return v == null ? null : JSON.parse(JSON.stringify(v)); }
+    return {
+      load: function (token) {
+        if (Object.prototype.hasOwnProperty.call(mem, token)) return copy(mem[token]);
+        try { return JSON.parse(getStorage().getItem(prefix + token) || 'null'); } catch (e) { return null; }
+      },
+      save: function (token, value) {
+        mem[token] = copy(value);
+        try { getStorage().setItem(prefix + token, JSON.stringify(value)); } catch (e) { /* private mode */ }
+      },
+    };
+  }
+
+  /** Normalise a stored vote state. */
+  function voteState(v) {
+    return v && typeof v === 'object' && v.on && typeof v.on === 'object' ? v : { on: {} };
+  }
+
+  /**
+   * An un-vote with no voter key has nothing on the server to undo (no key
+   * means this browser never landed a vote): it is a local change only, never
+   * an RPC that would come back 'not_found'.
+   */
+  function needsServerCall(key, on) {
+    return on === true || Boolean(key);
+  }
+
   var REASON_COPY = {
+    vote_failed: 'Couldn\u2019t update your vote. Please try again.',
     closed: 'Voting on this has closed.',
     invalid_option: 'That option is no longer available.',
     invalid_name: 'Please add your name.',
@@ -187,24 +222,14 @@
     });
   }
 
-  function storeKey(token) { return 'loop:plan-rsvp:' + token; }
-  function loadRsvp(token) {
-    try { return JSON.parse(window.localStorage.getItem(storeKey(token)) || 'null'); } catch (e) { return null; }
-  }
-  function saveRsvp(token, value) {
-    try { window.localStorage.setItem(storeKey(token), JSON.stringify(value)); } catch (e) { /* private mode */ }
-  }
+  function browserStorage() { return window.localStorage; }
+  var rsvpStore = makeStore(browserStorage, 'loop:plan-rsvp:');
+  var voteStore = makeStore(browserStorage, 'loop:plan-vote:');
+  function loadRsvp(token) { return rsvpStore.load(token); }
+  function saveRsvp(token, value) { rsvpStore.save(token, value); }
 
-  function voteStoreKey(token) { return 'loop:plan-vote:' + token; }
-  function loadVotes(token) {
-    try {
-      var v = JSON.parse(window.localStorage.getItem(voteStoreKey(token)) || 'null');
-      return v && typeof v === 'object' && v.on && typeof v.on === 'object' ? v : { on: {} };
-    } catch (e) { return { on: {} }; }
-  }
-  function saveVotes(token, value) {
-    try { window.localStorage.setItem(voteStoreKey(token), JSON.stringify(value)); } catch (e) { /* private mode */ }
-  }
+  function loadVotes(token) { return voteState(voteStore.load(token)); }
+  function saveVotes(token, value) { voteStore.save(token, value); }
 
   function el(id) { return document.getElementById(id); }
   function show(id) { el(id).hidden = false; }
@@ -331,6 +356,13 @@
       var votes = loadVotes(token);
       var rsvp = loadRsvp(token) || {};
       var key = votes.key || rsvp.key || null;
+      if (!needsServerCall(key, on)) {
+        votes.on[o.kind + '-' + o.ordinal] = false;
+        saveVotes(token, votes);
+        voting = false;
+        loadOptions().catch(function () { /* a stale tally is fine */ });
+        return;
+      }
       rpc(cfg, 'vote_plan_option_web', { p_token: token, p_voter_key: key, p_kind: o.kind, p_ordinal: o.ordinal, p_on: on }).then(function (rows) {
         var r = Array.isArray(rows) ? rows[0] : null;
         if (!r || !r.accepted) throw new Error((r && r.reason) || 'unknown');
@@ -338,7 +370,9 @@
         votes.on[o.kind + '-' + o.ordinal] = on;
         saveVotes(token, votes);
       }).catch(function (err) {
-        text('inv-vote-error', reasonCopy(err && err.message));
+        var reason = err && err.message;
+        // An un-vote that fails is never "this invite is no longer active".
+        text('inv-vote-error', reasonCopy(!on && reason === 'not_found' ? 'vote_failed' : reason));
         show('inv-vote-error');
       }).then(function () {
         voting = false;
@@ -395,7 +429,8 @@
     module.exports = {
       parsePlanToken: parsePlanToken, formatStart: formatStart, goingLabel: goingLabel,
       reasonCopy: reasonCopy, hostLine: hostLine, groupOptions: groupOptions, voteHeading: voteHeading,
-      optionTitle: optionTitle, optionTag: optionTag, votesLabel: votesLabel, pitchLine: pitchLine, facesFor: facesFor, goingNames: goingNames,
+      optionTitle: optionTitle, optionTag: optionTag, votesLabel: votesLabel,
+      makeStore: makeStore, voteState: voteState, needsServerCall: needsServerCall, pitchLine: pitchLine, facesFor: facesFor, goingNames: goingNames,
       previewMeta: previewMeta, TOKEN_RE: TOKEN_RE,
     };
   } else if (document.readyState === 'loading') {
