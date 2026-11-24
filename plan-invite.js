@@ -48,6 +48,12 @@
     return c === 1 ? '1 person going' : c + ' people going';
   }
 
+  /** "<host> invited you", or a neutral line when the RPC gives no host name. */
+  function hostLine(inv) {
+    var host = inv && typeof inv.host_first_name === 'string' ? inv.host_first_name.trim() : '';
+    return host ? host + ' invited you' : 'You’re invited';
+  }
+
   /** The Loop-picked line, or null. Strictly the boolean true from the RPC. */
   function pitchLine(inv) {
     if (!inv || inv.loop_picked_spot !== true) return null;
@@ -84,8 +90,9 @@
   function previewMeta(inv, locale) {
     inv = inv || {};
     var what = inv.title || inv.venue_name || '';
-    var title = inv.host_first_name && what
-      ? inv.host_first_name + ' invited you: ' + what
+    var host = typeof inv.host_first_name === 'string' ? inv.host_first_name.trim() : '';
+    var title = host && what
+      ? host + ' invited you: ' + what
       : what || 'You’re invited on Loop';
     var parts = [];
     if (inv.venue_name && inv.venue_name !== what) parts.push(inv.venue_name);
@@ -157,7 +164,7 @@
   function renderInvite(inv) {
     var meta = previewMeta(inv);
     document.title = meta.title + ' · Loop';
-    text('inv-host', inv.host_first_name ? inv.host_first_name + ' invited you' : 'You’re invited');
+    text('inv-host', hostLine(inv));
     text('inv-title', inv.title || inv.venue_name || 'A plan on Loop');
     text('inv-venue', inv.venue_name && inv.venue_name !== inv.title ? inv.venue_name : '');
     text('inv-address', inv.venue_address);
@@ -251,7 +258,7 @@
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
       parsePlanToken: parsePlanToken, formatStart: formatStart, goingLabel: goingLabel,
-      reasonCopy: reasonCopy, pitchLine: pitchLine, facesFor: facesFor, goingNames: goingNames,
+      reasonCopy: reasonCopy, hostLine: hostLine, pitchLine: pitchLine, facesFor: facesFor, goingNames: goingNames,
       previewMeta: previewMeta, TOKEN_RE: TOKEN_RE,
     };
   } else if (document.readyState === 'loading') {
